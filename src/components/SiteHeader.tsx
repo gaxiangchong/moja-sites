@@ -12,6 +12,7 @@ const navItems: NavItem[] = [
   { href: "/shop", label: "Shop" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "Contact" },
 ];
 
 function isActive(pathname: string, href: string) {

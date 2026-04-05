@@ -1,0 +1,28 @@
+{
+  "pageTitle": "Contact us",
+  "pageIntro": "Pick the channel you prefer — we’re happy to help with orders, delivery questions, or custom requests.",
+  "whatsapp": {
+    "enabled": true,
+    "label": "WhatsApp",
+    "hint": "Fast replies during business hours 10a.m. - 6p.m.",
+    "url": "https://wa.me/601139331134"
+  },
+  "email": {
+    "enabled": true,
+    "label": "Email",
+    "hint": "For detailed questions or corporate orders",
+    "address": "admin@mojamaison.com"
+  },
+  "facebook": {
+    "enabled": true,
+    "label": "Facebook",
+    "hint": "News, promos, and community",
+    "url": "https://www.facebook.com/mojamaison"
+  },
+  "instagram": {
+    "enabled": true,
+    "label": "Instagram",
+    "hint": "Photos, reels, and behind the scenes",
+    "url": "https://www.instagram.com/mojamaison"
+  }
+}

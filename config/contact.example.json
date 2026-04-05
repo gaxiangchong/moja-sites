@@ -1,0 +1,28 @@
+{
+  "pageTitle": "Contact us",
+  "pageIntro": "Choose how you would like to reach us.",
+  "whatsapp": {
+    "enabled": true,
+    "label": "WhatsApp",
+    "hint": "Message us for quick help",
+    "url": "https://wa.me/60123456789"
+  },
+  "email": {
+    "enabled": true,
+    "label": "Email",
+    "hint": "We reply within 1–2 business days",
+    "address": "you@example.com"
+  },
+  "facebook": {
+    "enabled": true,
+    "label": "Facebook",
+    "hint": "Visit our Facebook page",
+    "url": "https://www.facebook.com/your-page"
+  },
+  "instagram": {
+    "enabled": true,
+    "label": "Instagram",
+    "hint": "Photos and behind the scenes",
+    "url": "https://www.instagram.com/your-profile"
+  }
+}

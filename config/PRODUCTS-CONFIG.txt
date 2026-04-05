@@ -1,0 +1,81 @@
+================================================================================
+PRODUCT CATALOG — config/products.catalog.json
+================================================================================
+
+This file drives:
+  • Product detail pages (/product/[slug])
+  • Shop page sections and product cards (/shop)
+  • “Best sellers” on the home page (via homeFeaturedSlugs)
+
+After editing, save the file, then restart `npm run dev` or run `npm run build`
+before deploy so changes appear (same behavior as config/contact.json).
+
+--------------------------------------------------------------------------------
+TOP-LEVEL FIELDS
+--------------------------------------------------------------------------------
+
+homeFeaturedSlugs
+  Array of product slugs shown on the home page, in order.
+  Each slug must exist in the "products" array.
+
+shopSections
+  Each section has:
+    id            — anchor for links (e.g. premium-cake); use lowercase + hyphens
+    title         — heading on /shop
+    description   — paragraph under the heading
+    productSlugs  — ordered list of slugs to show in that section
+
+products
+  Full list of items for sale. Each object needs at least:
+    slug, name, price, category, images[], summary
+
+--------------------------------------------------------------------------------
+PRODUCT FIELDS (common)
+--------------------------------------------------------------------------------
+
+slug
+  URL-safe id, e.g. "prestige-noir". Used in /product/prestige-noir
+
+name
+  Display name
+
+price
+  Free text, e.g. "RM235.00" or "RM118.00 – RM150.00"
+
+badge
+  Optional pill text (e.g. "Signature", "Same Day before 1pm")
+
+category
+  Must be exactly one of:
+    "Premium Cake" | "Collection Cake" | "Festive Cake" | "Box Edition"
+
+images
+  Array of { "src": "/path/from/public.jpg", "alt": "..." }
+  First image = main photo on shop cards and listings.
+  Put files under public/ (e.g. public/images/... → src "/images/...")
+
+summary
+  Long description on the product page.
+
+shortDescription
+  Optional. If set, shop listing cards use this instead of summary (shorter blurbs).
+
+soldOut
+  Optional true/false. On /shop, shows sold-out state and disables the link CTA.
+
+hasVariants
+  Optional true. On /shop, shows “multiple variants” hint under the card.
+
+highlights, availabilityNote, size, allergens, handling, storage
+  Optional blocks for the product detail page (same structure as the sample JSON).
+
+--------------------------------------------------------------------------------
+JSON TIPS
+--------------------------------------------------------------------------------
+
+  • Straight double quotes " only
+  • Commas between array/object entries; no trailing comma on the last entry
+  • Duplicate the pattern of an existing product when adding a new one, then add
+    its slug to the right shopSections.productSlugs list
+
+================================================================================

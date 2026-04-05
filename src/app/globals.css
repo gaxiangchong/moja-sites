@@ -19,6 +19,30 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@keyframes hero-image-drift {
+  0%,
+  100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate3d(-1.2%, 0.4%, 0);
+  }
+}
+
+.hero-image-drift {
+  animation: hero-image-drift 28s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-image-drift {
+    animation: none;
+  }
+}
+
+.font-display {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
 body {
   background:
     radial-gradient(900px 600px at 10% -10%, rgba(98, 166, 255, 0.22), transparent 60%),

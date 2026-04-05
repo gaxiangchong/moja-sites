@@ -1,98 +1,165 @@
 import Image from "next/image";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getHomeFeaturedProducts } from "@/lib/products";
+
+const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
 export default function Home() {
-  const products = [
-    {
-      name: "Avocado",
-      tag: "Same Day before 1pm",
-      price: "RM125.00",
-      imageSrc: "/images/demo/round-cake.jpg",
-    },
-    {
-      name: "Prestige Noir",
-      tag: "Signature",
-      price: "RM235.00",
-      imageSrc: "/images/demo/choco-slice-raspberry.jpg",
-    },
-    {
-      name: "Everytime",
-      tag: "Top Pick!",
-      price: "RM180.00",
-      imageSrc: "/images/demo/choco-slice-berries.jpg",
-    },
-    {
-      name: "Low Carb Pistachio Cake",
-      tag: "Gluten-free",
-      price: "RM150.00",
-      imageSrc: "/images/demo/hero-display-case.jpg",
-    },
-    {
-      name: "Labu-Labu",
-      tag: "Limited Days only",
-      price: "RM118.00",
-      imageSrc: "/images/demo/round-cake.jpg",
-    },
-    {
-      name: "Duo in a box – Petits Gateaux",
-      tag: "Box Edition",
-      price: "RM63.00",
-      imageSrc: "/images/demo/choco-slice-raspberry.jpg",
-    },
-  ] as const;
+  const featuredProducts = getHomeFeaturedProducts();
 
   return (
     <div className="flex flex-col flex-1">
-      <div className="border-b border-slate-900/10 bg-white/50">
-        <div className="mx-auto max-w-6xl px-4 py-2 text-center text-xs tracking-wide text-slate-700 sm:text-sm">
-          ORDER BEFORE 1PM FOR SAME DAY / NEXT DAY PICK UP & DELIVERY{" "}
-          <span className="text-slate-400">•</span>{" "}
-          <span className="font-semibold text-slate-800">EXCEPT SUNDAY</span>
+      <div className="border-b border-slate-900/10 bg-slate-900 text-center text-[11px] font-medium tracking-wide text-white sm:text-xs">
+        <div className="mx-auto max-w-6xl px-4 py-2.5">
+          <span className="text-[#9edcff]">Same-day &amp; next-day</span> slots
+          when you order before{" "}
+          <span className="font-semibold text-white">1:00 PM</span>
+          <span className="mx-2 text-slate-400">·</span>
+          Mon–Sat delivery &amp; pickup
+          <span className="mx-2 text-slate-400">·</span>
         </div>
       </div>
 
-      <SiteHeader />
+      <SiteHeader ctaHref="/shop" ctaLabel="Shop & order" />
 
       <main className="flex-1">
-        <section className="mx-auto max-w-6xl px-4 pt-14 pb-10 sm:pt-20">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-xs text-slate-600">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#57f0ff]" />
-                Est. 2016 • Handcrafted • Halal-friendly ingredients
+        {/* Full-bleed hero: image-first for immediate visual hook */}
+        <section className="relative isolate w-full overflow-hidden bg-[#050a14]">
+          <div className="absolute inset-0">
+            <div className="hero-image-drift absolute inset-[-8%] min-h-[120%] min-w-[120%]">
+              <Image
+                src={HERO_IMAGE}
+                alt="Pastry chef finishing a burnt Basque cheesecake, highlighting the caramelized top and careful craftsmanship"
+                fill
+                className="object-cover object-center"
+                sizes="100vw"
+                priority
+                fetchPriority="high"
+              />
+            </div>
+            {/* No directional overlay — full photo stays even; copy uses the glass panel + shadows */}
+          </div>
+
+          <div className="relative mx-auto flex w-full min-h-[min(48vh,440px)] max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-5 sm:min-h-[min(44vh,400px)] sm:pb-11 sm:pt-6 lg:min-h-[min(42vh,380px)] lg:pb-12 lg:pt-8">
+            <div className="ml-auto w-full max-w-xl text-left lg:max-w-2xl rounded-3xl border border-white/[0.14] bg-slate-950/25 px-5 py-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-7 sm:py-8 lg:bg-slate-950/20 lg:backdrop-blur-lg">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-[#c8e8ff] backdrop-blur-md">
+                <span
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#57f0ff] shadow-[0_0_12px_rgba(87,240,255,0.9)]"
+                  aria-hidden
+                />
+                Baked to order · Halal-friendly ingredients
               </div>
-              <h1 className="mt-5 text-balance text-4xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-5xl">
-                Celebrate every moment with cakes that create memories.
+
+              <h1 className="font-display mt-6 text-balance text-4xl font-medium leading-[1.08] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
+                Cakes worth craving for everyday moments
               </h1>
-              <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-slate-600 sm:text-lg">
-                Freshly made upon order, with a modern, less-sweet profile and a
-                focus on texture. Same / next-day delivery available in selected
-                areas.
+              <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/95 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)] sm:text-lg">
+                Less-sweet, texture-forward recipes guests remember. Secure
+                your slot today; weekend dates fill up fastest.
               </p>
 
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <a
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-7 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_16px_48px_rgba(98,166,255,0.35)] transition hover:brightness-110"
+                >
+                  Shop best-sellers
+                </Link>
+                <Link
                   href="#shop"
-                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-5 py-3 text-sm font-semibold text-[#070b1a] transition hover:brightness-110"
+                  className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
                 >
-                  Browse best-sellers
-                </a>
-                <a
-                  href="#about"
-                  className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-white"
-                >
-                  Learn more
-                </a>
+                  Discover our products
+                </Link>
               </div>
 
-              <div className="mt-10 grid gap-3 sm:grid-cols-2">
+              {/* <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-100/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]">
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-300" aria-hidden>
+                    ★★★★★
+                  </span>
+                  <span className="font-medium text-white">Loved for taste &amp; texture</span>
+                </div>
+                <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden />
+                <div>
+                  <span className="font-semibold text-[#9edcff]">
+                    Order before 1PM
+                  </span>{" "}
+                  Mon–Sat for same / next-day
+                </div>
+              </div> */}
+            </div>
+          </div>
+        </section>
+
+        {/* Quick trust + urgency strip */}
+        <section
+          className="border-b border-slate-900/10 bg-white/90 backdrop-blur-sm"
+          aria-label="Why order with us"
+        >
+          <div className="mx-auto grid max-w-6xl gap-4 px-4 py-5 sm:grid-cols-3">
+            {[
+              {
+                title: "Fresh from our kitchen",
+                body: "Made after you order — not sitting on a shelf.",
+              },
+              {
+                title: "Clear pickup & delivery windows",
+                body: "Choose a slot that fits your day.",
+              },
+              {
+                title: "Gifting-ready presentation",
+                body: "Impress at birthdays, raya, and “just because”.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex gap-3 rounded-2xl border border-slate-900/8 bg-white/80 px-4 py-3"
+              >
+                <span
+                  className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-[#62a6ff] to-[#57f0ff]"
+                  aria-hidden
+                />
+                <div>
+                  <div className="text-sm font-semibold text-slate-900">
+                    {item.title}
+                  </div>
+                  <div className="mt-0.5 text-sm text-slate-600">{item.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 pt-12 pb-6 sm:pt-16">
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-6">
+              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                Built for celebrations — and ordinary Tuesdays.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+                When people eat with their eyes first, a strong hero photo wins
+                attention; the next click should feel effortless. Start with
+                crowd favorites, then explore the full menu.
+              </p>
+              <Link
+                href="/shop"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#1a5f9e] hover:text-slate-900"
+              >
+                See full menu
+                <span aria-hidden>→</span>
+              </Link>
+            </div>
+            <div className="lg:col-span-6">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {[
                   {
                     title: "Baked fresh daily",
                     desc: "Preorder required — crafted in small batches.",
                   },
                   {
-                    title: "Same / Next-day delivery",
+                    title: "Same / next-day delivery",
                     desc: "Order before 1PM (Mon–Sat).",
                   },
                   {
@@ -100,13 +167,13 @@ export default function Home() {
                     desc: "Ingredients selected with care.",
                   },
                   {
-                    title: "Delivery coverage",
-                    desc: "Within selected city zones.",
+                    title: "Coverage",
+                    desc: "Delivery within selected city zones.",
                   },
                 ].map((f) => (
                   <div
                     key={f.title}
-                    className="rounded-2xl border border-slate-900/10 bg-white/70 p-4"
+                    className="rounded-2xl border border-slate-900/10 bg-white/80 p-4 shadow-sm shadow-slate-900/[0.03]"
                   >
                     <div className="text-sm font-semibold text-slate-900">
                       {f.title}
@@ -116,160 +183,101 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
-            <div className="lg:col-span-5">
-              <div className="relative overflow-hidden rounded-3xl border border-slate-900/10 bg-white/70 p-6">
-                <div className="absolute -top-24 -left-24 h-56 w-56 rounded-full bg-[#62a6ff]/20 blur-3xl" />
-                <div className="absolute -bottom-24 -right-24 h-56 w-56 rounded-full bg-[#57f0ff]/18 blur-3xl" />
-
-                <div className="relative">
-                  <div className="relative h-44 overflow-hidden rounded-2xl border border-slate-900/10 bg-white/60 shadow-sm">
-                    <Image
-                      src="/images/demo/hero-display-case.jpg"
-                      alt="Cake display case"
-                      fill
-                      className="object-cover"
-                      sizes="(min-width: 1024px) 420px, 100vw"
-                      priority
-                    />
-                  </div>
-                  <div className="text-xs font-medium tracking-wide text-slate-500">
-                    Top pick
-                  </div>
-                  <div className="mt-2 text-2xl font-semibold text-slate-900">
-                    Signature Collection
-                  </div>
-                  <div className="mt-2 text-sm leading-6 text-slate-600">
-                    A curated lineup of crowd favorites — balanced sweetness,
-                    modern flavor pairings, and a clean finish.
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-2 gap-3">
-                    {[
-                      { name: "Avocado", price: "RM125.00" },
-                      { name: "Prestige Noir", price: "RM235.00" },
-                      { name: "Everytime", price: "RM180.00" },
-                      { name: "Mango Yuzu", price: "RM120.00" },
-                    ].map((p) => (
-                      <div
-                        key={p.name}
-                        className="rounded-2xl border border-slate-900/10 bg-gradient-to-b from-white to-white/70 p-4"
-                      >
-                        <div className="text-sm font-semibold text-slate-900">
-                          {p.name}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          {p.price}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-between rounded-2xl border border-slate-900/10 bg-white/60 px-4 py-3">
-                    <div>
-                      <div className="text-sm font-semibold text-slate-900">
-                        Same-day delivery
-                      </div>
-                      <div className="text-xs text-slate-500">
-                        Order before 1PM (Mon–Sat)
-                      </div>
-                    </div>
-                    <a
-                      href="#shop"
-                      className="rounded-full bg-slate-900/5 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-900/10"
-                    >
-                      See menu
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
         <section id="shop" className="mx-auto max-w-6xl px-4 py-10">
-          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-                Best-selling cakes of the month
+              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                Best sellers — ready to add to cart
               </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                A modern, blueish theme storefront with a familiar ecommerce
-                layout — swap content/images later with your real products.
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                Tap a cake to choose size and date. Popular weekends sell out —
+                don&apos;t wait if you&apos;re celebrating soon.
               </p>
             </div>
-            <a
-              href="#"
-              className="rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-white"
+            <Link
+              href="/shop"
+              className="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-900/15 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-900/25 hover:bg-slate-50"
             >
-              View more
-            </a>
+              View all products
+            </Link>
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((p, idx) => (
-              <div
-                key={p.name}
-                className="group overflow-hidden rounded-3xl border border-slate-900/10 bg-white/70 transition hover:bg-white"
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredProducts.map((p, idx) => (
+              <article
+                key={p.slug}
+                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-900/10 bg-white/90 shadow-sm shadow-slate-900/[0.04] transition hover:-translate-y-0.5 hover:border-slate-900/15 hover:shadow-md"
               >
-                <div className="relative h-44 bg-gradient-to-br from-white/10 to-white/0">
+                <Link
+                  href={`/product/${p.slug}`}
+                  className="relative block aspect-[4/3] overflow-hidden bg-slate-100"
+                >
                   <div
-                    className="absolute inset-0 opacity-80"
+                    className="absolute inset-0 opacity-90 transition group-hover:opacity-100"
                     style={{
                       background:
                         idx % 2 === 0
-                          ? "radial-gradient(380px 220px at 20% 20%, rgba(98,166,255,0.35), transparent 55%)"
-                          : "radial-gradient(380px 220px at 80% 20%, rgba(87,240,255,0.25), transparent 55%)",
+                          ? "radial-gradient(420px 240px at 15% 15%, rgba(98,166,255,0.28), transparent 55%)"
+                          : "radial-gradient(420px 240px at 85% 15%, rgba(87,240,255,0.22), transparent 55%)",
                     }}
+                    aria-hidden
                   />
                   <Image
-                    src={p.imageSrc}
-                    alt={p.name}
+                    src={p.images[0]?.src ?? "/images/demo/shop/display-case.jpg"}
+                    alt={p.images[0]?.alt ?? p.name}
                     fill
-                    className="object-cover opacity-95"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
                     sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/85 to-transparent" />
-                  <div className="absolute left-4 top-4 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-xs font-medium text-slate-700 backdrop-blur">
-                    {p.tag}
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
+                  {p.badge ? (
+                    <div className="absolute left-3 top-3 rounded-full border border-slate-900/10 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-800 backdrop-blur">
+                      {p.badge}
+                    </div>
+                  ) : null}
+                </Link>
+
+                <div className="flex flex-1 flex-col p-5 pt-4">
+                  <Link href={`/product/${p.slug}`}>
+                    <h3 className="text-lg font-semibold text-slate-900 transition group-hover:text-[#1a5f9e]">
+                      {p.name}
+                    </h3>
+                  </Link>
+                  <p className="mt-1 text-base font-medium text-slate-700">
+                    {p.price}
+                  </p>
+
+                  <div className="mt-5 flex gap-2">
+                    <Link
+                      href={`/product/${p.slug}`}
+                      className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2.5 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
+                    >
+                      Order now
+                    </Link>
+                    <Link
+                      href="/shop"
+                      className="inline-flex items-center justify-center rounded-full border border-slate-900/12 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-white"
+                      aria-label={`More options for ${p.name}`}
+                    >
+                      More
+                    </Link>
                   </div>
                 </div>
-
-                <div className="p-5">
-                  <div className="text-base font-semibold text-slate-900">
-                    {p.name}
-                  </div>
-                  <div className="mt-1 text-sm text-slate-500">{p.price}</div>
-
-                  <div className="mt-4 flex gap-2">
-                    <a
-                      href="#"
-                      className="inline-flex flex-1 items-center justify-center rounded-full bg-slate-900/5 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-900/10"
-                    >
-                      Select options
-                    </a>
-                    <a
-                      href="#"
-                      className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white"
-                      aria-label="Add to wishlist"
-                      title="Add to wishlist"
-                    >
-                      ♡
-                    </a>
-                  </div>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
         <section id="about" className="mx-auto max-w-6xl px-4 py-10">
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-5">
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
                 Premium cakes
               </h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">
+              <p className="mt-3 text-base leading-relaxed text-slate-600">
                 A union of flavors and textures — built for gifting, sharing,
                 and those “just because” days.
               </p>
@@ -296,7 +304,7 @@ export default function Home() {
                 ].map((x) => (
                   <div
                     key={x.title}
-                    className="rounded-3xl border border-slate-900/10 bg-white/70 p-5"
+                    className="rounded-3xl border border-slate-900/10 bg-white/85 p-5"
                   >
                     <div className="text-sm font-semibold text-slate-900">
                       {x.title}
@@ -314,25 +322,26 @@ export default function Home() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-12">
-          <div className="rounded-3xl border border-slate-900/10 bg-gradient-to-br from-white/80 to-white/60 p-6 sm:p-8">
+          <div className="rounded-3xl border border-slate-900/10 bg-gradient-to-br from-white via-white to-[#f0f7ff] p-6 sm:p-10">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h2 className="text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl">
-                  Cake lovers say the nicest things
+                <h2 className="font-display text-2xl font-medium tracking-tight text-slate-900 sm:text-3xl">
+                  Real reviews from real celebrations
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Testimonials section styled like modern ecommerce reviews.
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                  Social proof reduces hesitation — here&apos;s what customers
+                  say about freshness, delivery, and flavor balance.
                 </p>
               </div>
-              <a
-                href="#"
-                className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+              <Link
+                href="/shop"
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
               >
-                Read more reviews
-              </a>
+                Order yours
+              </Link>
             </div>
 
-            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            <div className="mt-10 grid gap-5 lg:grid-cols-3">
               {[
                 {
                   name: "Rain Prince",
@@ -350,41 +359,48 @@ export default function Home() {
                   meta: "04 Feb 26",
                 },
               ].map((r) => (
-                <div
+                <blockquote
                   key={r.name}
-                  className="rounded-3xl border border-slate-900/10 bg-white/70 p-5"
+                  className="rounded-3xl border border-slate-900/10 bg-white/90 p-5"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="font-semibold text-slate-900">{r.name}</div>
                     <div className="text-xs text-slate-400">{r.meta}</div>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">
-                    {r.text}
+                  <p
+                    className="mt-2 text-amber-500"
+                    aria-label="5 out of 5 stars"
+                  >
+                    ★★★★★
                   </p>
-                </div>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                    “{r.text}”
+                  </p>
+                </blockquote>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="contact" className="mx-auto max-w-6xl px-4 pb-14">
+        <section id="contact" className="mx-auto max-w-6xl px-4 pb-16">
           <div className="grid gap-4 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <div className="rounded-3xl border border-slate-900/10 bg-white/70 p-6">
+              <div className="rounded-3xl border border-slate-900/10 bg-white/85 p-6">
                 <div className="text-sm font-semibold text-slate-900">
                   Follow us on Instagram
                 </div>
-                <div className="mt-2 text-sm leading-6 text-slate-600">
-                  Stay updated with the latest news and behind-the-scenes.
+                <div className="mt-2 text-sm leading-relaxed text-slate-600">
+                  New drops, behind-the-scenes, and limited editions — follow
+                  before they sell out.
                 </div>
-                <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-700">
+                <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800">
                   @maisoncakes
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-7">
-              <div className="rounded-3xl border border-slate-900/10 bg-white/70 p-6">
+              <div className="rounded-3xl border border-slate-900/10 bg-white/85 p-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <div className="text-sm font-semibold text-slate-900">
@@ -402,15 +418,29 @@ export default function Home() {
                     <div className="mt-2 space-y-1 text-sm text-slate-600">
                       <div>
                         Email:{" "}
-                        <a className="text-slate-800 hover:text-slate-900" href="#">
+                        <a
+                          className="font-medium text-slate-800 hover:text-slate-900"
+                          href="#"
+                        >
                           hello@maison.example
                         </a>
                       </div>
                       <div>
                         Phone:{" "}
-                        <a className="text-slate-800 hover:text-slate-900" href="#">
+                        <a
+                          className="font-medium text-slate-800 hover:text-slate-900"
+                          href="#"
+                        >
                           +60 12-000 0000
                         </a>
+                      </div>
+                      <div className="mt-3">
+                        <Link
+                          href="/contact"
+                          className="text-sm font-semibold text-[#1a5f9e] hover:text-slate-900"
+                        >
+                          WhatsApp, email &amp; social →
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -431,7 +461,7 @@ export default function Home() {
                     ].map((x) => (
                       <div
                         key={x.q}
-                        className="rounded-2xl border border-slate-900/10 bg-white/60 p-4"
+                        className="rounded-2xl border border-slate-900/10 bg-white/70 p-4"
                       >
                         <div className="text-sm font-semibold text-slate-900">
                           {x.q}
@@ -447,11 +477,11 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-900/10 bg-white/50">
+      <footer className="border-t border-slate-900/10 bg-white/60">
         <div className="mx-auto max-w-6xl px-4 py-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-slate-600">
-              © {new Date().getFullYear()} Maison. All rights reserved.
+              © {new Date().getFullYear()} Moja Maison Sdn Bhd. All rights reserved.
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-slate-500">
               <a className="hover:text-slate-900" href="#">

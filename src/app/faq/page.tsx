@@ -190,7 +190,7 @@ export default function FaqPage() {
         <div className="mx-auto max-w-6xl px-4 py-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-slate-600">
-              © {new Date().getFullYear()} Moja Maison. All rights reserved.
+              © {new Date().getFullYear()} Moja Maison Sdn Bhd. All rights reserved.
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-slate-500">
               <a className="hover:text-slate-900" href="#">

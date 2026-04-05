@@ -1,0 +1,45 @@
+================================================================================
+CONTACT PAGE — HOW TO EDIT YOUR LINKS
+================================================================================
+
+This site reads:  config/contact.json
+
+Edit that file with any text editor (Notepad, VS Code, etc.). Save the file.
+
+  • Local dev: save, then refresh the browser (restart `npm run dev` if the
+    page does not pick up changes).
+  • Production: commit your changes and redeploy / run `npm run build` again
+    so the new links are included in the build.
+
+JSON RULES (important):
+  • Use straight double quotes " like this — not curly “smart” quotes.
+  • Every line except the last item in { } or [ ] needs a comma at the end.
+  • If you are unsure, copy the pattern from contact.example.json.
+
+--------------------------------------------------------------------------------
+WHATSAPP
+--------------------------------------------------------------------------------
+  "url": full link, usually:
+    https://wa.me/60123456789
+  (Use your country code + number, no spaces or dashes in the digits part.)
+
+--------------------------------------------------------------------------------
+EMAIL
+--------------------------------------------------------------------------------
+  "address": your inbox only, e.g.  hello@yourbakery.com
+  The site will open the visitor’s email app (mailto:).
+
+--------------------------------------------------------------------------------
+FACEBOOK / INSTAGRAM
+--------------------------------------------------------------------------------
+  "url": paste the full page URL from your browser’s address bar.
+
+  "enabled": true  → button shows on the Contact page
+  "enabled": false → hidden until you turn it on
+
+--------------------------------------------------------------------------------
+BACKUP TEMPLATE
+--------------------------------------------------------------------------------
+See: config/contact.example.json (duplicate and rename to contact.json if needed)
+
+================================================================================
