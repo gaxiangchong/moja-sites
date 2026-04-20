@@ -10,6 +10,9 @@
   --border: rgba(11, 18, 32, 0.12);
   --accent: #62a6ff;
   --accent-2: #57f0ff;
+  /* Conversion / offer accents (hero, primary clicks) */
+  --cta: #34d399;
+  --cta-strong: #10b981;
 }
 
 @theme inline {

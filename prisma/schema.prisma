@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ShopHandoffConsume {
+  jti         String   @id
+  consumedAt  DateTime @default(now()) @map("consumed_at")
+
+  @@map("shop_handoff_consumes")
+}

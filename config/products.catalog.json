@@ -118,7 +118,7 @@
     {
       "slug": "pineapple-tart",
       "name": "Pineapple Tart",
-      "price": "RM55.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Premium Cake",
       "images": [
@@ -140,7 +140,7 @@
     {
       "slug": "seikhlas-raya-gift-box",
       "name": "Seikhlas Raya Gift Box",
-      "price": "RM195.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Premium Cake",
       "images": [
@@ -162,7 +162,7 @@
     {
       "slug": "prestige-noir",
       "name": "Prestige Noir",
-      "price": "RM235.00",
+      "price": "",
       "badge": "Signature",
       "category": "Premium Cake",
       "images": [
@@ -184,7 +184,7 @@
     {
       "slug": "lamour",
       "name": "L’amour",
-      "price": "RM180.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Premium Cake",
       "images": [
@@ -206,7 +206,7 @@
     {
       "slug": "everytime",
       "name": "Everytime",
-      "price": "RM180.00",
+      "price": "",
       "badge": "Top Pick!",
       "category": "Premium Cake",
       "images": [
@@ -228,7 +228,7 @@
     {
       "slug": "low-carb-pistachio-cake",
       "name": "Low Carb Pistachio Cake",
-      "price": "RM150.00",
+      "price": "",
       "badge": "Gluten-free",
       "category": "Collection Cake",
       "images": [
@@ -272,7 +272,7 @@
     {
       "slug": "watermelon-lychee",
       "name": "Watermelon Lychee",
-      "price": "RM118.00 – RM150.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Collection Cake",
       "images": [
@@ -295,7 +295,7 @@
     {
       "slug": "mellow-taro",
       "name": "Mellow Taro",
-      "price": "RM120.00 – RM150.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Collection Cake",
       "images": [
@@ -318,7 +318,7 @@
     {
       "slug": "la-lune",
       "name": "La Lune",
-      "price": "RM118.00",
+      "price": "",
       "badge": "Top Pick!",
       "category": "Collection Cake",
       "images": [
@@ -340,7 +340,7 @@
     {
       "slug": "avocado",
       "name": "Avocado",
-      "price": "RM125.00",
+      "price": "",
       "badge": "Top Pick!",
       "category": "Collection Cake",
       "images": [
@@ -362,7 +362,7 @@
     {
       "slug": "mango-yuzu",
       "name": "Mango Yuzu",
-      "price": "RM120.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Collection Cake",
       "images": [
@@ -384,7 +384,7 @@
     {
       "slug": "matcha-chacha",
       "name": "Matcha-chacha",
-      "price": "RM125.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Collection Cake",
       "images": [
@@ -406,7 +406,7 @@
     {
       "slug": "low-carb-chocolate-cake",
       "name": "Low Carb Chocolate Cake",
-      "price": "RM135.00",
+      "price": "",
       "badge": "Gluten-free",
       "category": "Collection Cake",
       "images": [
@@ -428,7 +428,7 @@
     {
       "slug": "strawberry",
       "name": "Strawberry",
-      "price": "RM125.00",
+      "price": "",
       "badge": "Kids' Choice",
       "category": "Collection Cake",
       "images": [
@@ -450,7 +450,7 @@
     {
       "slug": "duo-in-a-box-cny-collection",
       "name": "Duo in a box – CNY collection",
-      "price": "RM63.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Festive Cake",
       "images": [
@@ -473,7 +473,7 @@
     {
       "slug": "mothers-day",
       "name": "Mother’s Day",
-      "price": "RM155.00",
+      "price": "",
       "badge": "Festive Special",
       "category": "Festive Cake",
       "images": [
@@ -496,7 +496,7 @@
     {
       "slug": "chinese-new-year",
       "name": "Chinese New Year",
-      "price": "RM168.00",
+      "price": "",
       "badge": "Festive Special",
       "category": "Festive Cake",
       "images": [
@@ -519,7 +519,7 @@
     {
       "slug": "pineapple-tart-box-edition",
       "name": "Pineapple Tart",
-      "price": "RM55.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Box Edition",
       "images": [
@@ -541,7 +541,7 @@
     {
       "slug": "duo-in-a-box-cny-collection-box",
       "name": "Duo in a box – CNY collection",
-      "price": "RM63.00",
+      "price": "",
       "badge": "Same Day before 1pm",
       "category": "Box Edition",
       "images": [
@@ -564,7 +564,7 @@
     {
       "slug": "seindah-raya-set",
       "name": "Seindah Raya Set",
-      "price": "RM90.00",
+      "price": "",
       "badge": "Sold out",
       "category": "Box Edition",
       "images": [
@@ -587,7 +587,7 @@
     {
       "slug": "mid-autumn-baked-mooncake",
       "name": "Mid-Autumn Collection – Baked Mooncake",
-      "price": "RM163.00",
+      "price": "",
       "badge": "Sold out",
       "category": "Box Edition",
       "images": [
