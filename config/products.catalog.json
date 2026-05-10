@@ -1,611 +1,354 @@
 {
   "$schemaNote": "Edit this file to change product copy, prices, and images. Restart dev server after changes. See config/PRODUCTS-CONFIG.txt",
   "homeFeaturedSlugs": [
-    "avocado",
-    "prestige-noir",
-    "everytime",
-    "low-carb-pistachio-cake",
-    "labu-labu",
-    "duo-in-a-box-petits-gateaux"
+    "caramel-macademia-cake",
+    "matcha-marmalade",
+    "tiramisu-basque-cheesecake",
+    "truffle-basque-cheesecake",
+    "strawberry-shortcake",
+    "assorted-cookies-jar"
   ],
   "shopSections": [
     {
       "id": "premium-cake",
       "title": "Premium Cake",
-      "description": "French-inspired cakes with an Asian twist. Multi-layer indulgence with contrasting textures and complementary flavours.",
+      "description": "Signature whole cakes crafted from the finest ingredients. Multi-layer indulgence with contrasting textures and complementary flavours.",
       "productSlugs": [
-        "pineapple-tart",
-        "duo-in-a-box-petits-gateaux",
-        "seikhlas-raya-gift-box",
-        "prestige-noir",
-        "lamour",
-        "everytime"
+        "caramel-macademia-cake",
+        "lemon-yuzu-cake",
+        "matcha-marmalade",
+        "strawberry-shortcake",
+        "mixed-fruit-basque-cheesecake",
+        "jasmine-basque-cheesecake",
+        "tiramisu-basque-cheesecake",
+        "lemon-basque-cheesecake",
+        "truffle-basque-cheesecake"
       ]
     },
     {
       "id": "collection-cake",
       "title": "Collection Cake",
-      "description": "Classic delights with timeless flavours to mark just about every occasion.",
+      "description": "Everyday loaves, brownies and cookies — classic delights with timeless flavours for any occasion.",
       "productSlugs": [
-        "low-carb-pistachio-cake",
-        "labu-labu",
-        "watermelon-lychee",
-        "mellow-taro",
-        "la-lune",
-        "avocado",
-        "mango-yuzu",
-        "matcha-chacha",
-        "low-carb-chocolate-cake",
-        "strawberry"
-      ]
-    },
-    {
-      "id": "festive-cake",
-      "title": "Festive Cake",
-      "description": "Charming centrepieces for celebrations. Produced in limited quantities and seasonal availability.",
-      "productSlugs": [
-        "duo-in-a-box-cny-collection",
-        "mothers-day",
-        "chinese-new-year"
+        "lemon-pound-cake",
+        "banana-walnut-loaf",
+        "chocolate-brownie",
+        "chocolate-chip-soft-cookies",
+        "matcha-pistachio-soft-cookies"
       ]
     },
     {
       "id": "box-edition",
       "title": "Box Edition",
-      "description": "Thoughtfully curated boxes featuring a medley of flavours from our collection (based on availability).",
+      "description": "Cookie jars curated for gifting and sharing. Thoughtfully packed and ready to bring home.",
       "productSlugs": [
-        "pineapple-tart-box-edition",
-        "duo-in-a-box-cny-collection-box",
-        "seindah-raya-set",
-        "mid-autumn-baked-mooncake"
+        "assorted-cookies-jar",
+        "butter-cookies-jar",
+        "chocolate-chip-cookies-jar",
+        "chocolate-cookies-jar",
+        "matcha-cookies-jar"
       ]
     }
   ],
   "products": [
     {
-      "slug": "duo-in-a-box-petits-gateaux",
-      "name": "Duo in a box – Petits Gateaux",
-      "price": "RM63.00",
-      "badge": "Limited Days only",
-      "category": "Box Edition",
+      "slug": "caramel-macademia-cake",
+      "name": "Caramel Macademia Cake",
+      "price": "RM168.00",
+      "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Duo in a box - Image 1"
+          "src": "/images/products/caramel_macadamia_cake.png",
+          "alt": "Caramel Macademia Cake"
         },
         {
-          "src": "/images/demo/shop/choco-slice-raspberry.jpg",
-          "alt": "Duo in a box - Image 2"
-        },
-        {
-          "src": "/images/demo/shop/choco-slice-berries.jpg",
-          "alt": "Duo in a box - Image 3"
+          "src": "/images/products/caramel_macadamia_cake_v2.png",
+          "alt": "Caramel Macademia Cake — alternative angle"
         }
       ],
-      "summary": "Discover our Signature Duo in a Box (two petits gâteaux in a box), featuring petite versions of our premium cakes — Prestige Noir and L’amour.",
-      "highlights": [
-        {
-          "title": "L’amour (1 piece)",
-          "body": "Yuzu Light Cheese Mousse, Pink Grapefruit Marmalade, Baked Vanilla Cheesecake, Matcha Cloud Cake, Almond Crunch."
-        },
-        {
-          "title": "Prestige Noir (1 piece)",
-          "body": "66% Dark Chocolate Mousse, Sicilian Pistachio Praliné, Pistachio Génoise, Raspberry Confit, Pistachio-Hazelnut Crunch."
-        }
-      ],
-      "availabilityNote": "Available on Wednesday, Friday, Saturday & Sunday only.",
-      "size": [
-        "Diameter: 6–7cm ±",
-        "Serving recommendation: 1–2 servings"
-      ],
-      "allergens": [
-        "Dairy",
-        "Eggs",
-        "Gluten",
-        "Nuts"
-      ],
-      "handling": [
-        "Petit Gateaux can last in air-conditioned spaces for a maximum of 1 hour.",
-        "This cake is fragile — always transport on a flat surface and by car.",
-        "Upon receiving, please chill for at least 30 minutes before serving.",
-        "For travelling, store in a cooler box / cooler bag with ice packs."
-      ],
-      "storage": [
-        "Keep refrigerated (1°C–4°C). Do not freeze.",
-        "Best consumed within 2 days."
+      "summary": "Buttery vanilla layers swirled with rich salted caramel and topped with a generous scatter of toasted macadamia nuts. Nutty, indulgent, and beautifully balanced.",
+      "variants": [
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
       ]
     },
     {
-      "slug": "pineapple-tart",
-      "name": "Pineapple Tart",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "lemon-yuzu-cake",
+      "name": "Lemon Yuzu Cake",
+      "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/pineapple-upside-down.jpg",
-          "alt": "Pineapple Tart"
+          "src": "/images/products/lemon_yuzu_cake.png",
+          "alt": "Lemon Yuzu Cake"
         },
         {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Pastry close-up"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Bakery display"
+          "src": "/images/products/lemon_yuzu_cake_v2.png",
+          "alt": "Lemon Yuzu Cake — alternative angle"
         }
       ],
-      "summary": "Handcrafted pineapple tarts made with buttery pastry and slow-cooked pineapple filling, finished in a refined less-sweet style and crafted for gifting and sharing."
+      "summary": "A bright, citrus-forward sponge that pairs Mediterranean lemon with the floral zing of Japanese yuzu. Light, refreshing, and impossible to resist.",
+      "variants": [
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
     },
     {
-      "slug": "seikhlas-raya-gift-box",
-      "name": "Seikhlas Raya Gift Box",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "matcha-marmalade",
+      "name": "Matcha Marmalade",
+      "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Gift box treats"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts in display"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Celebration cake"
+          "src": "/images/products/matcha_crepe_cake.png",
+          "alt": "Matcha Marmalade"
         }
       ],
-      "summary": "A delightful selection of festive treats featuring Kek Medjool Kurma and signature cookies."
+      "summary": "Earthy ceremonial-grade matcha cake layered with a tangy yuzu-citrus marmalade. A grown-up balance of bitter, sweet, and bright.",
+      "variants": [
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
     },
     {
-      "slug": "prestige-noir",
-      "name": "Prestige Noir",
-      "price": "",
-      "badge": "Signature",
+      "slug": "strawberry-shortcake",
+      "name": "Strawberry Shortcake",
+      "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/choco-slice-raspberry.jpg",
-          "alt": "Chocolate & berry"
-        },
-        {
-          "src": "/images/demo/shop/choco-slice-berries.jpg",
-          "alt": "Chocolate slice"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Dessert counter"
+          "src": "/images/products/strawberry_shortcake.png",
+          "alt": "Strawberry Shortcake"
         }
       ],
-      "summary": "A harmonious blend of dark chocolate, pistachio and bright raspberries."
+      "summary": "Classic Japanese-style shortcake — airy chiffon sponge, freshly whipped cream, and ripe strawberries layered through every bite.",
+      "variants": [
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
     },
     {
-      "slug": "lamour",
-      "name": "L’amour",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "mixed-fruit-basque-cheesecake",
+      "name": "Mixed Fruit Basque Cheesecake",
+      "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/matcha-slice.jpg",
-          "alt": "Matcha-style cake slice"
+          "src": "/images/products/mixed_fruit_shortcake.png",
+          "alt": "Mixed Fruit Basque Cheesecake"
         },
         {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Light cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
+          "src": "/images/products/mixed_fruit_shortcake_v2.png",
+          "alt": "Mixed Fruit Basque Cheesecake — alternative angle"
         }
       ],
-      "summary": "Zesty yuzu and tangy grapefruit, balanced with matcha and almond."
+      "summary": "Our signature burnt Basque cheesecake topped with a colourful medley of seasonal fruits. Caramelised on top, custardy in the centre, and bursting with freshness.",
+      "variants": [
+        { "label": "6 inch", "price": "RM199.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
     },
     {
-      "slug": "everytime",
-      "name": "Everytime",
-      "price": "",
-      "badge": "Top Pick!",
+      "slug": "jasmine-basque-cheesecake",
+      "name": "Jasmine Basque Cheesecake",
+      "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Everytime cake"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Cake on stand"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Bakery case"
+          "src": "/images/products/pistachio_cake.png",
+          "alt": "Jasmine Basque Cheesecake (placeholder image)"
         }
       ],
-      "summary": "Premium vanilla bean with a tang from raspberries and toasted hazelnuts."
+      "summary": "A delicate twist on our Basque cheesecake — infused with fragrant jasmine tea for a floral, elegant finish that lingers on the palate.",
+      "variants": [
+        { "label": "6 inch", "price": "RM199.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
     },
     {
-      "slug": "low-carb-pistachio-cake",
-      "name": "Low Carb Pistachio Cake",
-      "price": "",
-      "badge": "Gluten-free",
+      "slug": "tiramisu-basque-cheesecake",
+      "name": "Tiramisu Basque Cheesecake",
+      "price": "RM199.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "src": "/images/products/tiramisu_crepe_cake.png",
+          "alt": "Tiramisu Basque Cheesecake"
+        }
+      ],
+      "summary": "The Italian classic reimagined as a burnt Basque cheesecake — espresso-soaked layers, mascarpone cream, and a dusting of cocoa over a caramelised top.",
+      "variants": [
+        { "label": "6 inch", "price": "RM199.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
+    },
+    {
+      "slug": "lemon-basque-cheesecake",
+      "name": "Lemon Basque Cheesecake",
+      "price": "RM199.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "src": "/images/products/carrot_cake_slice.png",
+          "alt": "Lemon Basque Cheesecake (placeholder image)"
+        }
+      ],
+      "summary": "Bright lemon zest folded through our signature burnt Basque cheesecake. Tangy, creamy, and gently caramelised — a dessert that wakes you up.",
+      "variants": [
+        { "label": "6 inch", "price": "RM199.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
+    },
+    {
+      "slug": "truffle-basque-cheesecake",
+      "name": "Truffle Basque Cheesecake",
+      "price": "RM208.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "src": "/images/products/lotus_biscoff_crepe_cake_slice.png",
+          "alt": "Truffle Basque Cheesecake"
+        }
+      ],
+      "summary": "Our most decadent Basque cheesecake — laced with rich dark chocolate truffle ganache and finished with a deeply caramelised top. For serious chocolate lovers.",
+      "variants": [
+        { "label": "6 inch", "price": "RM208.00", "available": true },
+        { "label": "8 inch", "price": null, "available": false }
+      ]
+    },
+    {
+      "slug": "lemon-pound-cake",
+      "name": "Lemon Pound Cake",
+      "price": "RM88.00",
       "category": "Collection Cake",
       "images": [
         {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Low Carb Pistachio Cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Cake display"
-        },
-        {
-          "src": "/images/demo/shop/matcha-slice.jpg",
-          "alt": "Slice detail"
+          "src": "/images/products/lemon_pound_cake.png",
+          "alt": "Lemon Pound Cake"
         }
       ],
-      "summary": "A light and creamy pistachio cake that’s low-carb, gluten-free, and sugar-free."
+      "summary": "A classic loaf with a buttery, dense crumb and a punchy lemon glaze. Comforting and timeless — perfect with coffee or tea."
     },
     {
-      "slug": "labu-labu",
-      "name": "Labu-Labu",
-      "price": "RM118.00",
-      "badge": "Same Day before 1pm",
+      "slug": "banana-walnut-loaf",
+      "name": "Banana Walnut Loaf",
+      "price": "RM99.00",
       "category": "Collection Cake",
       "images": [
         {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Labu-Labu"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Display case"
+          "src": "/images/products/banana_walnut_loaf.png",
+          "alt": "Banana Walnut Loaf"
         }
       ],
-      "summary": "A light, creamy pumpkin-shaped creation that’s a little fun and a little refined."
+      "summary": "Ripe bananas folded into a moist, tender loaf with toasted walnuts in every slice. Warm, comforting, and impossibly moreish."
     },
     {
-      "slug": "watermelon-lychee",
-      "name": "Watermelon Lychee",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "chocolate-brownie",
+      "name": "Chocolate Brownie",
+      "price": "RM13.90 each",
       "category": "Collection Cake",
       "images": [
         {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Watermelon Lychee"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Fruit cake"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Cake on stand"
+          "src": "/images/products/chocolate_brownies.png",
+          "alt": "Chocolate Brownie"
         }
       ],
-      "summary": "Refreshing watermelon and lychee, a perfect combination of light and vibrant flavors.",
-      "hasVariants": true
+      "summary": "Fudgy on the inside, lightly crisp on top, and made with a generous hit of dark chocolate. Intense, satisfying, and best enjoyed warm."
     },
     {
-      "slug": "mellow-taro",
-      "name": "Mellow Taro",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "chocolate-chip-soft-cookies",
+      "name": "Chocolate Chip Soft Cookies",
+      "price": "RM13.90 each",
       "category": "Collection Cake",
       "images": [
         {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Mellow Taro"
+          "src": "/images/products/chocolate_chip_cookie.png",
+          "alt": "Chocolate Chip Soft Cookies"
         },
         {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Bakery case"
-        },
-        {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Dessert"
+          "src": "/images/products/chocolate_chip_cookie_v2.png",
+          "alt": "Chocolate Chip Soft Cookies — alternative angle"
         }
       ],
-      "summary": "Robust with 100% fresh yam and Japanese purple sweet potatoes.",
-      "hasVariants": true
+      "summary": "Thick, soft-baked cookies with pools of melted dark chocolate. Soft centre, golden edges — best enjoyed warm with a glass of cold milk."
     },
     {
-      "slug": "la-lune",
-      "name": "La Lune",
-      "price": "",
-      "badge": "Top Pick!",
+      "slug": "matcha-pistachio-soft-cookies",
+      "name": "Matcha Pistachio Soft Cookies",
+      "price": "RM14.90 each",
       "category": "Collection Cake",
       "images": [
         {
-          "src": "/images/demo/shop/choco-slice-berries.jpg",
-          "alt": "La Lune"
-        },
-        {
-          "src": "/images/demo/shop/matcha-slice.jpg",
-          "alt": "Slice"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Display"
+          "src": "/images/products/matcha_cookie.png",
+          "alt": "Matcha Pistachio Soft Cookies"
         }
       ],
-      "summary": "Earthy, floral notes of oolong tea meets aromatic vanilla bean and velvety mascarpone."
+      "summary": "Buttery soft cookies infused with ceremonial-grade matcha and studded with chopped pistachios. Earthy, nutty, and gently sweet."
     },
     {
-      "slug": "avocado",
-      "name": "Avocado",
-      "price": "",
-      "badge": "Top Pick!",
-      "category": "Collection Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Avocado cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Cake"
-        }
-      ],
-      "summary": "A fusion between the buttery goodness of avocados and the airy lightness of cake."
-    },
-    {
-      "slug": "mango-yuzu",
-      "name": "Mango Yuzu",
-      "price": "",
-      "badge": "Same Day before 1pm",
-      "category": "Collection Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/pineapple-upside-down.jpg",
-          "alt": "Mango Yuzu"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Light cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        }
-      ],
-      "summary": "Refreshing and light with a balance of sweet and sour."
-    },
-    {
-      "slug": "matcha-chacha",
-      "name": "Matcha-chacha",
-      "price": "",
-      "badge": "Same Day before 1pm",
-      "category": "Collection Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/matcha-slice.jpg",
-          "alt": "Matcha-chacha"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Bakery case"
-        },
-        {
-          "src": "/images/demo/shop/choco-slice-berries.jpg",
-          "alt": "Cake slice"
-        }
-      ],
-      "summary": "A rich and indulgent matcha experience with a chilled cheesecake base."
-    },
-    {
-      "slug": "low-carb-chocolate-cake",
-      "name": "Low Carb Chocolate Cake",
-      "price": "",
-      "badge": "Gluten-free",
-      "category": "Collection Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/choco-slice-raspberry.jpg",
-          "alt": "Low Carb Chocolate Cake"
-        },
-        {
-          "src": "/images/demo/shop/choco-slice-berries.jpg",
-          "alt": "Chocolate slice"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        }
-      ],
-      "summary": "Rich and intense chocolate flavours made without gluten, flour or white sugar."
-    },
-    {
-      "slug": "strawberry",
-      "name": "Strawberry",
-      "price": "",
-      "badge": "Kids' Choice",
-      "category": "Collection Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Strawberry cake"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Strawberry cake (alt)"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        }
-      ],
-      "summary": "Bursts of strawberries, fluffy sponge, and creamy vanilla notes – joy in every bite!"
-    },
-    {
-      "slug": "duo-in-a-box-cny-collection",
-      "name": "Duo in a box – CNY collection",
-      "price": "",
-      "badge": "Same Day before 1pm",
-      "category": "Festive Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Festive duo box"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Cake"
-        },
-        {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Dessert"
-        }
-      ],
-      "summary": "Double the festive vibes with a limited edition Duo in a Box.",
-      "soldOut": true
-    },
-    {
-      "slug": "mothers-day",
-      "name": "Mother’s Day",
-      "price": "",
-      "badge": "Festive Special",
-      "category": "Festive Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/strawberry-cake-2.jpg",
-          "alt": "Mother’s Day cake"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        }
-      ],
-      "summary": "Blueberry, blackcurrant, blackberry, and vanilla bean — crafted to celebrate with elegance and love.",
-      "soldOut": true
-    },
-    {
-      "slug": "chinese-new-year",
-      "name": "Chinese New Year",
-      "price": "",
-      "badge": "Festive Special",
-      "category": "Festive Cake",
-      "images": [
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Chinese New Year cake"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Dessert display"
-        },
-        {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Dessert"
-        }
-      ],
-      "summary": "Bold flavours and festive textures — made to celebrate the season.",
-      "soldOut": true
-    },
-    {
-      "slug": "pineapple-tart-box-edition",
-      "name": "Pineapple Tart",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "assorted-cookies-jar",
+      "name": "Assorted Cookies Jar",
+      "price": "RM28.00",
       "category": "Box Edition",
       "images": [
         {
-          "src": "/images/demo/shop/pineapple-upside-down.jpg",
-          "alt": "Pineapple Tart (Box Edition)"
-        },
-        {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Pastry"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Display"
+          "src": "/images/products/assorted_cookies_jar.png",
+          "alt": "Assorted Cookies Jar"
         }
       ],
-      "summary": "A gifting-ready box of handcrafted pineapple tarts with buttery pastry and slow-cooked filling."
+      "summary": "A curated jar bringing together our most-loved cookies — chocolate chip, butter, matcha and more. Perfect for gifting or sharing at home."
     },
     {
-      "slug": "duo-in-a-box-cny-collection-box",
-      "name": "Duo in a box – CNY collection",
-      "price": "",
-      "badge": "Same Day before 1pm",
+      "slug": "butter-cookies-jar",
+      "name": "Butter Cookies Jar",
+      "price": "RM28.00",
       "category": "Box Edition",
       "images": [
         {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Duo in a box (Box Edition)"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Cake"
-        },
-        {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Dessert"
+          "src": "/images/products/butter_cookies_jar.png",
+          "alt": "Butter Cookies Jar"
         }
       ],
-      "summary": "A seasonal Duo in a Box, thoughtfully curated based on availability.",
-      "soldOut": true
+      "summary": "A jar of crumbly, melt-in-the-mouth butter cookies made with French cultured butter. Simple, timeless, and always welcome."
     },
     {
-      "slug": "seindah-raya-set",
-      "name": "Seindah Raya Set",
-      "price": "",
-      "badge": "Sold out",
+      "slug": "chocolate-chip-cookies-jar",
+      "name": "Chocolate Chip Cookies Jar",
+      "price": "RM28.00",
       "category": "Box Edition",
       "images": [
         {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Seindah Raya Set"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Dessert display"
-        },
-        {
-          "src": "/images/demo/shop/strawberry-cake.jpg",
-          "alt": "Cake"
+          "src": "/images/products/chocolate_chip_cookies_jar.png",
+          "alt": "Chocolate Chip Cookies Jar"
         }
       ],
-      "summary": "A festive set produced in limited quantities (seasonal).",
-      "soldOut": true
+      "summary": "Our signature chocolate chip cookies packed into a generous jar. Soft centres, golden edges, and plenty of dark chocolate in every bite."
     },
     {
-      "slug": "mid-autumn-baked-mooncake",
-      "name": "Mid-Autumn Collection – Baked Mooncake",
-      "price": "",
-      "badge": "Sold out",
+      "slug": "chocolate-cookies-jar",
+      "name": "Chocolate Cookies Jar",
+      "price": "RM28.00",
       "category": "Box Edition",
       "images": [
         {
-          "src": "/images/demo/shop/apple-tart.jpg",
-          "alt": "Baked Mooncake collection"
-        },
-        {
-          "src": "/images/demo/shop/display-case.jpg",
-          "alt": "Desserts"
-        },
-        {
-          "src": "/images/demo/shop/round-cake.jpg",
-          "alt": "Cake"
+          "src": "/images/products/chocolate_cookies_jar.png",
+          "alt": "Chocolate Cookies Jar"
         }
       ],
-      "summary": "French-inspired baked mooncakes. 6 in a box, perfect for gifting (seasonal).",
-      "soldOut": true
+      "summary": "Deep cocoa cookies with rich dark chocolate chunks, baked until just chewy. For anyone who likes their chocolate doubled."
+    },
+    {
+      "slug": "matcha-cookies-jar",
+      "name": "Matcha Cookies Jar",
+      "price": "RM28.00",
+      "category": "Box Edition",
+      "images": [
+        {
+          "src": "/images/products/matcha_cookies_jar.png",
+          "alt": "Matcha Cookies Jar"
+        }
+      ],
+      "summary": "Buttery matcha cookies tucked into a jar — earthy, gently sweet, and impossible to stop at one."
     }
   ]
 }

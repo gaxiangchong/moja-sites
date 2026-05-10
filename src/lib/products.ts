@@ -7,6 +7,15 @@ export type ProductCategory =
   | "Festive Cake"
   | "Box Edition";
 
+export type ProductVariant = {
+  /** Display label, e.g. "6 inch", "8 inch" */
+  label: string;
+  /** Price string for this variant (e.g. "RM168.00"). `null` means unavailable / NA. */
+  price: string | null;
+  /** Whether this variant is selectable / purchasable today. */
+  available: boolean;
+};
+
 export type ProductDetail = {
   slug: string;
   name: string;
@@ -25,8 +34,10 @@ export type ProductDetail = {
   storage?: string[];
   /** Shop grid: show sold-out state */
   soldOut?: boolean;
-  /** Shop grid: hint for variant picker */
+  /** Shop grid: hint for variant picker. Auto-derived from `variants` if not set. */
   hasVariants?: boolean;
+  /** Selectable purchase variants (e.g. 6 inch / 8 inch). */
+  variants?: ProductVariant[];
 };
 
 type CatalogJson = {
@@ -59,6 +70,21 @@ function normalizeProduct(p: ProductDetail): ProductDetail {
   }
   if (!p.images?.length) {
     throw new Error(`Product "${p.slug}" needs at least one image`);
+  }
+  if (p.variants?.length) {
+    for (const v of p.variants) {
+      if (!v.label?.trim()) {
+        throw new Error(`Product "${p.slug}" has a variant without a label`);
+      }
+      if (v.available && !v.price?.trim()) {
+        throw new Error(
+          `Product "${p.slug}" variant "${v.label}" is marked available but has no price`,
+        );
+      }
+    }
+  }
+  if (p.hasVariants === undefined && p.variants?.length) {
+    return { ...p, hasVariants: true };
   }
   return p;
 }

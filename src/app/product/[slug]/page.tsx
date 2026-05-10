@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { products, productsBySlug } from "@/lib/products";
-import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { ProductPurchasePanel } from "@/components/cart/ProductPurchasePanel";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export function generateStaticParams() {
@@ -79,7 +79,15 @@ export default async function ProductPage({
               {product.name}
             </h1>
             <div className="mt-3 text-xl font-semibold text-slate-900">
-              {product.price}
+              {product.variants?.length
+                ? product.variants.find((v) => v.available)?.price ??
+                  product.price
+                : product.price}
+              {product.variants?.length ? (
+                <span className="ml-2 align-middle text-xs font-medium uppercase tracking-wide text-slate-500">
+                  starts from
+                </span>
+              ) : null}
             </div>
 
             <p className="mt-4 text-sm leading-6 text-slate-600">
@@ -152,24 +160,13 @@ export default async function ProductPage({
                 placeholder="(optional) Your message"
               />
 
-              <div className="mt-5 flex items-center gap-3">
-                <AddToCartButton
-                  slug={product.slug}
-                  name={product.name}
-                  priceLabel={product.price}
-                  unitPriceRm={Number.parseFloat(
-                    product.price.replace("RM", "").replace(",", ""),
-                  )}
-                  imageSrc={product.images[0]?.src}
-                />
-                <button
-                  className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                  aria-label="Add to wishlist"
-                  title="Add to wishlist"
-                >
-                  ♡
-                </button>
-              </div>
+              <ProductPurchasePanel
+                slug={product.slug}
+                name={product.name}
+                basePriceLabel={product.price}
+                variants={product.variants}
+                imageSrc={product.images[0]?.src}
+              />
             </div>
           </section>
         </div>

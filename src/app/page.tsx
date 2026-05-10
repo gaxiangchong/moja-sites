@@ -66,12 +66,12 @@ export default function Home() {
                 >
                   Shop best-sellers
                 </Link>
-                <Link
-                  href="#shop"
+                <a
+                  href="https://app.mojamaison.com"
                   className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
                 >
-                  Discover our products
-                </Link>
+                  Become a member · Earn rewards
+                </a>
               </div>
 
               {/* <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-100/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]">
@@ -136,7 +136,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-6">
               <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Built for celebrations — and ordinary Tuesdays.
+                Built for celebrations — and ordinary Thursdays.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
                 When people eat with their eyes first, a strong hero photo wins
@@ -394,7 +394,7 @@ export default function Home() {
                   before they sell out.
                 </div>
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800">
-                  @maisoncakes
+                  @mojamaison
                 </div>
               </div>
             </div>
@@ -407,8 +407,8 @@ export default function Home() {
                       Operation hours
                     </div>
                     <div className="mt-2 space-y-1 text-sm text-slate-600">
-                      <div>Mon - Sat: 11:00 AM - 6:00 PM</div>
-                      <div>Sun: 10:00 AM - 12:30 PM</div>
+                      <div>Web - Mon: 11:00 AM - 8:00 PM</div>
+                      <div>Tue: OFF</div>
                     </div>
                   </div>
                   <div>
@@ -422,7 +422,7 @@ export default function Home() {
                           className="font-medium text-slate-800 hover:text-slate-900"
                           href="#"
                         >
-                          hello@maison.example
+                          admin@mojamaison.com
                         </a>
                       </div>
                       <div>
@@ -431,7 +431,7 @@ export default function Home() {
                           className="font-medium text-slate-800 hover:text-slate-900"
                           href="#"
                         >
-                          +60 12-000 0000
+                          +60 11-3933 1134
                         </a>
                       </div>
                       <div className="mt-3">

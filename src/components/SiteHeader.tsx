@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { CartButton } from "@/components/cart/CartButton";
+import mojaLogo from "../../public/images/moja-logo.png";
 
 type NavItem = { href: string; label: string };
 
@@ -46,11 +48,15 @@ export function SiteHeader({
           href="/"
           className="group inline-flex items-center gap-2"
           onClick={() => setOpen(false)}
+          aria-label="Moja Maison — home"
         >
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white ring-1 ring-slate-900/10">
-            <span className="h-4 w-4 rounded-sm bg-gradient-to-br from-[#62a6ff] to-[#57f0ff]" />
-          </span>
-          <span className="text-sm font-semibold tracking-wide text-slate-900">
+          <Image
+            src={mojaLogo}
+            alt=""
+            priority
+            className="h-9 w-9 object-contain"
+          />
+          <span className="text-sm font-semibold tracking-wide text-blue-900">
             Moja Maison
           </span>
         </Link>
