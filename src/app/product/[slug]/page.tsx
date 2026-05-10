@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { products, productsBySlug } from "@/lib/products";
 import { ProductPurchasePanel } from "@/components/cart/ProductPurchasePanel";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -223,6 +224,8 @@ export default async function ProductPage({
           ) : null}
         </div>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

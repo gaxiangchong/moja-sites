@@ -1,0 +1,12 @@
+{
+  "$schemaNote": "Edit this file to update company info shown in the footer and legal pages. Restart dev server after changes.",
+  "legalName": "Moja Maison Sdn Bhd",
+  "registrationNumber": "20260106629 (1668727-A)",
+  "registeredAddress": "43, Jalan Eko Botani 2F, Taman Eko Botani 2, 79100 Iskandar Puteri, Johor, Malaysia",
+  "contactEmail": "admin@mojamaison.com",
+  "contactPhone": "+60 11-3933 1134",
+  "jurisdiction": "Malaysia",
+  "termsLastUpdated": "2026-05-10",
+  "refundLastUpdated": "2026-05-10",
+  "privacyLastUpdated": "2026-05-10"
+}

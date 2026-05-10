@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import {
   getContactConfig,
   type ContactChannel,
@@ -139,6 +140,8 @@ export default function ContactPage() {
           </p>
         </section>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

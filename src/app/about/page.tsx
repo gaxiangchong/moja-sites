@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export default function AboutPage() {
   return (
@@ -163,26 +164,7 @@ export default function AboutPage() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-900/10 bg-white/50">
-        <div className="mx-auto max-w-6xl px-4 py-8">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="text-sm text-slate-600" suppressHydrationWarning>
-              © {new Date().getFullYear()} Moja Maison Sdn Bhd. All rights reserved.
-            </div>
-            <div className="flex flex-wrap gap-4 text-sm text-slate-500">
-              <a className="hover:text-slate-900" href="#">
-                Privacy Policy
-              </a>
-              <a className="hover:text-slate-900" href="#">
-                Terms of Service
-              </a>
-              <a className="hover:text-slate-900" href="#">
-                Refund Policy
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

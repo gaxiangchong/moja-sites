@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { useCart } from "@/components/cart/CartProvider";
 
 function formatRm(value: number) {
@@ -153,6 +154,8 @@ export default function CartPage() {
           </div>
         )}
       </main>
+
+      <SiteFooter />
     </div>
   );
 }
