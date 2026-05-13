@@ -1,15 +1,254 @@
+// moja-sites Prisma schema
+//
+// Backend for the standalone storefront. SalesPlay is the master loyalty /
+// customer ledger; this database holds orders, payments, webhook idempotency,
+// and an outbox for asynchronous SalesPlay calls.
+//
+// Conventions:
+//   - Money is stored as integer minor units (sen). No floats.
+//   - Invariant on orders: total_cents = subtotal_cents + tax_cents - discount_cents
+//   - All datetimes that carry wall-clock meaning (pickup, paid_at) use timestamptz.
+//   - Snapshot fields (product_name, unit_price_cents on lines) freeze the order
+//     against future catalog edits.
+
+// Prisma 7 conventions:
+//   - generator uses provider = "prisma-client" with an explicit output path.
+//   - datasource.url lives in prisma.config.ts (not in this schema).
+//   - Import the runtime client from "@/generated/prisma".
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
+// ---------------------------------------------------------------------------
+// SSO replay protection (kept from previous schema, now on Postgres)
+// ---------------------------------------------------------------------------
+
 model ShopHandoffConsume {
-  jti         String   @id
-  consumedAt  DateTime @default(now()) @map("consumed_at")
+  jti        String   @id
+  consumedAt DateTime @default(now()) @map("consumed_at") @db.Timestamptz(6)
 
   @@map("shop_handoff_consumes")
+}
+
+// ---------------------------------------------------------------------------
+// Customers
+//
+// Lightweight identity record. SalesPlay is source of truth for loyalty and
+// long-term customer attributes. The `loyalty_points_balance` / `_synced_at`
+// columns are a local cache so a future lean member app can read points
+// without round-tripping to SalesPlay on every request.
+// ---------------------------------------------------------------------------
+
+model Customer {
+  id                    String    @id @default(cuid())
+  email                 String?   @unique
+  // Always normalised to E.164, e.g. "+60123456789"
+  phone                 String    @unique
+  name                  String
+  salesplayCustomerId   String?   @unique @map("salesplay_customer_id")
+  // Optional link to the (separate) moja-member-app identity. Populated by the
+  // existing /sso/consume route if a member-app user shops on moja-sites.
+  memberAppCustomerId   String?   @unique @map("member_app_customer_id")
+  // Cached from SalesPlay. Updated after order push and via customers.update
+  // webhook. Treat as best-effort; SalesPlay is authoritative.
+  loyaltyPointsBalance  Int       @default(0) @map("loyalty_points_balance")
+  loyaltyPointsSyncedAt DateTime? @map("loyalty_points_synced_at") @db.Timestamptz(6)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  orders Order[]
+
+  @@map("customers")
+}
+
+// ---------------------------------------------------------------------------
+// Orders
+// ---------------------------------------------------------------------------
+
+enum OrderStatus {
+  pending
+  paid
+  cancelled
+  refunded
+  fulfilled
+
+  @@map("order_status")
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  // Human-readable reference, format "MM-XXXXXXXX" (last 8 chars of cuid, upper).
+  // Used in confirmation emails, admin UI, and as the SalesPlay receipt reference.
+  orderNumber   String      @unique @map("order_number")
+  customerId    String      @map("customer_id")
+  status        OrderStatus @default(pending)
+  currency      String      @default("MYR")
+  subtotalCents Int         @map("subtotal_cents")
+  taxCents      Int         @default(0) @map("tax_cents")
+  discountCents Int         @default(0) @map("discount_cents")
+  totalCents    Int         @map("total_cents")
+
+  // Pickup window. UI exposes 2-hour slots (12-14, 14-16, 16-18) but the DB
+  // stores actual start/end so we can adjust slot rules without a migration.
+  pickupStartAt DateTime  @map("pickup_start_at") @db.Timestamptz(6)
+  pickupEndAt   DateTime  @map("pickup_end_at") @db.Timestamptz(6)
+  pickupNotes   String?   @map("pickup_notes")
+
+  // Populated by the outbox processor after a successful SalesPlay receipt push.
+  salesplayReceiptId String?   @unique @map("salesplay_receipt_id")
+  paidAt             DateTime? @map("paid_at") @db.Timestamptz(6)
+  cancelledAt        DateTime? @map("cancelled_at") @db.Timestamptz(6)
+  fulfilledAt        DateTime? @map("fulfilled_at") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  customer       Customer          @relation(fields: [customerId], references: [id])
+  lines          OrderLine[]
+  paymentIntents PaymentIntent[]
+  outboxEntries  SalesPlayOutbox[]
+
+  @@index([status])
+  @@index([pickupStartAt])
+  @@index([customerId])
+  @@map("orders")
+}
+
+model OrderLine {
+  id             String  @id @default(cuid())
+  orderId        String  @map("order_id")
+  // Catalog slug at time of order. Catalog rows can move; this stays stable.
+  productSlug    String  @map("product_slug")
+  // Snapshot of catalog at order time. Survives later catalog edits.
+  productName    String  @map("product_name")
+  variantLabel   String? @map("variant_label")
+  quantity       Int
+  unitPriceCents Int     @map("unit_price_cents")
+  taxCents       Int     @default(0) @map("tax_cents")
+  lineTotalCents Int     @map("line_total_cents")
+  // SalesPlay product id when known. May be null on creation; outbox
+  // processor falls back to a generic "online cake" product if unmapped.
+  salesplayProductId String? @map("salesplay_product_id")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("order_lines")
+}
+
+// ---------------------------------------------------------------------------
+// Payment intents (Xendit)
+//
+// One Order can have multiple PaymentIntent rows (e.g. user retries after a
+// failed card). Each PaymentIntent maps to one Xendit payment_request.
+// ---------------------------------------------------------------------------
+
+enum PaymentProvider {
+  xendit
+
+  @@map("payment_provider")
+}
+
+model PaymentIntent {
+  id                       String          @id @default(cuid())
+  orderId                  String          @map("order_id")
+  provider                 PaymentProvider @default(xendit)
+  // Xendit payment_request id, e.g. "pr_..."
+  providerPaymentRequestId String          @unique @map("provider_payment_request_id")
+  // Latest Xendit status (REQUIRES_ACTION, SUCCEEDED, FAILED, ...)
+  providerStatus           String          @map("provider_status")
+  amountCents              Int             @map("amount_cents")
+  currency                 String          @default("MYR")
+  // Persisted JSON for debugging and replay.
+  rawCreateResponse        Json?           @map("raw_create_response")
+  rawLatestEvent           Json?           @map("raw_latest_event")
+  createdAt                DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@map("payment_intents")
+}
+
+// ---------------------------------------------------------------------------
+// Webhook idempotency
+//
+// Every inbound webhook from Xendit or SalesPlay is recorded first (insert
+// on (source, external_id) is the dedupe gate), then processed. Retries
+// from the provider become no-ops.
+// ---------------------------------------------------------------------------
+
+enum WebhookSource {
+  xendit
+  salesplay
+
+  @@map("webhook_source")
+}
+
+model WebhookEvent {
+  id          String        @id @default(cuid())
+  source      WebhookSource
+  externalId  String        @map("external_id")
+  eventType   String        @map("event_type")
+  receivedAt  DateTime      @default(now()) @map("received_at") @db.Timestamptz(6)
+  processedAt DateTime?     @map("processed_at") @db.Timestamptz(6)
+  payload     Json
+  lastError   String?       @map("last_error")
+
+  @@unique([source, externalId])
+  @@index([source, processedAt])
+  @@map("webhook_events")
+}
+
+// ---------------------------------------------------------------------------
+// SalesPlay outbox
+//
+// Durable async push queue. Cron worker claims pending rows with an
+// optimistic lock (locked_until) and processes with exponential backoff.
+// No Redis required at this volume.
+// ---------------------------------------------------------------------------
+
+enum SalesPlayOutboxKind {
+  create_customer
+  update_customer
+  create_receipt
+
+  @@map("salesplay_outbox_kind")
+}
+
+enum OutboxStatus {
+  pending
+  in_progress
+  done
+  failed
+
+  @@map("outbox_status")
+}
+
+model SalesPlayOutbox {
+  id            String              @id @default(cuid())
+  kind          SalesPlayOutboxKind
+  // Optional FKs; one or both populated depending on `kind`. We don't FK to
+  // Customer because some payloads precede the local customer existing.
+  orderId       String?             @map("order_id")
+  customerId    String?             @map("customer_id")
+  payload       Json
+  attempts      Int                 @default(0)
+  nextAttemptAt DateTime            @default(now()) @map("next_attempt_at") @db.Timestamptz(6)
+  lockedUntil   DateTime?           @map("locked_until") @db.Timestamptz(6)
+  status        OutboxStatus        @default(pending)
+  lastError     String?             @map("last_error")
+  createdAt     DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  order Order? @relation(fields: [orderId], references: [id])
+
+  @@index([status, nextAttemptAt])
+  @@map("salesplay_outbox")
 }

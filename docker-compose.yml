@@ -1,0 +1,35 @@
+# Local Postgres for moja-sites development.
+#
+# Usage:
+#   docker compose up -d        # start postgres in background
+#   docker compose down         # stop postgres (data persists in volume)
+#   docker compose down -v      # stop and wipe data
+#
+# After starting:
+#   1. Copy .env.example -> .env.local
+#   2. DATABASE_URL is already set to match this service.
+#   3. Run: npx prisma migrate dev --name init_payments_and_outbox
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: moja-sites-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: moja
+      POSTGRES_PASSWORD: moja_dev
+      POSTGRES_DB: moja_sites
+    ports:
+      # Use a high host port: 5433 is often taken by a local Postgres install on
+      # Windows; hitting the wrong process yields Prisma P1000 (auth failed).
+      - "55432:5432"
+    volumes:
+      - moja_sites_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moja -d moja_sites"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  moja_sites_pg_data:

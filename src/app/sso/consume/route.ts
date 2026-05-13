@@ -1,9 +1,7 @@
 import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-
-const memoryConsumed = new Set<string>();
 
 function failRedirect(req: NextRequest) {
   const path = process.env.SHOP_AFTER_SSO_FAIL_PATH ?? "/shop";
@@ -15,14 +13,9 @@ function successRedirect(req: NextRequest) {
   return NextResponse.redirect(new URL(path, req.url));
 }
 
+// Replay protection: a JTI may only be consumed once. Concurrent or repeated
+// consumption attempts race on the unique constraint and lose with P2002.
 async function markJtiConsumedOnce(jti: string): Promise<boolean> {
-  if (!process.env.DATABASE_URL?.trim()) {
-    if (memoryConsumed.has(jti)) {
-      return false;
-    }
-    memoryConsumed.add(jti);
-    return true;
-  }
   try {
     await prisma.shopHandoffConsume.create({ data: { jti } });
     return true;
