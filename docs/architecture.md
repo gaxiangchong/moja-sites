@@ -61,13 +61,63 @@ loyalty checking is enabled by the cached points columns on `Customer`.
 4. **`POST /api/webhooks/xendit`** receives `payment.succeeded`. Inserts a
    `WebhookEvent` row (idempotency). Marks `Order.status = paid`. Inserts
    a `SalesPlayOutbox` row (`kind = create_receipt`).
-5. **Cron worker** (Render Cron Job pinging `/api/cron/process-outbox`)
-   claims pending outbox rows with `locked_until`, calls SalesPlay,
-   stores back `salesplay_receipt_id` and refreshes
-   `customers.loyalty_points_balance`.
-6. **Customer** receives confirmation email; bakery receives internal
+5. **Cron worker** (Render Cron Job pinging **`GET` or `POST`
+   `/api/cron/process-outbox`**, with `Authorization: Bearer $CRON_SECRET` or
+   header `x-cron-secret`) claims pending outbox rows with `locked_until`,
+   calls SalesPlay (`POST /customers` then **`POST /online_orders`** per
+   [SalesPlay API](https://developer.salesplay.com/)), stores
+   `orders.salesplay_receipt_id` (`system_unique_id`) and best-effort
+   refreshes `customers.loyalty_points_balance` via `GET /customers`.
+6. **SalesPlay webhooks** (`POST /api/webhooks/salesplay`) receive
+   `customers.update` / `receipts.update` ([webhook overview](https://help.salesplay.com/help/webhook)),
+   dedupe via `webhook_events`, and refresh cached loyalty points when payloads
+   include `total_points` (and link `salesplay_customer_id` when known).
+7. **Customer** receives confirmation email; bakery receives internal
    alert; `/admin/orders` shows pending fulfillment.
-7. **Bakery** marks `Order.fulfilled` on pickup.
+8. **Bakery** marks `Order.fulfilled` on pickup.
+
+## Checkout → payment → SalesPlay (sequence)
+
+End-to-end view for a **first-time** shopper (new row in our `customers`, then
+SalesPlay is notified after pay). **Loyalty points** are awarded by **SalesPlay’s
+rules** when the online order is accepted; moja-sites **syncs** IDs and a
+**cached** `loyalty_points_balance`. **Receipt layout** (including whether points
+print on the slip) is **SalesPlay’s** template, not this app.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor Shopper
+  participant Browser
+  participant Moja as moja-sites
+  participant DB as Postgres
+  participant X as Xendit
+  participant SP as SalesPlay API
+  participant Cron as Cron job
+
+  Shopper->>Browser: Cart, name, phone, email, pickup slot
+  Browser->>Moja: POST /api/checkout/initiate
+  Moja->>DB: Upsert Customer, insert Order pending, PaymentIntent
+  Moja->>X: Create payment session
+  X-->>Browser: Redirect URL
+  Shopper->>X: Pay on hosted page
+  X->>Moja: POST /api/webhooks/xendit paid event
+  Moja->>DB: WebhookEvent dedupe, Order paid, enqueue SalesPlayOutbox
+
+  Note over Shopper,Moja: Shopper can return immediately; SalesPlay push is async
+
+  Cron->>Moja: GET or POST /api/cron/process-outbox
+  Moja->>SP: POST /customers upsert
+  Moja->>SP: POST /online_orders
+  SP-->>Moja: success.system_unique_id
+  Moja->>DB: orders.salesplay_receipt_id, cache points if resolvable
+
+  SP->>Moja: POST /api/webhooks/salesplay optional
+  Moja->>DB: webhook_events dedupe, refresh loyalty cache
+```
+
+Steps 7–8 in **Order lifecycle** (confirmation email, admin, fulfilment) are
+not shown above; they are the next phase of product work.
 
 ## Design rules
 
@@ -100,10 +150,10 @@ loyalty checking is enabled by the cached points columns on `Customer`.
 | Phase | Status | Deliverable |
 | --- | --- | --- |
 | 1 | shipped here | Postgres schema, outbox, SSO migration off SQLite, Prisma 7 upgrade |
-| 2 | next | SalesPlay HTTP client + types |
+| 2 | shipped here | SalesPlay HTTP client + types (`src/lib/salesplay/*`) |
 | 3 | optional | Catalog pulled from SalesPlay |
-| 4 | next | Checkout API + Xendit webhooks |
-| 5 | next | Outbox processor cron |
-| 6 | next | Inbound SalesPlay webhooks |
+| 4 | shipped here | Checkout API + Xendit webhooks |
+| 5 | shipped here | Outbox processor cron (`/api/cron/process-outbox`) |
+| 6 | shipped here | Inbound SalesPlay webhooks (`/api/webhooks/salesplay`) |
 | 7 | next | Admin orders + transactional emails |
 | 8 | last | Hardening: Sentry, rate limits, integration tests |

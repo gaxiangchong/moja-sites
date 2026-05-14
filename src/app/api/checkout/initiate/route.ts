@@ -13,6 +13,7 @@ import {
   pickupWindowFromDateAndSlot,
   type PickupSlotId,
 } from "@/lib/pickupSlots";
+import { splitCustomerName } from "@/lib/splitCustomerName";
 import { createXenditPaymentSession } from "@/lib/xenditSession";
 
 export const runtime = "nodejs";
@@ -26,16 +27,6 @@ type Body = {
   pickupSlot: PickupSlotId;
   pickupNotes?: string;
 };
-
-function splitName(full: string): { given: string; surname: string } {
-  const t = full.trim();
-  if (!t) return { given: "Customer", surname: "." };
-  const parts = t.split(/\s+/);
-  if (parts.length === 1) return { given: parts[0]!, surname: "." };
-  const surname = parts.pop()!;
-  const given = parts.join(" ");
-  return { given: given || surname, surname };
-}
 
 function publicBaseUrl(req: Request): string {
   const env = process.env.XENDIT_PUBLIC_BASE_URL?.trim();
@@ -112,7 +103,7 @@ export async function POST(req: Request) {
   const successReturnUrl = `${base}/checkout/return?orderId=${encodeURIComponent(orderId)}&status=success`;
   const cancelReturnUrl = `${base}/checkout/return?orderId=${encodeURIComponent(orderId)}&status=cancel`;
 
-  const { given, surname } = splitName(name);
+  const { firstName: given, lastName: surname } = splitCustomerName(name);
   const email = (body.customerEmail ?? "").trim() || undefined;
 
   const x = await createXenditPaymentSession({

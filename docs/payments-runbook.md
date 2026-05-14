@@ -145,14 +145,102 @@ If something goes wrong on Render:
 
 ---
 
-## Phase 2+ (to be filled in as we ship)
+## Phase 2 — SalesPlay HTTP client
 
-(Placeholders — populated when each phase lands.)
+Shipped files:
 
-- Phase 2 — SalesPlay HTTP client
-- Phase 3 — Catalog from SalesPlay (optional)
-- Phase 4 — Checkout API + Xendit
-- Phase 5 — Outbox processor cron
-- Phase 6 — Inbound SalesPlay webhooks
-- Phase 7 — Admin + emails
-- Phase 8 — Hardening
+- `src/lib/salesplay/types.ts` — Request/response shapes for customers and online orders.
+- `src/lib/salesplay/client.ts` — `SalesPlayClient` with Bearer auth against
+  `https://api.salesplaypos.com/v1.0` ([API reference](https://developer.salesplay.com/)).
+- `src/lib/salesplay/dateFormat.ts` — `Asia/Kuala_Lumpur` timestamps for SalesPlay fields.
+- `src/lib/salesplay/pushOrder.ts` — Maps paid `Order` rows to **`POST /online_orders`**
+  (SalesPlay’s channel for external web orders) and **`POST /customers`** for upsert.
+
+Environment:
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `SALESPLAY_ACCESS_TOKEN` | Yes (for sync) | Bearer token from SalesPlay Backoffice |
+| `SALESPLAY_SHOP_ID` | Yes | Target shop id (from `GET /shops`) |
+| `SALESPLAY_FALLBACK_PRODUCT_CODE` | Yes* | `product_code` on each line when `order_lines.salesplay_product_id` is null |
+| `SALESPLAY_API_BASE_URL` | No | Default `https://api.salesplaypos.com/v1.0` |
+| `SALESPLAY_ORDER_TYPE` | No | Default `Delivery` |
+| `SALESPLAY_ORDER_PAYMENT_TYPE` | No | Default `Card` — must match an enabled payment type name in SalesPlay |
+| `SALESPLAY_TARGET_TERMINAL` | No | Optional terminal id |
+| `SALESPLAY_CHANNEL_ORDER_STATUS_ID` / `NAME` | No | Defaults `0` / `pending` per SalesPlay online-order docs; adjust if your channel uses different values |
+
+\*Required unless every order line has `salesplay_product_id` populated (future catalog mapping).
+
+---
+
+## Phase 5 — Outbox processor (cron)
+
+Endpoint: **`GET` or `POST` `/api/cron/process-outbox`**
+
+Query: `limit` (1–50, default 10) — max outbox rows attempted per invocation.
+
+Auth:
+
+- `Authorization: Bearer <CRON_SECRET>` **or**
+- Header `x-cron-secret: <CRON_SECRET>`
+
+In **production**, `CRON_SECRET` must be set; otherwise the endpoint returns **401**.
+In development, if `CRON_SECRET` is unset, requests are allowed (local testing only).
+
+Behaviour:
+
+- Claims `SalesPlayOutbox` rows in `pending` state (optimistic lock via `locked_until`).
+- **`create_receipt`**: upsert customer, push **`/online_orders`**, save `orders.salesplay_receipt_id`
+  from `success.system_unique_id`, refresh cached loyalty points when `salesplay_customer_id` is known.
+- **`create_customer`** / **`update_customer`**: payload `{ "customerId": "<cuid>" }` — same customer upsert path.
+- Failures: exponential backoff on `next_attempt_at` (up to 24 tries), then `failed` status with `last_error`.
+
+Render: add a **Cron Job** service that curls the URL every 1–5 minutes with the bearer secret.
+
+---
+
+## Phase 4 — Xendit (reference)
+
+Checkout: `POST /api/checkout/initiate`. Webhook: `POST /api/webhooks/xendit` (header `x-callback-token`).
+
+---
+
+## Phase 6 — Inbound SalesPlay webhooks
+
+Endpoint: **`POST /api/webhooks/salesplay`**
+
+SalesPlay sends JSON payloads with `merchant_id`, `type`, `created_at`, and an
+event-specific array (`customers`, `receipts`, …). See
+[SalesPlay webhook help](https://help.salesplay.com/help/webhook).
+
+Auth (recommended in production):
+
+- Shared secret in env **`SALESPLAY_WEBHOOK_SECRET`**, sent as
+  **`x-salesplay-webhook-secret`** (or `x-webhook-secret`, or `Authorization: Bearer …`).
+
+If the secret is unset, the handler accepts requests only outside production
+(for local testing). **`SALESPLAY_MERCHANT_ID`** is optional; when set, the
+handler rejects payloads whose `merchant_id` does not match (spoof protection).
+
+Processing:
+
+- Inserts into **`webhook_events`** with `source = salesplay` and a stable
+  `external_id` for idempotency (retries are no-ops once `processed_at` is set).
+- **`customers.update`**: updates `customers.loyalty_points_balance` /
+  `loyalty_points_synced_at` when `total_points` is present; matches rows by
+  `salesplay_customer_id`, **`moja_<localCustomerId>`** customer_code, or
+  normalised Malaysian phone.
+- **`receipts.update`**: reads nested customer data when present and applies the
+  same loyalty cache refresh (receipts often follow a sale that changed points).
+
+Other event types (`inventory_levels.update`, `products.update`, …) are stored
+and marked processed without side effects.
+
+Register two webhook URLs in SalesPlay (one per event type), both pointing to
+`https://<your-domain>/api/webhooks/salesplay`.
+
+---
+
+## Phase 7+ (still to ship)
+
+- Admin UI + transactional emails.
