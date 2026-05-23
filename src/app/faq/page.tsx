@@ -128,9 +128,8 @@ export default function FaqPage() {
     <div className="min-h-full">
       <div className="border-b border-slate-900/10 bg-white/50">
         <div className="mx-auto max-w-6xl px-4 py-2 text-center text-xs tracking-wide text-slate-700 sm:text-sm">
-          ORDER BEFORE 1PM FOR SAME DAY / NEXT DAY PICK UP & DELIVERY{" "}
-          <span className="text-slate-400">•</span>{" "}
-          <span className="font-semibold text-slate-800">EXCEPT SUNDAY</span>
+          Website is under construction / Price may not be accurate
+
         </div>
       </div>
 

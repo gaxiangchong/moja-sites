@@ -14,14 +14,14 @@
       "title": "Premium Cake",
       "description": "Signature whole cakes crafted from the finest ingredients. Multi-layer indulgence with contrasting textures and complementary flavours.",
       "productSlugs": [
-        "caramel-macademia-cake",
-        "lemon-yuzu-cake",
+        "caramel-espresso-gateau",
+        "jasmine-blanc-cheesecake",
         "matcha-marmalade",
         "strawberry-shortcake",
         "mixed-fruit-basque-cheesecake",
-        "jasmine-basque-cheesecake",
-        "tiramisu-basque-cheesecake",
-        "lemon-basque-cheesecake",
+        "pistachio-noir-cheesecake",
+        "tiramisu-noir-cheesecake",
+        "citron-basque-cheesecake",
         "truffle-basque-cheesecake"
       ]
     },
@@ -52,24 +52,24 @@
   ],
   "products": [
     {
-      "slug": "caramel-macademia-cake",
-      "name": "Caramel Macademia Cake",
+      "slug": "caramel-espresso-gateau",
+      "name": "Caramel Espresso Gateau",
       "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
           "src": "/images/products/caramel_macadamia_cake.png",
-          "alt": "Caramel Macademia Cake"
+          "alt": "Caramel Espresso Gateau"
         },
         {
           "src": "/images/products/caramel_macadamia_cake_v2.png",
-          "alt": "Caramel Macademia Cake — alternative angle"
+          "alt": "Caramel Espresso Gateau — alternative angle"
         }
       ],
       "summary": "Buttery vanilla layers swirled with rich salted caramel and topped with a generous scatter of toasted macadamia nuts. Nutty, indulgent, and beautifully balanced.",
       "variants": [
         { "label": "6 inch", "price": "RM168.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "8 inch", "price": "RM228.00", "available": true }
       ]
     },
     {
@@ -90,7 +90,7 @@
       "summary": "A bright, citrus-forward sponge that pairs Mediterranean lemon with the floral zing of Japanese yuzu. Light, refreshing, and impossible to resist.",
       "variants": [
         { "label": "6 inch", "price": "RM168.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "8 inch", "price": "RM228.00", "available": true }
       ]
     },
     {
@@ -149,54 +149,54 @@
       ]
     },
     {
-      "slug": "jasmine-basque-cheesecake",
-      "name": "Jasmine Basque Cheesecake",
+      "slug": "matcha-marmalade-gateau",
+      "name": "Matcha Marmalade Gateau",
       "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/products/pistachio_cake.png",
-          "alt": "Jasmine Basque Cheesecake (placeholder image)"
+          "src": "/images/products/matcha_marmalade.png",
+          "alt": "Matcha Marmalade Gateau (placeholder image)"
         }
       ],
-      "summary": "A delicate twist on our Basque cheesecake — infused with fragrant jasmine tea for a floral, elegant finish that lingers on the palate.",
+      "summary": "A delicate twist on our Basque cheesecake — infused with fragrant matcha tea and yuzu-citrus marmalade for a floral, elegant finish that lingers on the palate.",
       "variants": [
-        { "label": "6 inch", "price": "RM199.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "6 inch", "price": "RM149.00", "available": true },
+        { "label": "8 inch", "price": "RM208.00", "available": true }
       ]
     },
     {
-      "slug": "tiramisu-basque-cheesecake",
-      "name": "Tiramisu Basque Cheesecake",
+      "slug": "tiramisu-noir-cheesecake",
+      "name": "Tiramisu Noir Cheesecake",
       "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/products/tiramisu_crepe_cake.png",
-          "alt": "Tiramisu Basque Cheesecake"
+          "src": "/images/products/tiramisu_noir.png",
+          "alt": "Tiramisu Noir Cheesecake"
         }
       ],
       "summary": "The Italian classic reimagined as a burnt Basque cheesecake — espresso-soaked layers, mascarpone cream, and a dusting of cocoa over a caramelised top.",
       "variants": [
-        { "label": "6 inch", "price": "RM199.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": "RM228.00", "available": true }
       ]
     },
     {
-      "slug": "lemon-basque-cheesecake",
-      "name": "Lemon Basque Cheesecake",
+      "slug": "citron-basque-cheesecake",
+      "name": "Citron Basque Cheesecake",
       "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
           "src": "/images/products/carrot_cake_slice.png",
-          "alt": "Lemon Basque Cheesecake (placeholder image)"
+          "alt": "Citron Basque Cheesecake (placeholder image)"
         }
       ],
       "summary": "Bright lemon zest folded through our signature burnt Basque cheesecake. Tangy, creamy, and gently caramelised — a dessert that wakes you up.",
       "variants": [
-        { "label": "6 inch", "price": "RM199.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "6 inch", "price": "RM139.00", "available": true },
+        { "label": "8 inch", "price": "RM208.00", "available": true }
       ]
     },
     {
@@ -212,8 +212,8 @@
       ],
       "summary": "Our most decadent Basque cheesecake — laced with rich dark chocolate truffle ganache and finished with a deeply caramelised top. For serious chocolate lovers.",
       "variants": [
-        { "label": "6 inch", "price": "RM208.00", "available": true },
-        { "label": "8 inch", "price": null, "available": false }
+        { "label": "6 inch", "price": "RM168.00", "available": true },
+        { "label": "8 inch", "price": "RM228.00", "available": true }
       ]
     },
     {
