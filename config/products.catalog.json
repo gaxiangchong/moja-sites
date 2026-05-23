@@ -1,9 +1,9 @@
 {
   "$schemaNote": "Edit this file to change product copy, prices, and images. Restart dev server after changes. See config/PRODUCTS-CONFIG.txt",
   "homeFeaturedSlugs": [
-    "caramel-macademia-cake",
+    "caramel-espresso-gateau",
     "matcha-marmalade",
-    "tiramisu-basque-cheesecake",
+    "tiramisu-noir-cheesecake",
     "truffle-basque-cheesecake",
     "strawberry-shortcake",
     "assorted-cookies-jar"
@@ -149,17 +149,34 @@
       ]
     },
     {
-      "slug": "matcha-marmalade-gateau",
-      "name": "Matcha Marmalade Gateau",
+      "slug": "jasmine-blanc-cheesecake",
+      "name": "Jasmine Blanc Cheesecake",
       "price": "RM199.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/products/matcha_marmalade.png",
-          "alt": "Matcha Marmalade Gateau (placeholder image)"
+          "src": "/images/products/lemon_yuzu_cake.png",
+          "alt": "Jasmine Blanc Cheesecake"
         }
       ],
-      "summary": "A delicate twist on our Basque cheesecake — infused with fragrant matcha tea and yuzu-citrus marmalade for a floral, elegant finish that lingers on the palate.",
+      "summary": "A delicate twist on our Basque cheesecake — infused with fragrant jasmine tea for a floral, elegant finish that lingers on the palate.",
+      "variants": [
+        { "label": "6 inch", "price": "RM199.00", "available": true },
+        { "label": "8 inch", "price": "RM208.00", "available": true }
+      ]
+    },
+    {
+      "slug": "pistachio-noir-cheesecake",
+      "name": "Pistachio Noir Cheesecake",
+      "price": "RM149.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "src": "/images/products/matcha_marmalade.png",
+          "alt": "Pistachio Noir Cheesecake"
+        }
+      ],
+      "summary": "Finely ground pistachios folded through our burnt Basque cheesecake, finished with a deeply caramelised top and a whisper of dark chocolate. Nutty, rich, and quietly luxurious.",
       "variants": [
         { "label": "6 inch", "price": "RM149.00", "available": true },
         { "label": "8 inch", "price": "RM208.00", "available": true }
@@ -168,7 +185,7 @@
     {
       "slug": "tiramisu-noir-cheesecake",
       "name": "Tiramisu Noir Cheesecake",
-      "price": "RM199.00",
+      "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
@@ -185,7 +202,7 @@
     {
       "slug": "citron-basque-cheesecake",
       "name": "Citron Basque Cheesecake",
-      "price": "RM199.00",
+      "price": "RM139.00",
       "category": "Premium Cake",
       "images": [
         {
@@ -202,7 +219,7 @@
     {
       "slug": "truffle-basque-cheesecake",
       "name": "Truffle Basque Cheesecake",
-      "price": "RM208.00",
+      "price": "RM168.00",
       "category": "Premium Cake",
       "images": [
         {
