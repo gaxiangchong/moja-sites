@@ -6,8 +6,10 @@ import { getHomeFeaturedProducts } from "@/lib/products";
 
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
-export default function Home() {
-  const featuredProducts = getHomeFeaturedProducts();
+export const revalidate = 60;
+
+export default async function Home() {
+  const featuredProducts = await getHomeFeaturedProducts();
 
   return (
     <div className="flex flex-col flex-1">

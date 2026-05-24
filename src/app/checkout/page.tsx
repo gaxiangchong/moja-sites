@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useCart } from "@/components/cart/CartProvider";
+import { requestMemberCheckoutRedirect } from "@/lib/memberCheckout";
 
 function formatRm(value: number) {
   return `RM${value.toFixed(2)}`;
@@ -11,6 +13,26 @@ function formatRm(value: number) {
 
 export default function CheckoutPage() {
   const { items, subtotalRm } = useCart();
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
+
+  const handlePayInMemberApp = async () => {
+    if (items.length === 0 || paying) return;
+    setPayError(null);
+    setPaying(true);
+    try {
+      const redirectUrl = await requestMemberCheckoutRedirect(
+        items,
+        window.location.href,
+      );
+      window.location.href = redirectUrl;
+    } catch (err) {
+      setPayError(
+        err instanceof Error ? err.message : "Could not open member checkout",
+      );
+      setPaying(false);
+    }
+  };
 
   return (
     <div className="min-h-full">
@@ -30,7 +52,7 @@ export default function CheckoutPage() {
               Checkout
             </h1>
             <p className="mt-2 text-sm text-slate-600">
-              Confirm your details, then complete payment.
+              Confirm your details, then complete payment in the Moja Member app.
             </p>
           </div>
           <Link
@@ -139,20 +161,23 @@ export default function CheckoutPage() {
                   </span>
                 </div>
                 <div className="mt-2 text-xs text-slate-500">
-                  Delivery and discounts are applied at payment in a real
-                  integration.
+                  Payment runs through the Moja Member app (Touch &apos;n Go, FPX,
+                  cards, and more).
                 </div>
+
+                {payError ? (
+                  <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {payError}
+                  </p>
+                ) : null}
 
                 <button
                   type="button"
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-900/90"
-                  onClick={() => {
-                    alert(
-                      "Payment is not connected yet. Next step: integrate Stripe/FPX/etc.",
-                    );
-                  }}
+                  disabled={paying}
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-900/90 disabled:cursor-not-allowed disabled:opacity-60"
+                  onClick={() => void handlePayInMemberApp()}
                 >
-                  Pay now
+                  {paying ? "Opening member checkout…" : "Pay in Moja Member app"}
                 </button>
               </div>
             </aside>

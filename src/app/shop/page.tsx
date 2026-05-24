@@ -73,8 +73,10 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
   );
 }
 
-export default function ShopPage() {
-  const sections = getShopSections();
+export const revalidate = 60;
+
+export default async function ShopPage() {
+  const sections = await getShopSections();
 
   return (
     <div className="min-h-full">
@@ -92,11 +94,9 @@ export default function ShopPage() {
           <div>
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Shop</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Products, prices, photos, and descriptions are loaded from{" "}
-              <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-800">
-                config/products.catalog.json
-              </code>
-              . Edit that file and restart the dev server to update the storefront.
+              Products, prices, photos, and descriptions are loaded from the Moja
+              Member API catalog. Update products in the member admin dashboard
+              (or data/shop-catalog.products.json on the API server).
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

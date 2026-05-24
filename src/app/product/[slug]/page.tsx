@@ -1,13 +1,20 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { products, productsBySlug } from "@/lib/products";
+import { getCatalogProducts, getProductsBySlug } from "@/lib/products";
 import { ProductPurchasePanel } from "@/components/cart/ProductPurchasePanel";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  try {
+    const products = await getCatalogProducts();
+    return products.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
+
+export const revalidate = 60;
 
 export default async function ProductPage({
   params,
@@ -15,6 +22,7 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const productsBySlug = await getProductsBySlug();
   const product = productsBySlug.get(slug);
   if (!product) return notFound();
 
