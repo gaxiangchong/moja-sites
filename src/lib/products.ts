@@ -31,6 +31,12 @@ export type ProductDetail = {
   images: { src: string; alt: string }[];
   summary: string;
   shortDescription?: string;
+  highlights?: { title: string; body: string }[];
+  availabilityNote?: string;
+  size?: string[];
+  allergens?: string[];
+  handling?: string[];
+  storage?: string[];
   soldOut?: boolean;
   hasVariants?: boolean;
   variants?: ProductVariant[];
