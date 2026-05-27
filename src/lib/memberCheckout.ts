@@ -35,9 +35,18 @@ export function cartItemsToHandoffLines(
   }));
 }
 
+export type MemberCheckoutFulfillment = {
+  method: "pickup" | "delivery";
+  /** Time-of-day in 24h HH:mm matching the member app's slot list. Null when user has no preference. */
+  preferredTime: string | null;
+  /** Original human label of the slot, kept for display only. */
+  preferredTimeLabel: string | null;
+};
+
 export async function requestMemberCheckoutRedirect(
   items: CartItem[],
   sourceUrl: string,
+  fulfillment?: MemberCheckoutFulfillment,
 ): Promise<string> {
   const res = await fetch("/api/checkout/handoff", {
     method: "POST",
@@ -45,6 +54,7 @@ export async function requestMemberCheckoutRedirect(
     body: JSON.stringify({
       lines: cartItemsToHandoffLines(items, window.location.origin),
       sourceUrl,
+      fulfillment: fulfillment ?? undefined,
     }),
   });
   const data = (await res.json()) as {

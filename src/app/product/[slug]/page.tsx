@@ -129,7 +129,7 @@ export default async function ProductPage({
 
             <div className="mt-6 rounded-3xl border border-slate-900/10 bg-white/70 p-5">
               <div className="text-sm font-semibold text-slate-900">
-                Delivery Day / Pick-up Day
+                Pickup day
               </div>
               <select className="mt-2 w-full rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm text-slate-700">
                 <option>(optional)</option>
@@ -140,7 +140,7 @@ export default async function ProductPage({
               </select>
 
               <div className="mt-4 text-sm font-semibold text-slate-900">
-                Delivery Time / Pick-up Time
+                Pickup time
               </div>
               <select className="mt-2 w-full rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm text-slate-700">
                 <option>(optional) Choose your preferred time</option>

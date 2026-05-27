@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { useCart } from "@/components/cart/CartProvider";
@@ -11,10 +11,28 @@ function formatRm(value: number) {
   return `RM${value.toFixed(2)}`;
 }
 
+type TimeSlot = {
+  value: string; // HH:mm (24h) sent to member app
+  label: string; // human readable label
+};
+
+const TIME_SLOTS: TimeSlot[] = [
+  { value: "11:00", label: "11am – 1pm (Mon – Sat)" },
+  { value: "14:00", label: "2pm – 4pm (Mon – Sat)" },
+  { value: "16:00", label: "4pm – 6pm (Mon – Sat)" },
+  { value: "10:00", label: "10am – 12:30pm (Sun)" },
+];
+
 export default function CheckoutPage() {
   const { items, subtotalRm } = useCart();
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
+  const [preferredTime, setPreferredTime] = useState<string>("");
+
+  const selectedSlotLabel = useMemo(() => {
+    if (!preferredTime) return null;
+    return TIME_SLOTS.find((s) => s.value === preferredTime)?.label ?? null;
+  }, [preferredTime]);
 
   const handlePayInMemberApp = async () => {
     if (items.length === 0 || paying) return;
@@ -24,6 +42,11 @@ export default function CheckoutPage() {
       const redirectUrl = await requestMemberCheckoutRedirect(
         items,
         window.location.href,
+        {
+          method: "pickup",
+          preferredTime: preferredTime || null,
+          preferredTimeLabel: selectedSlotLabel,
+        },
       );
       window.location.href = redirectUrl;
     } catch (err) {
@@ -52,7 +75,7 @@ export default function CheckoutPage() {
               Checkout
             </h1>
             <p className="mt-2 text-sm text-slate-600">
-              Confirm your details, then complete payment in the Moja Member app.
+              Choose your preferred pickup time, then complete payment in the Moja Member app.
             </p>
           </div>
           <Link
@@ -85,66 +108,33 @@ export default function CheckoutPage() {
             <section className="lg:col-span-7 space-y-4">
               <div className="rounded-3xl border border-slate-900/10 bg-white/70 p-6">
                 <div className="text-sm font-semibold text-slate-900">
-                  Member benefits
+                  Pickup
                 </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Before you pay, consider signing up as a{" "}
-                  <span className="font-semibold text-slate-900">
-                    Moja Maison member
-                  </span>{" "}
-                  to unlock extra discounts and perks.
+                <p className="mt-2 text-sm text-slate-600">
+                  All orders are <span className="font-semibold text-slate-900">self pickup</span> at our store —
+                  we don&apos;t offer delivery at the moment. Your time preference is carried over to the Moja Member app.
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-slate-600">
-                  <li>- Member-only discounts & promo codes</li>
-                  <li>- Faster checkout for repeat orders</li>
-                  <li>- Order tracking and saved delivery details</li>
-                </ul>
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="#"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-5 py-3 text-sm font-semibold text-slate-900 shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110"
-                  >
-                    Sign up & get benefits
-                  </Link>
-                  <Link
-                    href="#"
-                    className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                  >
-                    Log in
-                  </Link>
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                    onClick={() => {
-                      // placeholder: continue as guest
-                      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-                    }}
-                  >
-                    Continue as guest
-                  </button>
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-slate-900/10 bg-white/70 p-6">
-                <div className="text-sm font-semibold text-slate-900">
-                  Delivery / Pickup
-                </div>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <select className="w-full rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm text-slate-700">
-                    <option>Delivery</option>
-                    <option>Pickup</option>
-                  </select>
-                  <select className="w-full rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm text-slate-700">
-                    <option>(optional) Preferred time</option>
-                    <option>11am - 1pm (Mon - Sat)</option>
-                    <option>2pm - 4pm (Mon - Sat)</option>
-                    <option>4pm - 6pm (Mon - Sat)</option>
-                    <option>10am - 12:30pm (Sun)</option>
-                  </select>
+                <div className="mt-4">
+                  <label className="block">
+                    <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Preferred pickup time (optional)
+                    </span>
+                    <select
+                      className="w-full rounded-xl border border-slate-900/10 bg-white px-3 py-2 text-sm text-slate-700"
+                      value={preferredTime}
+                      onChange={(e) => setPreferredTime(e.target.value)}
+                    >
+                      <option value="">No preference</option>
+                      {TIME_SLOTS.map((slot) => (
+                        <option key={slot.value} value={slot.value}>
+                          {slot.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </div>
                 <div className="mt-3 text-xs text-slate-500">
-                  This is a UI preview; payment + real delivery pricing can be
-                  connected later.
+                  You can fine-tune the exact pickup date and time in the Moja Member app before paying.
                 </div>
               </div>
             </section>
@@ -189,4 +179,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-

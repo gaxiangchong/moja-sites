@@ -9,6 +9,12 @@ type HandoffLine = {
   imageUrl?: string | null;
 };
 
+type HandoffFulfillment = {
+  method?: "pickup" | "delivery";
+  preferredTime?: string | null;
+  preferredTimeLabel?: string | null;
+};
+
 export async function POST(req: NextRequest) {
   const memberApiBase = process.env.MEMBER_API_BASE_URL?.trim();
   if (!memberApiBase) {
@@ -18,7 +24,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { lines?: HandoffLine[]; sourceUrl?: string };
+  let body: {
+    lines?: HandoffLine[];
+    sourceUrl?: string;
+    fulfillment?: HandoffFulfillment;
+  };
   try {
     body = await req.json();
   } catch {
@@ -36,6 +46,7 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       lines: body.lines,
       sourceUrl: body.sourceUrl,
+      fulfillment: body.fulfillment,
     }),
   });
 
