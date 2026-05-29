@@ -1,5 +1,10 @@
 import { cache } from "react";
 import {
+  getLocalCatalogProducts,
+  getLocalHomeFeaturedProducts,
+  getLocalShopSections,
+} from "./localCatalog";
+import {
   fetchMemberCatalogLayout,
   fetchMemberCatalogProducts,
   productHasVariants,
@@ -10,55 +15,15 @@ import {
   type MemberCatalogProduct,
 } from "./memberCatalog";
 
-export type ProductCategory =
-  | "Premium Cake"
-  | "Collection Cake"
-  | "Festive Cake"
-  | "Box Edition";
+export type {
+  ProductCategory,
+  ProductDetail,
+  ProductVariant,
+  ShopListingProduct,
+  ShopSection,
+} from "./productTypes";
 
-export type ProductVariant = {
-  label: string;
-  price: string | null;
-  available: boolean;
-};
-
-export type ProductDetail = {
-  slug: string;
-  name: string;
-  price: string;
-  badge?: string;
-  category: ProductCategory;
-  images: { src: string; alt: string }[];
-  summary: string;
-  shortDescription?: string;
-  highlights?: { title: string; body: string }[];
-  availabilityNote?: string;
-  size?: string[];
-  allergens?: string[];
-  handling?: string[];
-  storage?: string[];
-  soldOut?: boolean;
-  hasVariants?: boolean;
-  variants?: ProductVariant[];
-};
-
-export type ShopListingProduct = {
-  slug: string;
-  name: string;
-  description: string;
-  badge?: string;
-  price: string;
-  imageSrc: string;
-  soldOut?: boolean;
-  hasVariants?: boolean;
-};
-
-export type ShopSection = {
-  id: string;
-  title: string;
-  description: string;
-  products: ShopListingProduct[];
-};
+import type { ProductCategory, ProductDetail, ShopListingProduct, ShopSection } from "./productTypes";
 
 function assertCategory(c: string | undefined): ProductCategory {
   if (
@@ -103,9 +68,62 @@ function toShopListing(p: MemberCatalogProduct): ShopListingProduct {
   };
 }
 
+function memberApiConfigured(): boolean {
+  if (process.env.MEMBER_API_BASE_URL?.trim()) return true;
+  return process.env.NODE_ENV === "development";
+}
+
+async function tryMemberCatalog(): Promise<{
+  products: ProductDetail[];
+  shopSections: ShopSection[];
+  homeFeatured: ProductDetail[];
+} | null> {
+  if (!memberApiConfigured()) return null;
+  try {
+    const [layout, memberProducts] = await Promise.all([
+      fetchMemberCatalogLayout(),
+      fetchMemberCatalogProducts(),
+    ]);
+    const byId = new Map(memberProducts.map((p) => [p.id, p]));
+    const products = memberProducts.map(toProductDetail);
+    const shopSections = layout.shopSections.map((section) => ({
+      id: section.id,
+      title: section.title,
+      description: section.description,
+      products: section.productIds
+        .map((id) => byId.get(id))
+        .filter((p): p is MemberCatalogProduct => Boolean(p))
+        .map(toShopListing),
+    }));
+    const homeFeatured = layout.homeFeaturedProductIds
+      .map((id) => byId.get(id))
+      .filter((p): p is MemberCatalogProduct => Boolean(p))
+      .map(toProductDetail);
+    return { products, shopSections, homeFeatured };
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[catalog] Member API unavailable; using config/products.catalog.json.",
+        err instanceof Error ? err.message : err,
+      );
+    }
+    return null;
+  }
+}
+
+const getCatalogBundle = cache(async () => {
+  const fromApi = await tryMemberCatalog();
+  if (fromApi) return fromApi;
+  return {
+    products: getLocalCatalogProducts(),
+    shopSections: getLocalShopSections(),
+    homeFeatured: getLocalHomeFeaturedProducts(),
+  };
+});
+
 export const getCatalogProducts = cache(async (): Promise<ProductDetail[]> => {
-  const items = await fetchMemberCatalogProducts();
-  return items.map(toProductDetail);
+  const { products } = await getCatalogBundle();
+  return products;
 });
 
 export const getProductsBySlug = cache(async (): Promise<Map<string, ProductDetail>> => {
@@ -114,30 +132,11 @@ export const getProductsBySlug = cache(async (): Promise<Map<string, ProductDeta
 });
 
 export const getShopSections = cache(async (): Promise<ShopSection[]> => {
-  const [layout, products] = await Promise.all([
-    fetchMemberCatalogLayout(),
-    fetchMemberCatalogProducts(),
-  ]);
-  const byId = new Map(products.map((p) => [p.id, p]));
-  return layout.shopSections.map((section) => ({
-    id: section.id,
-    title: section.title,
-    description: section.description,
-    products: section.productIds
-      .map((id) => byId.get(id))
-      .filter((p): p is MemberCatalogProduct => Boolean(p))
-      .map(toShopListing),
-  }));
+  const { shopSections } = await getCatalogBundle();
+  return shopSections;
 });
 
 export const getHomeFeaturedProducts = cache(async (): Promise<ProductDetail[]> => {
-  const [layout, products] = await Promise.all([
-    fetchMemberCatalogLayout(),
-    fetchMemberCatalogProducts(),
-  ]);
-  const byId = new Map(products.map((p) => [p.id, p]));
-  return layout.homeFeaturedProductIds
-    .map((id) => byId.get(id))
-    .filter((p): p is MemberCatalogProduct => Boolean(p))
-    .map(toProductDetail);
+  const { homeFeatured } = await getCatalogBundle();
+  return homeFeatured;
 });

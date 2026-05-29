@@ -94,9 +94,9 @@ export default async function ShopPage() {
           <div>
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Shop</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Products, prices, photos, and descriptions are loaded from the Moja
-              Member API catalog. Update products in the member admin dashboard
-              (or data/shop-catalog.products.json on the API server).
+              Products, prices, and photos load from the Moja Member API when
+              available; otherwise this site uses{" "}
+              <code className="text-xs">config/products.catalog.json</code>.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
