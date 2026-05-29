@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchWithTimeout } from "@/lib/fetchWithTimeout";
 
 type HandoffLine = {
   productId: string;
@@ -40,15 +41,26 @@ export async function POST(req: NextRequest) {
   }
 
   const apiUrl = `${memberApiBase.replace(/\/$/, "")}/shop/cart-handoff`;
-  const upstream = await fetch(apiUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      lines: body.lines,
-      sourceUrl: body.sourceUrl,
-      fulfillment: body.fulfillment,
-    }),
-  });
+  let upstream: Response;
+  try {
+    upstream = await fetchWithTimeout(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lines: body.lines,
+        sourceUrl: body.sourceUrl,
+        fulfillment: body.fulfillment,
+      }),
+    });
+  } catch {
+    return NextResponse.json(
+      {
+        message:
+          "Checkout service timed out. Check MEMBER_API_BASE_URL on the server or try again shortly.",
+      },
+      { status: 504 },
+    );
+  }
 
   const data = (await upstream.json()) as {
     redirectUrl?: string;

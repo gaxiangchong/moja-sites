@@ -24,6 +24,8 @@ export type MemberCatalogProduct = {
   sortOrder: number;
 };
 
+import { fetchWithTimeout } from "./fetchWithTimeout";
+
 export type MemberCatalogLayout = {
   homeFeaturedProductIds: string[];
   shopSections: Array<{
@@ -37,10 +39,10 @@ export type MemberCatalogLayout = {
 function memberApiBase(): string {
   const base =
     process.env.MEMBER_API_BASE_URL?.trim() ||
-    (process.env.NODE_ENV === "development" ? "http://127.0.0.1:3153" : "");
+    (process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : "");
   if (!base) {
     throw new Error(
-      "MEMBER_API_BASE_URL is not set. Add MEMBER_API_BASE_URL=http://localhost:3153 to .env.local (see checkout-handoff.env.example).",
+      "MEMBER_API_BASE_URL is not set. Add MEMBER_API_BASE_URL=http://127.0.0.1:3000 to .env.local (see checkout-handoff.env.example).",
     );
   }
   return base.replace(/\/$/, "");
@@ -51,16 +53,16 @@ async function fetchJson<T>(path: string): Promise<T> {
   const url = `${base}${path}`;
   let res: Response;
   try {
-    res = await fetch(url, {
+    res = await fetchWithTimeout(url, {
       next: { revalidate: 60 },
     });
   } catch (cause) {
     const hint =
       base.includes(":5193")
-        ? " MEMBER_API_BASE_URL looks like the member web app (5193). Use the Nest API (3153)."
+        ? " MEMBER_API_BASE_URL looks like the member web app (5193). Use the Nest API (PORT from moja-member-app .env)."
         : "";
     throw new Error(
-      `Could not reach member API at ${url}.${hint} Is moja-member-app running? (npm run start:dev, default port 3153)`,
+      `Could not reach member API at ${url}.${hint} Is moja-member-app running? (npm run start:dev)`,
       { cause },
     );
   }
