@@ -335,13 +335,13 @@
     },
     {
       "slug": "lemon-pound-cake",
-      "name": "Lemon Pound Cake",
-      "price": "RM88.00",
+      "name": "Citron Pavot",
+      "price": "RM22.00",
       "category": "Collection Cake",
       "images": [
         {
           "src": "/images/products/lemon_pound_cake.png",
-          "alt": "Lemon Pound Cake"
+          "alt": "Citron Pavot"
         }
       ],
       "summary": "A classic loaf with a buttery, dense crumb and a punchy lemon glaze. Comforting and timeless — perfect with coffee or tea.",
@@ -350,13 +350,13 @@
     },
     {
       "slug": "banana-walnut-loaf",
-      "name": "Banana Walnut Loaf",
-      "price": "RM99.00",
+      "name": "Banana Doree Pecan",
+      "price": "RM25.00",
       "category": "Collection Cake",
       "images": [
         {
           "src": "/images/products/banana_walnut_loaf.png",
-          "alt": "Banana Walnut Loaf"
+          "alt": "Banana Doree Pecan"
         }
       ],
       "summary": "Ripe bananas folded into a moist, tender loaf with toasted walnuts in every slice. Warm, comforting, and impossibly moreish.",
@@ -365,13 +365,13 @@
     },
     {
       "slug": "chocolate-brownie",
-      "name": "Chocolate Brownie",
-      "price": "RM13.90 each",
+      "name": "Artisan Fudge Squares",
+      "price": "RM14.00 each",
       "category": "Collection Cake",
       "images": [
         {
           "src": "/images/products/chocolate_brownies.png",
-          "alt": "Chocolate Brownie"
+          "alt": "Artisan Fudge Squares"
         }
       ],
       "summary": "Fudgy on the inside, lightly crisp on top, and made with a generous hit of dark chocolate. Intense, satisfying, and best enjoyed warm.",
