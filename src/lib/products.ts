@@ -1,12 +1,13 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import {
   getLocalCatalogProducts,
   getLocalHomeFeaturedProducts,
   getLocalShopSections,
 } from "./localCatalog";
 import {
-  fetchMemberCatalogLayout,
-  fetchMemberCatalogProducts,
+  catalogFetchRevalidate,
+  fetchMemberCatalogBundle,
   productHasVariants,
   productImages,
   productIsSoldOut,
@@ -24,6 +25,12 @@ export type {
 } from "./productTypes";
 
 import type { ProductCategory, ProductDetail, ShopListingProduct, ShopSection } from "./productTypes";
+
+type CatalogBundle = {
+  products: ProductDetail[];
+  shopSections: ShopSection[];
+  homeFeatured: ProductDetail[];
+};
 
 function assertCategory(c: string | undefined): ProductCategory {
   if (
@@ -68,6 +75,36 @@ function toShopListing(p: MemberCatalogProduct): ShopListingProduct {
   };
 }
 
+function memberBundleFromApi(
+  memberProducts: MemberCatalogProduct[],
+  layout: Awaited<ReturnType<typeof fetchMemberCatalogBundle>>["layout"],
+): CatalogBundle {
+  const byId = new Map(memberProducts.map((p) => [p.id, p]));
+  const products = memberProducts.map(toProductDetail);
+  const shopSections = layout.shopSections.map((section) => ({
+    id: section.id,
+    title: section.title,
+    description: section.description,
+    products: section.productIds
+      .map((id) => byId.get(id))
+      .filter((p): p is MemberCatalogProduct => Boolean(p))
+      .map(toShopListing),
+  }));
+  const homeFeatured = layout.homeFeaturedProductIds
+    .map((id) => byId.get(id))
+    .filter((p): p is MemberCatalogProduct => Boolean(p))
+    .map(toProductDetail);
+  return { products, shopSections, homeFeatured };
+}
+
+function localCatalogBundle(): CatalogBundle {
+  return {
+    products: getLocalCatalogProducts(),
+    shopSections: getLocalShopSections(),
+    homeFeatured: getLocalHomeFeaturedProducts(),
+  };
+}
+
 /**
  * Option B: member-app catalog API is the primary source when configured.
  * Set CATALOG_SOURCE=local only to force the JSON fallback file.
@@ -87,7 +124,7 @@ function shouldTryMemberCatalog(): boolean {
       const host = new URL(base).hostname;
       if (host === "localhost" || host === "127.0.0.1" || host === "::1") {
         console.warn(
-          "[catalog] MEMBER_API_BASE_URL is localhost in production; using products.catalog.json fallback. Set a public API URL for Option B.",
+          "[catalog] MEMBER_API_BASE_URL is localhost in production; using products.catalog.json fallback.",
         );
         return false;
       }
@@ -102,51 +139,32 @@ function shouldTryMemberCatalog(): boolean {
   return true;
 }
 
-async function tryMemberCatalog(): Promise<{
-  products: ProductDetail[];
-  shopSections: ShopSection[];
-  homeFeatured: ProductDetail[];
-} | null> {
-  if (!shouldTryMemberCatalog()) return null;
+async function loadCatalogBundle(): Promise<CatalogBundle> {
+  if (!shouldTryMemberCatalog()) {
+    return localCatalogBundle();
+  }
   try {
-    const [layout, memberProducts] = await Promise.all([
-      fetchMemberCatalogLayout(),
-      fetchMemberCatalogProducts(),
-    ]);
-    const byId = new Map(memberProducts.map((p) => [p.id, p]));
-    const products = memberProducts.map(toProductDetail);
-    const shopSections = layout.shopSections.map((section) => ({
-      id: section.id,
-      title: section.title,
-      description: section.description,
-      products: section.productIds
-        .map((id) => byId.get(id))
-        .filter((p): p is MemberCatalogProduct => Boolean(p))
-        .map(toShopListing),
-    }));
-    const homeFeatured = layout.homeFeaturedProductIds
-      .map((id) => byId.get(id))
-      .filter((p): p is MemberCatalogProduct => Boolean(p))
-      .map(toProductDetail);
-    return { products, shopSections, homeFeatured };
+    const { products: memberProducts, layout } =
+      await fetchMemberCatalogBundle();
+    return memberBundleFromApi(memberProducts, layout);
   } catch (err) {
     console.warn(
       "[catalog] Member API unavailable; using config/products.catalog.json.",
       err instanceof Error ? err.message : err,
     );
-    return null;
+    return localCatalogBundle();
   }
 }
 
-const getCatalogBundle = cache(async () => {
-  const fromApi = await tryMemberCatalog();
-  if (fromApi) return fromApi;
-  return {
-    products: getLocalCatalogProducts(),
-    shopSections: getLocalShopSections(),
-    homeFeatured: getLocalHomeFeaturedProducts(),
-  };
-});
+/** Persists across requests on the server (Hostinger) for CATALOG_CACHE_SECONDS. */
+const getCatalogBundleCached = unstable_cache(
+  loadCatalogBundle,
+  ["moja-catalog-bundle"],
+  { revalidate: catalogFetchRevalidate() },
+);
+
+/** Per-request dedupe within a single render. */
+const getCatalogBundle = cache(getCatalogBundleCached);
 
 export const getCatalogProducts = cache(async (): Promise<ProductDetail[]> => {
   const { products } = await getCatalogBundle();

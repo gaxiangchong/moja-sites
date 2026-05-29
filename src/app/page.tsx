@@ -6,7 +6,7 @@ import { getHomeFeaturedProducts } from "@/lib/products";
 
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default async function Home() {
   const featuredProducts = await getHomeFeaturedProducts();

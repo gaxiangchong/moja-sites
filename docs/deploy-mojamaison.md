@@ -8,9 +8,26 @@
 4. Deploy **member-app** first, then **moja-sites** with:
 
 ```env
-MEMBER_API_BASE_URL=https://YOUR-PUBLIC-NEST-API-HOST
-MEMBER_API_TIMEOUT_MS=5000
+MEMBER_API_BASE_URL=https://api.mojamaison.com
+MEMBER_API_TIMEOUT_MS=2500
+CATALOG_CACHE_SECONDS=300
 ```
+
+The storefront caches catalog API responses for **5 minutes** (`CATALOG_CACHE_SECONDS`). After deploy, the first page load may still call the API; later loads should be fast.
+
+If every page load stays slow (10s+), Hostinger may not reach `api.mojamaison.com`. Test from the host’s shell:
+
+```bash
+curl -sS -o /dev/null -w "%{http_code} %{time_total}s\n" https://api.mojamaison.com/shop/catalog/bundle
+```
+
+If that hangs or takes many seconds, use fast fallback until networking is fixed:
+
+```env
+CATALOG_SOURCE=local
+```
+
+Then run `npm run catalog:pull` before each deploy (snapshot from member-app `data/`).
 
 Do not use `CATALOG_SOURCE=local` in production unless you intentionally bypass the API.
 

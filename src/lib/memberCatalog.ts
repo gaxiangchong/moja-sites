@@ -48,13 +48,25 @@ function memberApiBase(): string {
   return base.replace(/\/$/, "");
 }
 
+/** How long Next.js Data Cache keeps catalog API responses (seconds). */
+export function catalogFetchRevalidate(): number {
+  const raw = process.env.CATALOG_CACHE_SECONDS?.trim();
+  const n = Number.parseInt(raw ?? "", 10);
+  return Number.isFinite(n) && n > 0 ? n : 300;
+}
+
+export type MemberCatalogBundle = {
+  products: MemberCatalogProduct[];
+  layout: MemberCatalogLayout;
+};
+
 async function fetchJson<T>(path: string): Promise<T> {
   const base = memberApiBase();
   const url = `${base}${path}`;
   let res: Response;
   try {
     res = await fetchWithTimeout(url, {
-      next: { revalidate: 60 },
+      next: { revalidate: catalogFetchRevalidate() },
     });
   } catch (cause) {
     const hint =
@@ -87,6 +99,31 @@ export async function fetchMemberCatalogLayout(): Promise<MemberCatalogLayout> {
       : [],
     shopSections: Array.isArray(data.shopSections) ? data.shopSections : [],
   };
+}
+
+/** Preferred: one HTTP request for products + layout (faster on slow hosts). */
+export async function fetchMemberCatalogBundle(): Promise<MemberCatalogBundle> {
+  try {
+    const data = await fetchJson<MemberCatalogBundle>("/shop/catalog/bundle");
+    const layout = data.layout ?? ({} as MemberCatalogLayout);
+    return {
+      products: Array.isArray(data.products) ? data.products : [],
+      layout: {
+        homeFeaturedProductIds: Array.isArray(layout.homeFeaturedProductIds)
+          ? layout.homeFeaturedProductIds
+          : [],
+        shopSections: Array.isArray(layout.shopSections)
+          ? layout.shopSections
+          : [],
+      },
+    };
+  } catch {
+    const [products, layout] = await Promise.all([
+      fetchMemberCatalogProducts(),
+      fetchMemberCatalogLayout(),
+    ]);
+    return { products, layout };
+  }
 }
 
 export function formatRmFromCents(cents: number): string {

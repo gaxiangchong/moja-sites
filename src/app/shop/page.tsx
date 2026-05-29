@@ -73,7 +73,7 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
   );
 }
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export default async function ShopPage() {
   const sections = await getShopSections();

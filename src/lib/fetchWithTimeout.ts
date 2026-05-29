@@ -1,4 +1,4 @@
-const DEFAULT_MS = 5_000;
+const DEFAULT_MS = 2_500;
 
 export function memberApiTimeoutMs(): number {
   const raw = process.env.MEMBER_API_TIMEOUT_MS?.trim();
