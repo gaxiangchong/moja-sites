@@ -73,17 +73,17 @@
       ]
     },
     {
-      "slug": "lemon-yuzu-cake",
+      "slug": "osmanthus-longan-chantilly",
       "name": "Osmanthus Longan Chantilly",
       "price": "RM149.00",
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/products/lemon_yuzu_cake_v2.png",
+          "src": "/images/products/osmanthus_longan_chantilly.png",
           "alt": "Osmanthus Longan Chantilly"
         },
         {
-          "src": "/images/products/lemon_yuzu_cake.png",
+          "src": "/images/products/osmanthus_longan_chantilly_v2.png",
           "alt": "Osmanthus Longan Chantilly — alternative angle"
         }
       ],
@@ -155,7 +155,7 @@
       "category": "Premium Cake",
       "images": [
         {
-          "src": "/images/products/matcha_crepe_cake.png",
+          "src": "/images/products/jasmine blanc.png",
           "alt": "Jasmine Blanc"
         }
       ],
