@@ -1,5 +1,6 @@
 import { cache } from "react";
 import catalogFile from "../../config/products.catalog.json";
+import { resolveProductImageSrc } from "./assetUrl";
 import type { ProductCategory, ProductDetail, ShopListingProduct, ShopSection } from "./productTypes";
 
 type CatalogJson = {
@@ -33,6 +34,10 @@ function normalizeProduct(p: ProductDetail): ProductDetail {
   if (!p.images?.length) {
     throw new Error(`Product "${p.slug}" needs at least one image`);
   }
+  const images = p.images.map((img) => ({
+    ...img,
+    src: resolveProductImageSrc(img.src),
+  }));
   if (p.variants?.length) {
     for (const v of p.variants) {
       if (!v.label?.trim()) {
@@ -46,9 +51,9 @@ function normalizeProduct(p: ProductDetail): ProductDetail {
     }
   }
   if (p.hasVariants === undefined && p.variants?.length) {
-    return { ...p, hasVariants: true };
+    return { ...p, images, hasVariants: true };
   }
-  return p;
+  return { ...p, images };
 }
 
 const products = catalog.products.map(normalizeProduct);

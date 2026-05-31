@@ -25,6 +25,7 @@ export type MemberCatalogProduct = {
 };
 
 import { fetchWithTimeout } from "./fetchWithTimeout";
+import { resolveProductImageSrc } from "./assetUrl";
 
 export type MemberCatalogLayout = {
   homeFeaturedProductIds: string[];
@@ -165,9 +166,14 @@ export function toStorefrontVariants(
 export function productImages(
   product: MemberCatalogProduct,
 ): Array<{ src: string; alt: string }> {
-  if (product.images?.length) return product.images;
+  if (product.images?.length) {
+    return product.images.map((img) => ({
+      src: resolveProductImageSrc(img.src),
+      alt: img.alt,
+    }));
+  }
   if (product.imageUrl?.trim()) {
-    return [{ src: product.imageUrl, alt: product.name }];
+    return [{ src: resolveProductImageSrc(product.imageUrl), alt: product.name }];
   }
   return [];
 }
