@@ -1,11 +1,30 @@
 import type { NextConfig } from "next";
 
+type RemotePattern = NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]>[number];
+
 /**
- * Product images are served by moja-member-app (the Member API). Allow that
- * origin so next/image can optimize remote product photos. The production host
- * is overridable via NEXT_PUBLIC_MEMBER_ASSET_BASE; localhost:3153 covers dev.
+ * The member app serves product images from two roots: /images/** (migrated
+ * static catalog images) and /uploads/** (admin-uploaded images). Allow both
+ * so next/image can optimize either.
  */
-function memberAssetRemotePattern() {
+const MEMBER_ASSET_PATHNAMES = ["/images/**", "/uploads/**"];
+
+function patternsForHost(
+  host: { protocol: "http" | "https"; hostname: string; port?: string },
+): RemotePattern[] {
+  return MEMBER_ASSET_PATHNAMES.map((pathname) => ({
+    protocol: host.protocol,
+    hostname: host.hostname,
+    ...(host.port ? { port: host.port } : {}),
+    pathname,
+  }));
+}
+
+/**
+ * Production host is overridable via NEXT_PUBLIC_MEMBER_ASSET_BASE;
+ * localhost:3153 covers dev.
+ */
+function memberAssetHostFromEnv() {
   const base = process.env.NEXT_PUBLIC_MEMBER_ASSET_BASE?.trim();
   if (!base) return null;
   try {
@@ -14,25 +33,23 @@ function memberAssetRemotePattern() {
       protocol: url.protocol.replace(":", "") as "http" | "https",
       hostname: url.hostname,
       ...(url.port ? { port: url.port } : {}),
-      pathname: "/images/**",
     };
   } catch {
     return null;
   }
 }
 
-type RemotePattern = NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]>[number];
+const hosts = [
+  { protocol: "https" as const, hostname: "api.mojamaison.com" },
+  { protocol: "http" as const, hostname: "localhost", port: "3153" },
+  memberAssetHostFromEnv(),
+].filter(Boolean) as Array<{
+  protocol: "http" | "https";
+  hostname: string;
+  port?: string;
+}>;
 
-const remotePatterns = [
-  { protocol: "https", hostname: "api.mojamaison.com", pathname: "/images/**" },
-  {
-    protocol: "http",
-    hostname: "localhost",
-    port: "3153",
-    pathname: "/images/**",
-  },
-  memberAssetRemotePattern(),
-].filter(Boolean) as RemotePattern[];
+const remotePatterns = hosts.flatMap(patternsForHost);
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@prisma/client"],

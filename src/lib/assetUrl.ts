@@ -10,12 +10,19 @@ export const MEMBER_ASSET_BASE =
   process.env.NEXT_PUBLIC_MEMBER_ASSET_BASE?.trim().replace(/\/$/, "") ||
   "https://api.mojamaison.com";
 
-/** Only product images are migrated to the member app; keep the rest local. */
+/**
+ * Product images are served by the member app under two roots:
+ * - /images/products/... (migrated static catalog images)
+ * - /uploads/...         (admin-uploaded product images)
+ * Everything else (logo, /images/demo/..., local placeholders) stays local.
+ */
+const MEMBER_ASSET_PREFIXES = ["/images/products/", "/uploads/"];
+
 export function resolveProductImageSrc(src: string | null | undefined): string {
   const value = src?.trim();
   if (!value) return "";
   if (/^https?:\/\//i.test(value) || /^data:/i.test(value)) return value;
-  if (value.startsWith("/images/products/")) {
+  if (MEMBER_ASSET_PREFIXES.some((prefix) => value.startsWith(prefix))) {
     return `${MEMBER_ASSET_BASE}${value}`;
   }
   return value;
