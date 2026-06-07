@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { OrderInAppButton } from "@/components/OrderInAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getHomeFeaturedProducts } from "@/lib/products";
@@ -15,16 +16,16 @@ export default async function Home() {
     <div className="flex flex-col flex-1">
       <div className="border-b border-slate-900/10 bg-slate-900 text-center text-[11px] font-medium tracking-wide text-white sm:text-xs">
         <div className="mx-auto max-w-6xl px-4 py-2.5">
-          <span className="text-[#9edcff]">Same-day &amp; next-day</span> slots
-          when you order before{" "}
-          <span className="font-semibold text-white">1:00 PM</span>
+          <span className="text-[#9edcff]">Freshly baked</span> in small batches
           <span className="mx-2 text-slate-400">·</span>
-          Mon–Sat delivery &amp; pickup
+          Order via the{" "}
+          <span className="font-semibold text-white">Moja app</span>
           <span className="mx-2 text-slate-400">·</span>
+          Pickup &amp; delivery slots available
         </div>
       </div>
 
-      <SiteHeader ctaHref="/shop" ctaLabel="Shop & order" />
+      <SiteHeader />
 
       <main className="flex-1">
         {/* Full-bleed hero: image-first for immediate visual hook */}
@@ -58,8 +59,8 @@ export default async function Home() {
                 Cakes worth craving for everyday moments
               </h1>
               <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/95 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)] sm:text-lg">
-                Less-sweet, texture-forward recipes guests remember. Secure
-                your slot today; weekend dates fill up fastest.
+                Less-sweet, texture-forward recipes guests remember. Explore
+                our collection here — order sizes, slots, and rewards in the app.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -67,14 +68,12 @@ export default async function Home() {
                   href="/shop"
                   className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-7 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_16px_48px_rgba(98,166,255,0.35)] transition hover:brightness-110"
                 >
-                  Shop best-sellers
+                  Explore our cakes
                 </Link>
-                <a
-                  href="https://app.mojamaison.com"
+                <OrderInAppButton
                   className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
-                >
-                  Become a member · Earn rewards
-                </a>
+                  label="Order in app"
+                />
               </div>
 
               {/* <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-100/90 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]">
@@ -99,7 +98,7 @@ export default async function Home() {
         {/* Quick trust + urgency strip */}
         <section
           className="border-b border-slate-900/10 bg-white/90 backdrop-blur-sm"
-          aria-label="Why order with us"
+          aria-label="Why Moja Maison"
         >
           <div className="mx-auto grid max-w-6xl gap-4 px-4 py-5 sm:grid-cols-3">
             {[
@@ -193,11 +192,12 @@ export default async function Home() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Best sellers — ready to add to cart
+                Featured creations
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                Tap a cake to choose size and date. Popular weekends sell out —
-                don&apos;t wait if you&apos;re celebrating soon.
+                A taste of what we bake — tap a cake for the full story. To
+                order, open the Moja app for sizes, pickup slots, and member
+                rewards.
               </p>
             </div>
             <Link
@@ -249,24 +249,21 @@ export default async function Home() {
                       {p.name}
                     </h3>
                   </Link>
-                  <p className="mt-1 text-base font-medium text-slate-700">
-                    {p.price}
+                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                    {p.shortDescription ?? p.summary}
                   </p>
 
                   <div className="mt-5 flex gap-2">
                     <Link
                       href={`/product/${p.slug}`}
+                      className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-900/12 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                    >
+                      View details
+                    </Link>
+                    <OrderInAppButton
                       className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2.5 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
-                    >
-                      Order now
-                    </Link>
-                    <Link
-                      href="/shop"
-                      className="inline-flex items-center justify-center rounded-full border border-slate-900/12 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                      aria-label={`More options for ${p.name}`}
-                    >
-                      More
-                    </Link>
+                      label="Order in app"
+                    />
                   </div>
                 </div>
               </article>
@@ -336,12 +333,7 @@ export default async function Home() {
                   say about freshness, delivery, and flavor balance.
                 </p>
               </div>
-              <Link
-                href="/shop"
-                className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
-              >
-                Order yours
-              </Link>
+              <OrderInAppButton label="Order in app" />
             </div>
 
             <div className="mt-10 grid gap-5 lg:grid-cols-3">

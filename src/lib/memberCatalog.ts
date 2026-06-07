@@ -40,10 +40,12 @@ export type MemberCatalogLayout = {
 function memberApiBase(): string {
   const base =
     process.env.MEMBER_API_BASE_URL?.trim() ||
-    (process.env.NODE_ENV === "development" ? "http://127.0.0.1:3000" : "");
+    (process.env.NODE_ENV === "development"
+      ? "https://api.mojamaison.com"
+      : "");
   if (!base) {
     throw new Error(
-      "MEMBER_API_BASE_URL is not set. Add MEMBER_API_BASE_URL=http://127.0.0.1:3000 to .env.local (see checkout-handoff.env.example).",
+      "MEMBER_API_BASE_URL is not set. Add MEMBER_API_BASE_URL=https://api.mojamaison.com to .env.local (see checkout-handoff.env.example).",
     );
   }
   return base.replace(/\/$/, "");

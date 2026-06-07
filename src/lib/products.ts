@@ -79,8 +79,9 @@ function memberBundleFromApi(
   memberProducts: MemberCatalogProduct[],
   layout: Awaited<ReturnType<typeof fetchMemberCatalogBundle>>["layout"],
 ): CatalogBundle {
-  const byId = new Map(memberProducts.map((p) => [p.id, p]));
-  const products = memberProducts.map(toProductDetail);
+  const active = memberProducts.filter((p) => p.isActive !== false);
+  const byId = new Map(active.map((p) => [p.id, p]));
+  const products = active.map(toProductDetail);
   const shopSections = layout.shopSections.map((section) => ({
     id: section.id,
     title: section.title,
@@ -159,7 +160,11 @@ async function loadCatalogBundle(): Promise<CatalogBundle> {
 /** Persists across requests on the server (Hostinger) for CATALOG_CACHE_SECONDS. */
 const getCatalogBundleCached = unstable_cache(
   loadCatalogBundle,
-  ["moja-catalog-bundle"],
+  [
+    "moja-catalog-bundle",
+    process.env.CATALOG_SOURCE?.trim().toLowerCase() ?? "member",
+    process.env.MEMBER_API_BASE_URL?.trim().replace(/\/$/, "") ?? "default",
+  ],
   { revalidate: catalogFetchRevalidate() },
 );
 

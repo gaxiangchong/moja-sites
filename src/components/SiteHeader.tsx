@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { CartButton } from "@/components/cart/CartButton";
+import { MEMBER_APP_URL } from "@/lib/appLinks";
 import mojaLogo from "../../public/images/moja-logo.png";
 
 type NavItem = { href: string; label: string };
@@ -23,14 +23,15 @@ function isActive(pathname: string, href: string) {
 }
 
 export function SiteHeader({
-  ctaHref = "/shop",
-  ctaLabel = "Order now",
+  ctaHref = MEMBER_APP_URL,
+  ctaLabel = "Order in app",
 }: {
   ctaHref?: string;
   ctaLabel?: string;
 }) {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
+  const ctaExternal = ctaHref.startsWith("http");
 
   const items = useMemo(
     () =>
@@ -40,6 +41,9 @@ export function SiteHeader({
       })),
     [pathname],
   );
+
+  const ctaClassName =
+    "inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2 text-sm font-semibold text-slate-900 shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110";
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-900/10 bg-white/70 backdrop-blur">
@@ -75,26 +79,23 @@ export function SiteHeader({
               {i.label}
             </Link>
           ))}
-          <Link
-            href="/cart"
-            className={
-              isActive(pathname, "/cart")
-                ? "font-semibold text-slate-900"
-                : "transition hover:text-slate-900"
-            }
-          >
-            Cart
-          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
-          <CartButton className="hidden sm:inline-flex relative items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white" />
-          <Link
-            href={ctaHref}
-            className="hidden sm:inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2 text-sm font-semibold text-slate-900 shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110"
-          >
-            {ctaLabel}
-          </Link>
+          {ctaExternal ? (
+            <a
+              href={ctaHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`hidden sm:inline-flex ${ctaClassName}`}
+            >
+              {ctaLabel}
+            </a>
+          ) : (
+            <Link href={ctaHref} className={`hidden sm:inline-flex ${ctaClassName}`}>
+              {ctaLabel}
+            </Link>
+          )}
 
           <button
             type="button"
@@ -129,26 +130,26 @@ export function SiteHeader({
                 </Link>
               ))}
 
-              <Link
-                href="/cart"
-                onClick={() => setOpen(false)}
-                className={
-                  isActive(pathname, "/cart")
-                    ? "rounded-2xl border border-slate-900/10 bg-white px-4 py-3 text-sm font-semibold text-slate-900"
-                    : "rounded-2xl border border-slate-900/10 bg-white/60 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                }
-              >
-                Cart
-              </Link>
-
-              <div className="mt-2 grid gap-2 sm:hidden">
-                <Link
-                  href={ctaHref}
-                  onClick={() => setOpen(false)}
-                  className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-3 text-sm font-semibold text-slate-900 shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110"
-                >
-                  {ctaLabel}
-                </Link>
+              <div className="mt-2 grid gap-2">
+                {ctaExternal ? (
+                  <a
+                    href={ctaHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className={`inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold ${ctaClassName}`}
+                  >
+                    {ctaLabel}
+                  </a>
+                ) : (
+                  <Link
+                    href={ctaHref}
+                    onClick={() => setOpen(false)}
+                    className={`inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold ${ctaClassName}`}
+                  >
+                    {ctaLabel}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -157,4 +158,3 @@ export function SiteHeader({
     </header>
   );
 }
-
