@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { MEMBER_APP_URL } from "@/lib/appLinks";
+import {
+  MEMBER_APP_URL,
+  ORDERING_CLOSED_MESSAGE,
+  ORDERING_ENABLED,
+} from "@/lib/appLinks";
 import mojaLogo from "../../public/images/moja-logo.png";
 
 type NavItem = { href: string; label: string };
@@ -32,6 +36,8 @@ export function SiteHeader({
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
   const ctaExternal = ctaHref.startsWith("http");
+  const ctaBlocked = !ORDERING_ENABLED && ctaHref === MEMBER_APP_URL;
+  const showOrderingClosed = () => window.alert(ORDERING_CLOSED_MESSAGE);
 
   const items = useMemo(
     () =>
@@ -82,7 +88,15 @@ export function SiteHeader({
         </nav>
 
         <div className="flex items-center gap-2">
-          {ctaExternal ? (
+          {ctaBlocked ? (
+            <button
+              type="button"
+              onClick={showOrderingClosed}
+              className={`hidden sm:inline-flex ${ctaClassName}`}
+            >
+              {ctaLabel}
+            </button>
+          ) : ctaExternal ? (
             <a
               href={ctaHref}
               target="_blank"
@@ -131,7 +145,18 @@ export function SiteHeader({
               ))}
 
               <div className="mt-2 grid gap-2">
-                {ctaExternal ? (
+                {ctaBlocked ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      showOrderingClosed();
+                    }}
+                    className={`inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold ${ctaClassName}`}
+                  >
+                    {ctaLabel}
+                  </button>
+                ) : ctaExternal ? (
                   <a
                     href={ctaHref}
                     target="_blank"

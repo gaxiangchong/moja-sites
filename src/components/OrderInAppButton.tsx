@@ -1,4 +1,10 @@
-import { MEMBER_APP_URL } from "@/lib/appLinks";
+"use client";
+
+import {
+  MEMBER_APP_URL,
+  ORDERING_CLOSED_MESSAGE,
+  ORDERING_ENABLED,
+} from "@/lib/appLinks";
 
 type Props = {
   className?: string;
@@ -12,6 +18,18 @@ export function OrderInAppButton({
   className = defaultClassName,
   label = "Order in app",
 }: Props) {
+  if (!ORDERING_ENABLED) {
+    return (
+      <button
+        type="button"
+        onClick={() => window.alert(ORDERING_CLOSED_MESSAGE)}
+        className={className}
+      >
+        {label}
+      </button>
+    );
+  }
+
   return (
     <a
       href={MEMBER_APP_URL}

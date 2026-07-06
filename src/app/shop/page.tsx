@@ -4,7 +4,7 @@ import { OrderInAppButton } from "@/components/OrderInAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getShopSections, type ShopListingProduct } from "@/lib/products";
-import { MEMBER_APP_URL } from "@/lib/appLinks";
+import { MEMBER_APP_URL, ORDERING_ENABLED } from "@/lib/appLinks";
 
 function ProductCard({ product }: { product: ShopListingProduct }) {
   const href = `/product/${product.slug}`;
@@ -83,14 +83,18 @@ export default async function ShopPage() {
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
               Browse what we bake at Moja Maison. When you&apos;re ready to
               order, choose your size and pickup slot in the{" "}
-              <a
-                href={MEMBER_APP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-[#1a5f9e] hover:text-slate-900"
-              >
-                Moja app
-              </a>
+              {ORDERING_ENABLED ? (
+                <a
+                  href={MEMBER_APP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-[#1a5f9e] hover:text-slate-900"
+                >
+                  Moja app
+                </a>
+              ) : (
+                <span className="font-semibold text-slate-800">Moja app</span>
+              )}
               .
             </p>
           </div>
