@@ -45,22 +45,22 @@ export default async function Home() {
             {/* No directional overlay — full photo stays even; copy uses the glass panel + shadows */}
           </div>
 
-          <div className="relative mx-auto flex w-full min-h-[min(48vh,440px)] max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-5 sm:min-h-[min(44vh,400px)] sm:pb-11 sm:pt-6 lg:min-h-[min(42vh,380px)] lg:pb-12 lg:pt-8">
-            <div className="ml-auto w-full max-w-xl text-left lg:max-w-2xl rounded-3xl border border-white/[0.14] bg-slate-950/25 px-5 py-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-7 sm:py-8 lg:bg-slate-950/20 lg:backdrop-blur-lg">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-[#c8e8ff] backdrop-blur-md">
+          <div className="relative mx-auto flex w-full min-h-[min(52vh,500px)] max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-5 sm:min-h-[min(48vh,470px)] sm:pb-11 sm:pt-6 lg:min-h-[min(46vh,440px)] lg:pb-12 lg:pt-8">
+            <div className="ml-auto w-full max-w-xl text-left lg:max-w-2xl rounded-[2rem] border border-white/[0.14] bg-slate-950/20 px-5 py-7 shadow-[0_28px_90px_rgba(0,0,0,0.38)] backdrop-blur-md sm:px-7 sm:py-8 lg:bg-slate-950/18 lg:backdrop-blur-lg">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-[#c8e8ff] backdrop-blur-md">
                 <span
                   className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#57f0ff] shadow-[0_0_12px_rgba(87,240,255,0.9)]"
                   aria-hidden
                 />
-                Baked to order · Halal-friendly ingredients
+                Baked fresh · Halal-friendly
               </div>
 
-              <h1 className="font-display mt-6 text-balance text-4xl font-medium leading-[1.08] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
-                Cakes worth craving for everyday moments
+              <h1 className="font-display mt-6 text-balance text-4xl font-medium leading-[1.06] tracking-[-0.03em] text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-[4.1rem]">
+                Cakes for the moments that matter.
               </h1>
-              <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/95 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)] sm:text-lg">
-                Less-sweet, texture-forward recipes guests remember. Explore
-                our collection here — order sizes, slots, and rewards in the app.
+              <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/90 [text-shadow:0_1px_16px_rgba(0,0,0,0.35)] sm:text-lg">
+                Less-sweet, texture-forward recipes guests remember — from
+                celebration cakes to everyday favourites worth sharing.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -68,11 +68,11 @@ export default async function Home() {
                   href="/shop"
                   className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-7 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_16px_48px_rgba(98,166,255,0.35)] transition hover:brightness-110"
                 >
-                  Explore our cakes
+                  Explore the collection
                 </Link>
                 <OrderInAppButton
-                  className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
-                  label="Order in app"
+                  className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/8 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/12"
+                  label="Visit app"
                 />
               </div>
 
@@ -135,70 +135,75 @@ export default async function Home() {
         </section>
 
         <section className="mx-auto max-w-6xl px-4 pt-12 pb-6 sm:pt-16">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-6">
-              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Built for celebrations — and ordinary Thursdays.
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
-                When people eat with their eyes first, a strong hero photo wins
-                attention; the next click should feel effortless. Start with
-                crowd favorites, then explore the full menu.
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1a5f9e]">
+                Thoughtful baking
               </p>
-              <Link
-                href="/shop"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#1a5f9e] hover:text-slate-900"
-              >
-                See full menu
-                <span aria-hidden>→</span>
-              </Link>
-            </div>
-            <div className="lg:col-span-6">
-              <div className="grid gap-3 sm:grid-cols-2">
-                {[
-                  {
-                    title: "Baked fresh daily",
-                    desc: "Preorder required — crafted in small batches.",
-                  },
-                  {
-                    title: "Same / next-day delivery",
-                    desc: "Order before 1PM (Mon–Sat).",
-                  },
-                  {
-                    title: "Halal-friendly",
-                    desc: "Ingredients selected with care.",
-                  },
-                  {
-                    title: "Coverage",
-                    desc: "Delivery within selected city zones.",
-                  },
-                ].map((f) => (
-                  <div
-                    key={f.title}
-                    className="rounded-2xl border border-slate-900/10 bg-white/80 p-4 shadow-sm shadow-slate-900/[0.03]"
-                  >
-                    <div className="text-sm font-semibold text-slate-900">
-                      {f.title}
-                    </div>
-                    <div className="mt-1 text-sm text-slate-600">{f.desc}</div>
-                  </div>
-                ))}
+              <h2 className="mt-3 font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl lg:text-[3.3rem]">
+                A quieter kind of luxury: better ingredients, better texture, better moments.
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                We create cakes and bakes that feel considered and memorable — a little more refined, a little more personal, and made to be shared.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                >
+                  Explore the collection
+                </Link>
+                <OrderInAppButton
+                  className="inline-flex items-center justify-center rounded-full border border-slate-900/15 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+                  label="Visit app"
+                />
               </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                {
+                  title: "Freshly baked",
+                  desc: "Made after your order is placed.",
+                },
+                {
+                  title: "Clear pickup windows",
+                  desc: "Select a slot that suits your day.",
+                },
+                {
+                  title: "Halal-friendly",
+                  desc: "Thoughtful ingredients and preparation.",
+                },
+                {
+                  title: "Gift-ready",
+                  desc: "Beautiful for birthdays, celebrations, and moments that matter.",
+                },
+              ].map((f) => (
+                <div
+                  key={f.title}
+                  className="rounded-[1.5rem] border border-slate-900/10 bg-white/80 p-4 shadow-[0_20px_44px_rgba(15,23,42,0.03)]"
+                >
+                  <div className="text-sm font-semibold text-slate-900">
+                    {f.title}
+                  </div>
+                  <div className="mt-1 text-sm leading-relaxed text-slate-600">
+                    {f.desc}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="shop" className="mx-auto max-w-6xl px-4 py-10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Featured creations
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                A taste of what we bake — tap a cake for the full story. To
-                order, open the Moja app for sizes, pickup slots, and member
-                rewards.
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1a5f9e]">
+                Signature collection
               </p>
+              <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                Curated favourites, designed to be discovered.
+              </h2>
             </div>
             <Link
               href="/shop"
@@ -208,11 +213,11 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredProducts.map((p, idx) => (
               <article
                 key={p.slug}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-900/10 bg-white/90 shadow-sm shadow-slate-900/[0.04] transition hover:-translate-y-0.5 hover:border-slate-900/15 hover:shadow-md"
+                className="group flex flex-col overflow-hidden rounded-[1.8rem] border border-slate-900/10 bg-white/90 shadow-[0_18px_52px_rgba(15,23,42,0.04)] transition duration-300 hover:-translate-y-1 hover:border-slate-900/15 hover:shadow-[0_26px_70px_rgba(15,23,42,0.08)]"
               >
                 <Link
                   href={`/product/${p.slug}`}
@@ -235,7 +240,6 @@ export default async function Home() {
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
                     sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white to-transparent" />
                   {p.badge ? (
                     <div className="absolute left-3 top-3 rounded-full border border-slate-900/10 bg-white/90 px-3 py-1 text-xs font-semibold text-slate-800 backdrop-blur">
                       {p.badge}
@@ -243,9 +247,9 @@ export default async function Home() {
                   ) : null}
                 </Link>
 
-                <div className="flex flex-1 flex-col p-5 pt-4">
+                <div className="flex flex-1 flex-col p-5">
                   <Link href={`/product/${p.slug}`}>
-                    <h3 className="text-lg font-semibold text-slate-900 transition group-hover:text-[#1a5f9e]">
+                    <h3 className="text-xl font-semibold text-slate-900 transition group-hover:text-[#1a5f9e]">
                       {p.name}
                     </h3>
                   </Link>
@@ -253,17 +257,13 @@ export default async function Home() {
                     {p.shortDescription ?? p.summary}
                   </p>
 
-                  <div className="mt-5 flex gap-2">
+                  <div className="mt-5">
                     <Link
                       href={`/product/${p.slug}`}
-                      className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-900/12 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                      className="inline-flex w-full items-center justify-center rounded-full border border-slate-900/10 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white hover:shadow-sm"
                     >
                       View details
                     </Link>
-                    <OrderInAppButton
-                      className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2.5 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
-                      label="Order in app"
-                    />
                   </div>
                 </div>
               </article>
@@ -271,51 +271,127 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="about" className="mx-auto max-w-6xl px-4 py-10">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
-            <div className="lg:col-span-5">
-              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Premium cakes
-              </h2>
-              <p className="mt-3 text-base leading-relaxed text-slate-600">
-                A union of flavors and textures — built for gifting, sharing,
-                and those “just because” days.
-              </p>
-            </div>
-            <div className="lg:col-span-7">
-              <div className="grid gap-4 sm:grid-cols-2">
+        <section className="mx-auto max-w-6xl px-4 py-10">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-900/10 bg-[radial-gradient(circle_at_top_left,_rgba(98,166,255,0.18),_transparent_38%),linear-gradient(135deg,_#fefdfb_0%,_#ffffff_35%,_#edf7ff_100%)] shadow-[0_28px_90px_rgba(17,24,39,0.05)]">
+            <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
+              <div className="flex flex-col justify-center">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1a5f9e]">
+                  Muffins collection
+                </p>
+                <h2 className="mt-3 font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                  Soft, comforting, and easy to love.
+                </h2>
+                <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600">
+                  A delicious everyday bite for slow mornings, coffee dates, and thoughtful little gifts.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {[
+                    "Classic flavours",
+                    "Freshly baked",
+                    "Perfect for gifting",
+                    "Small-batch daily",
+                  ].map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-slate-900/10 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-700"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <Link
+                  href="/shop"
+                  className="mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                >
+                  Explore muffins
+                  <span aria-hidden>→</span>
+                </Link>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
                 {[
                   {
-                    title: "Pineapple Tart",
-                    note: "Buttery pastry, slow-cooked filling.",
+                    title: "Classic muffin",
+                    note: "Soft crumb and golden finish.",
+                    tint: "from-[#f8d8ae] to-[#f3b15b]",
                   },
                   {
-                    title: "La Lune",
-                    note: "Oolong, vanilla, mascarpone.",
+                    title: "Seasonal picks",
+                    note: "Flavours that change with the season.",
+                    tint: "from-[#d9e6ff] to-[#8bb8ff]",
                   },
                   {
-                    title: "Low Carb Chocolate Cake",
-                    note: "Rich, intense, lighter finish.",
+                    title: "Gift-friendly",
+                    note: "Easy to share and easy to enjoy.",
+                    tint: "from-[#f6d4dc] to-[#e29ab3]",
                   },
                   {
-                    title: "L’amour",
-                    note: "Yuzu, grapefruit, matcha, almond.",
+                    title: "Daily fresh",
+                    note: "Made in small batches each day.",
+                    tint: "from-[#d8f5e7] to-[#7cd0a8]",
                   },
-                ].map((x) => (
+                ].map((item, index) => (
                   <div
-                    key={x.title}
-                    className="rounded-3xl border border-slate-900/10 bg-white/85 p-5"
+                    key={item.title}
+                    className="rounded-[1.5rem] border border-slate-900/10 bg-white/80 p-4 shadow-sm shadow-slate-900/[0.03]"
                   >
-                    <div className="text-sm font-semibold text-slate-900">
-                      {x.title}
+                    <div
+                      className={`mb-4 flex h-20 items-center justify-center rounded-[1.15rem] bg-gradient-to-br ${item.tint}`}
+                    >
+                      <span className="text-3xl" aria-hidden>
+                        {index === 0 ? "◌" : index === 1 ? "✦" : index === 2 ? "❋" : "✧"}
+                      </span>
                     </div>
-                    <div className="mt-1 text-sm text-slate-600">{x.note}</div>
-                    <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-500">
-                      <span className="h-1.5 w-1.5 rounded-full bg-slate-900/20" />
-                      Crafted in small batches
+                    <div className="text-sm font-semibold text-slate-900">
+                      {item.title}
+                    </div>
+                    <div className="mt-1 text-xs leading-relaxed text-slate-600">
+                      {item.note}
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 py-10">
+          <div className="rounded-[2rem] border border-slate-900/10 bg-white/85 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.03)] sm:p-8">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
+              <div className="lg:col-span-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1a5f9e]">
+                  The Moja difference
+                </p>
+                <h2 className="mt-3 font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                  Crafted with restraint, richness, and intention.
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-slate-600">
+                  We believe the best bakes are balanced — indulgent but not heavy, elegant but never fussy.
+                </p>
+              </div>
+
+              <div className="lg:col-span-7">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {[
+                    { value: "Daily", label: "Made in small batches" },
+                    { value: "1PM", label: "Order cut-off for selected slots" },
+                    { value: "Mon–Sat", label: "Fresh-bake schedule" },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="rounded-[1.5rem] border border-slate-900/10 bg-[#f9fbff] p-5 shadow-sm shadow-slate-900/[0.02]"
+                    >
+                      <div className="text-3xl font-semibold text-slate-900">
+                        {stat.value}
+                      </div>
+                      <div className="mt-2 text-sm leading-relaxed text-slate-600">
+                        {stat.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -333,7 +409,7 @@ export default async function Home() {
                   say about freshness, delivery, and flavor balance.
                 </p>
               </div>
-              <OrderInAppButton label="Order in app" />
+              <OrderInAppButton label="Visit app" />
             </div>
 
             <div className="mt-10 grid gap-5 lg:grid-cols-3">

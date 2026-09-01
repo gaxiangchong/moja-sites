@@ -124,7 +124,7 @@ export default async function ProductPage({
 
   return (
     <div className="min-h-full">
-      <SiteHeader ctaLabel="Order in app" />
+      <SiteHeader ctaLabel="Visit app" />
 
       <main>
         {/* Hero */}
@@ -211,16 +211,16 @@ export default async function ProductPage({
                   {!product.soldOut ? (
                     <div className="mt-8 rounded-[1.75rem] border border-slate-900/10 bg-gradient-to-br from-white via-white to-[#eef6ff] p-6 shadow-[0_20px_60px_rgba(98,166,255,0.08)]">
                       <h2 className="text-lg font-semibold text-slate-900">
-                        Order through the Moja app
+                        Continue in the Moja app
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                        Choose your size, pickup slot, and member rewards when
-                        you checkout in the app.
+                        Select your size, pickup slot, and delivery details in the
+                        app once you&apos;re ready to order.
                       </p>
                       <div className="mt-5">
                         <OrderInAppButton
                           className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-6 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110"
-                          label="Open Moja app to order"
+                          label="Continue in the app"
                         />
                       </div>
                     </div>
@@ -340,10 +340,10 @@ export default async function ProductPage({
           <div className="mx-auto max-w-6xl px-4 py-14 lg:py-16">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                How to order
+                How it works
               </p>
               <h2 className="font-display mt-3 text-3xl font-medium tracking-tight text-slate-900">
-                From browse to box in three steps
+                From discovery to delivery in three simple steps
               </h2>
             </div>
 
@@ -377,15 +377,15 @@ export default async function ProductPage({
               Moja Maison
             </p>
             <h2 className="font-display mx-auto mt-4 max-w-xl text-balance text-3xl font-medium tracking-tight text-white sm:text-4xl">
-              Love what you see? Order {product.name} in the app.
+              Love what you see? Continue with {product.name} in the app.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-slate-300">
-              Member rewards, pickup slots, and checkout — all in one place.
+              Choose your size, pickup window, and delivery details in one place.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <OrderInAppButton
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-8 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_16px_48px_rgba(98,166,255,0.35)] transition hover:brightness-110"
-                label="Order in app"
+                label="Continue in the app"
               />
               <Link
                 href="/shop"

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { OrderInAppButton } from "@/components/OrderInAppButton";
+
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getShopSections, type ShopListingProduct } from "@/lib/products";
@@ -46,19 +46,13 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
           </p>
         ) : null}
 
-        <div className="mt-4 flex items-center gap-2">
+        <div className="mt-4">
           <Link
             href={href}
-            className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-white"
+            className="inline-flex w-full items-center justify-center rounded-full border border-slate-900/10 bg-white/60 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-white"
           >
             View details
           </Link>
-          {!product.soldOut ? (
-            <OrderInAppButton
-              className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
-              label="Order in app"
-            />
-          ) : null}
         </div>
       </div>
     </article>
@@ -133,6 +127,31 @@ export default async function ShopPage() {
             </section>
           ))}
         </div>
+
+        <section className="mt-14 rounded-[2rem] border border-slate-900/10 bg-gradient-to-br from-[#f8fbff] via-white to-[#eef6ff] p-6 sm:p-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1a5f9e]">
+                Ready to order?
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+                Continue your order in the app
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
+                Explore the collection here, then continue in the app to choose your size, pickup slot, and delivery details.
+              </p>
+            </div>
+
+            <a
+              href={MEMBER_APP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-6 py-3 text-sm font-semibold text-[#050a14] shadow-[0_16px_44px_rgba(98,166,255,0.25)] transition hover:brightness-110"
+            >
+              Visit app
+            </a>
+          </div>
+        </section>
       </main>
 
       <SiteFooter />

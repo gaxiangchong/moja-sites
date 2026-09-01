@@ -28,7 +28,7 @@ function isActive(pathname: string, href: string) {
 
 export function SiteHeader({
   ctaHref = MEMBER_APP_URL,
-  ctaLabel = "Order in app",
+  ctaLabel = "Visit app",
 }: {
   ctaHref?: string;
   ctaLabel?: string;

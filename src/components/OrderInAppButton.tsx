@@ -16,7 +16,7 @@ const defaultClassName =
 
 export function OrderInAppButton({
   className = defaultClassName,
-  label = "Order in app",
+  label = "Visit app",
 }: Props) {
   if (!ORDERING_ENABLED) {
     return (
