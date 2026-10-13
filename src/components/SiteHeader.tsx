@@ -114,14 +114,15 @@ export function SiteHeader({
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/70 px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-white md:hidden"
-            aria-label="Open menu"
+            className="inline-flex flex-col items-center justify-center gap-[5px] rounded-full border border-slate-900/10 bg-white/70 px-3.5 py-3 transition hover:bg-white md:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open ? "true" : "false"}
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="sr-only">Menu</span>
-            <span className="block h-0.5 w-5 bg-slate-900" />
-            <span className="ml-2 block h-0.5 w-5 bg-slate-900" />
+            {/* Three stacked bars — the standard hamburger. */}
+            <span className="block h-0.5 w-5 rounded-full bg-slate-900" />
+            <span className="block h-0.5 w-5 rounded-full bg-slate-900" />
+            <span className="block h-0.5 w-5 rounded-full bg-slate-900" />
           </button>
         </div>
       </div>
