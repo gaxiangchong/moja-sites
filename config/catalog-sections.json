@@ -4,12 +4,17 @@
   "replacesSectionId": "premium-cake",
   "groups": [
     {
+      "id": "premium-cake",
+      "title": "Premium Cake",
+      "description": "Signature whole cakes crafted from the finest ingredients.",
+      "items": ["pistachio-noir-cheesecake"]
+    },
+    {
       "id": "cheesecake",
       "title": "Cheesecake",
       "description": "Burnt Basque cheesecakes — deeply caramelised on top, soft and custardy in the centre.",
       "items": [
         "jasmine-blanc-cheesecake",
-        "pistachio-noir-cheesecake",
         "citron-basque-cheesecake",
         "mixed-fruit-basque-cheesecake",
         "tiramisu-noir-cheesecake",
@@ -25,7 +30,7 @@
         "matcha-marmalade",
         "Cherry Chocolate Gateau",
         "blueberry-velvet-gateau",
-        "Caramel Espresso Gateau",
+        "caramel-espresso-gateau",
         "lemon-yuzu-cake"
       ]
     }

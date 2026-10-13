@@ -132,6 +132,18 @@ export function applyCatalogSections(
     const remaining = section.products.filter((p) => !claimed.has(p.slug));
     if (remaining.length === 0) continue;
 
+    // A group may reuse the id of the section it replaces (keeping
+    // "premium-cake" as one tier among the new ones). Leftovers then belong
+    // in that group rather than in a second section with the same heading.
+    const sameId = grouped.find((g) => g.id === section.id);
+    if (sameId) {
+      sameId.products.push(...remaining);
+      if (!result.includes(sameId) && sameId.products.length > 0) {
+        result.push(sameId);
+      }
+      continue;
+    }
+
     result.push({ ...section, products: remaining });
   }
 
