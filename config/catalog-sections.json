@@ -7,7 +7,7 @@
       "id": "premium-cake",
       "title": "Premium Cake",
       "description": "Signature whole cakes crafted from the finest ingredients.",
-      "items": ["pistachio-noir-cheesecake"]
+      "items": ["pistachio-noir-cheesecake", "rocher-noir-basque"]
     },
     {
       "id": "cheesecake",
