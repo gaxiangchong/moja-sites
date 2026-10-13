@@ -3,14 +3,63 @@ import Link from "next/link";
 import { OrderInAppButton } from "@/components/OrderInAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { getHomeFeaturedProducts } from "@/lib/products";
+import { getHomeFeaturedProducts, getShopSections } from "@/lib/products";
+import type { ShopListingProduct } from "@/lib/productTypes";
 
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
+
+const PREMIUM_SECTION_ID = "premium-cake";
+const PREMIUM_HIGHLIGHT_COUNT = 4;
+
+/**
+ * Short flavour lines for the "Premium cakes" tiles, keyed by product slug.
+ * Anything missing falls back to a trimmed version of the catalog description,
+ * so a newly added cake still renders sensibly.
+ */
+const PREMIUM_FLAVOUR_NOTES: Record<string, string> = {
+  "caramel-espresso-gateau": "Espresso sponge, salted caramel.",
+  "jasmine-blanc-cheesecake": "Jasmine tea, floral, burnt Basque.",
+  "lemon-yuzu-cake": "Osmanthus chantilly, sweet longan.",
+  "matcha-marmalade": "Ceremonial matcha, yuzu marmalade.",
+  "strawberry-shortcake": "Chiffon sponge, cream, strawberries.",
+  "mixed-fruit-basque-cheesecake": "Caramelised top, custardy centre.",
+  "pistachio-noir-cheesecake": "Pistachio, dark chocolate, burnt Basque.",
+  "tiramisu-noir-cheesecake": "Espresso, mascarpone, cocoa.",
+  "citron-basque-cheesecake": "Lemon zest, tangy and creamy.",
+  "truffle-basque-cheesecake": "Dark chocolate truffle ganache.",
+};
+
+function flavourNote(product: ShopListingProduct): string {
+  const curated = PREMIUM_FLAVOUR_NOTES[product.slug];
+  if (curated) return curated;
+
+  // Fallback: first sentence of the catalog description, trimmed to one line.
+  const firstSentence = product.description.split(/(?<=\.)\s/)[0]?.trim() ?? "";
+  if (firstSentence.length <= 64) return firstSentence;
+  return `${firstSentence.slice(0, 61).replace(/[\s,—-]+$/, "")}…`;
+}
 
 export const revalidate = 300;
 
 export default async function Home() {
-  const featuredProducts = await getHomeFeaturedProducts();
+  const [featuredProducts, shopSections] = await Promise.all([
+    getHomeFeaturedProducts(),
+    getShopSections(),
+  ]);
+
+  // Drive the "Premium cakes" tiles from the live catalog so they can never
+  // advertise a cake the store no longer sells. Skip anything already shown in
+  // the featured row above to avoid repeating the same cakes on one page.
+  const featuredSlugs = new Set(featuredProducts.map((p) => p.slug));
+  const premiumProducts =
+    shopSections.find((section) => section.id === PREMIUM_SECTION_ID)
+      ?.products ?? [];
+  const unfeaturedPremium = premiumProducts.filter(
+    (p) => !featuredSlugs.has(p.slug),
+  );
+  const premiumHighlights = (
+    unfeaturedPremium.length > 0 ? unfeaturedPremium : premiumProducts
+  ).slice(0, PREMIUM_HIGHLIGHT_COUNT);
 
   return (
     <div className="flex flex-col flex-1">
@@ -284,37 +333,23 @@ export default async function Home() {
             </div>
             <div className="lg:col-span-7">
               <div className="grid gap-4 sm:grid-cols-2">
-                {[
-                  {
-                    title: "Pineapple Tart",
-                    note: "Buttery pastry, slow-cooked filling.",
-                  },
-                  {
-                    title: "La Lune",
-                    note: "Oolong, vanilla, mascarpone.",
-                  },
-                  {
-                    title: "Low Carb Chocolate Cake",
-                    note: "Rich, intense, lighter finish.",
-                  },
-                  {
-                    title: "L’amour",
-                    note: "Yuzu, grapefruit, matcha, almond.",
-                  },
-                ].map((x) => (
-                  <div
-                    key={x.title}
-                    className="rounded-3xl border border-slate-900/10 bg-white/85 p-5"
+                {premiumHighlights.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/product/${p.slug}`}
+                    className="block rounded-3xl border border-slate-900/10 bg-white/85 p-5 transition hover:-translate-y-0.5 hover:border-slate-900/20 hover:bg-white hover:shadow-sm"
                   >
                     <div className="text-sm font-semibold text-slate-900">
-                      {x.title}
+                      {p.name}
                     </div>
-                    <div className="mt-1 text-sm text-slate-600">{x.note}</div>
+                    <div className="mt-1 text-sm text-slate-600">
+                      {flavourNote(p)}
+                    </div>
                     <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-500">
                       <span className="h-1.5 w-1.5 rounded-full bg-slate-900/20" />
                       Crafted in small batches
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -340,17 +375,17 @@ export default async function Home() {
               {[
                 {
                   name: "Rain Prince",
-                  text: "Sweet and light, with surprising layers. Would order again — would love more small-size options.",
+                  text: "The Original Basque was light and not too sweet, with that custardy centre everyone talks about. Would order again.",
                   meta: "10 Mar 26",
                 },
                 {
                   name: "Jaslene K",
-                  text: "Fresh, moist, full of texture. Customer service was prompt and delivery was on time.",
+                  text: "Our Strawberry Short Cake arrived fresh and moist, and the cream was beautifully balanced. Delivery was right on time.",
                   meta: "03 Mar 26",
                 },
                 {
                   name: "Norhayati",
-                  text: "Fast delivery and great balance of sweet/sour. Perfect size — no leftovers.",
+                  text: "Citron Blossom Basque had a lovely tangy lift against the creaminess. Fast delivery and the perfect size — no leftovers.",
                   meta: "04 Feb 26",
                 },
               ].map((r) => (
