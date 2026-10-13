@@ -29,8 +29,8 @@ export default function AboutPage() {
           <div className="lg:col-span-5">
             <div className="relative h-full min-h-64 overflow-hidden rounded-3xl border border-slate-900/10 bg-white/70">
               <Image
-                src="/images/demo/about/bakery-counter.jpg"
-                alt="Bakery counter"
+                src="/images/moja/display-case-counter.webp"
+                alt="The Moja Maison display case, with labelled whole cakes and cheesecakes on two shelves"
                 fill
                 className="object-cover"
                 sizes="(min-width: 1024px) 420px, 100vw"
@@ -44,16 +44,16 @@ export default function AboutPage() {
         <section className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
             {
-              src: "/images/demo/about/cake-display.jpg",
-              alt: "Cake display",
+              src: "/images/moja/cake-lineup.webp",
+              alt: "A row of Moja Maison whole cakes laid out together, from strawberry shortcake to burnt Basque cheesecakes",
             },
             {
-              src: "/images/demo/about/hands-cake-slices.jpg",
-              alt: "Hands holding cake slices",
+              src: "/images/moja/espresso-bar.webp",
+              alt: "The espresso machine and grinder on the Moja Maison coffee bar",
             },
             {
-              src: "/images/demo/about/cake-display.jpg",
-              alt: "Bakery cakes",
+              src: "/images/moja/gift-box-coffee-cup.webp",
+              alt: "A branded Moja Maison gift box and takeaway coffee cup",
             },
           ].map((img) => (
             <div

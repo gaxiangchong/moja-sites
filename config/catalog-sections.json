@@ -1,0 +1,33 @@
+{
+  "$schemaNote": "Regroups catalog products into the sections shown on the website (shop + business pages). The product catalog itself is NOT edited here — see PRODUCTS-CONFIG.txt. See CATALOG-SECTIONS-CONFIG.txt for help. Restart dev server after changes.",
+
+  "replacesSectionId": "premium-cake",
+  "groups": [
+    {
+      "id": "cheesecake",
+      "title": "Cheesecake",
+      "description": "Burnt Basque cheesecakes — deeply caramelised on top, soft and custardy in the centre.",
+      "items": [
+        "jasmine-blanc-cheesecake",
+        "pistachio-noir-cheesecake",
+        "citron-basque-cheesecake",
+        "mixed-fruit-basque-cheesecake",
+        "tiramisu-noir-cheesecake",
+        "truffle-basque-cheesecake"
+      ]
+    },
+    {
+      "id": "cream-cake",
+      "title": "Cream Cake",
+      "description": "Layered sponge and fresh cream gateaux, finished with fruit, nuts and seasonal flavours.",
+      "items": [
+        "strawberry-shortcake",
+        "matcha-marmalade",
+        "Cherry Chocolate Gateau",
+        "blueberry-velvet-gateau",
+        "Caramel Espresso Gateau",
+        "lemon-yuzu-cake"
+      ]
+    }
+  ]
+}

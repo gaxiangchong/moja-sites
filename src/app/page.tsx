@@ -12,7 +12,12 @@ import type { ProductDetail } from "@/lib/productTypes";
 
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
-const PREMIUM_SECTION_ID = "premium-cake";
+/**
+ * Sections the featured row tops up from. "premium-cake" is listed last as a
+ * fallback for when config/catalog-sections.json is not splitting it into
+ * Cheesecake and Cream Cake.
+ */
+const PREMIUM_SECTION_IDS = ["cheesecake", "cream-cake", "premium-cake"];
 /** Featured creations runs two rows of three on desktop. */
 const FEATURED_COUNT = 6;
 
@@ -32,10 +37,9 @@ export default async function Home() {
   // enough to fill two rows. Top the row up with premium cakes that are not
   // already featured, drawn from the shop section so nothing unlisted appears.
   const featuredSlugs = new Set(homeFeatured.map((p) => p.slug));
-  const premiumFill = (
-    shopSections.find((section) => section.id === PREMIUM_SECTION_ID)
-      ?.products ?? []
-  )
+  const premiumFill = shopSections
+    .filter((section) => PREMIUM_SECTION_IDS.includes(section.id))
+    .flatMap((section) => section.products)
     .filter((p) => !featuredSlugs.has(p.slug))
     .map((p) => productsBySlug.get(p.slug))
     .filter((p): p is ProductDetail => Boolean(p));
