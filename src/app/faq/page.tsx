@@ -126,13 +126,6 @@ function FaqCard({ q, a }: FaqItem) {
 export default function FaqPage() {
   return (
     <div className="min-h-full">
-      <div className="border-b border-slate-900/10 bg-white/50">
-        <div className="mx-auto max-w-6xl px-4 py-2 text-center text-xs tracking-wide text-slate-700 sm:text-sm">
-          Website is under construction / Price may not be accurate
-
-        </div>
-      </div>
-
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-10">
