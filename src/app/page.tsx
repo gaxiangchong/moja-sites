@@ -13,11 +13,16 @@ import type { ProductDetail } from "@/lib/productTypes";
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
 /**
- * Sections the featured row tops up from. "premium-cake" is listed last as a
- * fallback for when config/catalog-sections.json is not splitting it into
- * Cheesecake and Cream Cake.
+ * Sections the featured row tops up from, in the order they are drawn on.
+ * "premium-cake" is listed last because it doubles as the fallback for when
+ * config/catalog-sections.json is not splitting it into the cake tiers.
  */
-const PREMIUM_SECTION_IDS = ["cheesecake", "cream-cake", "premium-cake"];
+const PREMIUM_SECTION_IDS = [
+  "signature-basque",
+  "premium-basque",
+  "cream-cake",
+  "premium-cake",
+];
 /** Featured creations runs two rows of three on desktop. */
 const FEATURED_COUNT = 6;
 
