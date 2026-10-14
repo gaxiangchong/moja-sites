@@ -10,7 +10,7 @@ import {
 } from "@/lib/products";
 import type { ProductDetail } from "@/lib/productTypes";
 
-const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
+const HERO_IMAGE = "/images/hero-moja-baker-basque.webp";
 
 /**
  * Sections the featured row tops up from, in the order they are drawn on.
@@ -80,22 +80,45 @@ export default async function Home() {
         {/* Full-bleed hero: image-first for immediate visual hook */}
         <section className="relative isolate w-full overflow-hidden bg-[#050a14]">
           <div className="absolute inset-0">
-            <div className="hero-image-drift absolute inset-[-8%] min-h-[120%] min-w-[120%]">
+            {/*
+              Only a little over-scale: enough for the slow drift to have room,
+              but not so much that it crops the baker and the apron wordmark off
+              the right edge. The photo is composed deliberately, with the
+              subject right and clear space left, so hard cropping costs us the
+              whole point of it.
+            */}
+            <div className="hero-image-drift absolute inset-[-3%] min-h-[106%] min-w-[106%]">
               <Image
                 src={HERO_IMAGE}
-                alt="Pastry chef finishing a burnt Basque cheesecake, highlighting the caramelized top and careful craftsmanship"
+                alt="A Moja Maison baker dusting sugar over a burnt Basque cheesecake on a marble counter in a sunlit kitchen"
                 fill
-                className="object-cover object-center"
+                /*
+                  On phones the wide photo is cropped to a tall frame, and
+                  centring it would show mostly the empty wall. Favour the
+                  right side so the baker and the cake stay in shot; from sm up
+                  the frame is wide enough to centre and keep the clear space.
+                */
+                className="object-cover object-[72%_center] sm:object-center"
                 sizes="100vw"
                 priority
                 fetchPriority="high"
               />
             </div>
-            {/* No directional overlay — full photo stays even; copy uses the glass panel + shadows */}
+            {/*
+              Directional scrim instead of a frosted panel. The subject of the
+              photo sits on the right, so the copy goes left and the gradient
+              darkens only that side, leaving the baker and the cake uncovered.
+              Phones get a vertical gradient instead: the crop is too narrow
+              for any part of the frame to stay clear.
+            */}
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-[#050a14]/85 via-[#050a14]/55 to-[#050a14]/85 sm:bg-gradient-to-r sm:from-[#050a14]/90 sm:via-[#050a14]/45 sm:to-transparent"
+              aria-hidden
+            />
           </div>
 
           <div className="relative mx-auto flex w-full min-h-[min(48vh,440px)] max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-5 sm:min-h-[min(44vh,400px)] sm:pb-11 sm:pt-6 lg:min-h-[min(42vh,380px)] lg:pb-12 lg:pt-8">
-            <div className="ml-auto w-full max-w-xl text-left lg:max-w-2xl rounded-3xl border border-white/[0.14] bg-slate-950/25 px-5 py-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-7 sm:py-8 lg:bg-slate-950/20 lg:backdrop-blur-lg">
+            <div className="mr-auto w-full max-w-xl text-left lg:max-w-2xl py-7 sm:py-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-[#c8e8ff] backdrop-blur-md">
                 <span
                   className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#57f0ff] shadow-[0_0_12px_rgba(87,240,255,0.9)]"
