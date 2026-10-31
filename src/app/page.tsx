@@ -124,7 +124,7 @@ export default async function Home() {
                   className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#57f0ff] shadow-[0_0_12px_rgba(87,240,255,0.9)]"
                   aria-hidden
                 />
-                Baked to order · Halal-friendly ingredients
+                Baked to order · Muslim-friendly ingredients
               </div>
 
               <h1 className="font-display mt-6 text-balance text-[1.75rem] font-medium leading-[1.12] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
@@ -242,7 +242,7 @@ export default async function Home() {
                     desc: "Order before 1PM (Mon–Sat).",
                   },
                   {
-                    title: "Halal-friendly",
+                    title: "Muslim-friendly",
                     desc: "Ingredients selected with care.",
                   },
                   {
