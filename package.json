@@ -10,7 +10,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
-    "catalog:pull": "node scripts/pull-catalog-from-member.mjs"
+    "catalog:pull": "node scripts/pull-catalog-from-member.mjs",
+    "catalog:check": "node scripts/check-catalog-sync.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

@@ -1,11 +1,45 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/jsonLd";
+
+const ABOUT_TITLE = "About Moja Maison — Our Bakery in Iskandar Puteri";
+const ABOUT_DESCRIPTION =
+  "Meet Moja Maison: a small-batch bakery in Iskandar Puteri, Johor, baking less-sweet cakes to order for birthdays, celebrations and gifting across Johor Bahru.";
+
+export const metadata: Metadata = {
+  title: ABOUT_TITLE,
+  description: ABOUT_DESCRIPTION,
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: ABOUT_TITLE,
+    description: ABOUT_DESCRIPTION,
+    url: "/about",
+  },
+};
 
 export default function AboutPage() {
+  const structuredData = [
+    webPageJsonLd({
+      type: "AboutPage",
+      name: ABOUT_TITLE,
+      description: ABOUT_DESCRIPTION,
+      path: "/about",
+    }),
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "About", path: "/about" },
+    ]),
+  ];
+
   return (
     <div className="min-h-full">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-10">
@@ -16,7 +50,8 @@ export default function AboutPage() {
               Our story • Our craft • Your celebrations
             </div>
             <h1 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-              Craft nice cake for every happiness moment.
+              A small-batch bakery in Iskandar Puteri, crafting cake for every
+              happy moment.
             </h1>
             <p className="mt-4 max-w-3xl text-pretty text-sm leading-7 text-slate-600 sm:text-base">
               Moja Maison is built on a simple belief: the best cakes don’t just

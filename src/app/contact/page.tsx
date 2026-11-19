@@ -1,17 +1,29 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { getCompanyConfig } from "@/lib/companyConfig";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/jsonLd";
 import {
   getContactConfig,
   type ContactChannel,
   type ContactChannelKey,
 } from "@/lib/contactConfig";
 
+const CONTACT_TITLE = "Contact Moja Maison — WhatsApp, Email & Cake Orders";
+const CONTACT_DESCRIPTION =
+  "Talk to Moja Maison about cake orders, delivery in Johor Bahru, custom requests or corporate gifting — on WhatsApp, by email, or through Facebook and Instagram.";
+
 export const metadata: Metadata = {
-  title: "Contact us — Moja Maison",
-  description:
-    "Reach us on WhatsApp, email, or social media. Choose the channel that works best for you.",
+  title: CONTACT_TITLE,
+  description: CONTACT_DESCRIPTION,
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: CONTACT_TITLE,
+    description: CONTACT_DESCRIPTION,
+    url: "/contact",
+  },
 };
 
 function channelIcon(key: ContactChannelKey) {
@@ -74,9 +86,25 @@ function linkProps(href: string) {
 
 export default function ContactPage() {
   const cfg = getContactConfig();
+  const company = getCompanyConfig();
+  const structuredData = [
+    webPageJsonLd({
+      type: "ContactPage",
+      name: CONTACT_TITLE,
+      description: CONTACT_DESCRIPTION,
+      path: "/contact",
+    }),
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ]),
+  ];
 
   return (
     <div className="flex flex-col flex-1">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <SiteHeader ctaHref="/shop" ctaLabel="Shop & order" />
 
       <main className="flex-1">
@@ -89,6 +117,35 @@ export default function ContactPage() {
             <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
               {cfg.pageIntro}
             </p>
+
+            <div className="mt-6 grid gap-2 text-sm text-slate-600">
+              <div>
+                <span className="font-semibold text-slate-900">Kitchen:</span>{" "}
+                {company.registeredAddress}
+              </div>
+              <div>
+                <span className="font-semibold text-slate-900">Phone:</span>{" "}
+                <a
+                  className="underline-offset-2 hover:text-slate-900 hover:underline"
+                  href={`tel:${company.contactPhone.replace(/[^\d+]/g, "")}`}
+                >
+                  {company.contactPhone}
+                </a>
+              </div>
+              <div>
+                <span className="font-semibold text-slate-900">Email:</span>{" "}
+                <a
+                  className="underline-offset-2 hover:text-slate-900 hover:underline"
+                  href={`mailto:${company.contactEmail}`}
+                >
+                  {company.contactEmail}
+                </a>
+              </div>
+              <div>
+                <span className="font-semibold text-slate-900">Hours:</span> Mon
+                11:00 AM – 8:00 PM · Wed–Sun 10:00 AM – 6:00 PM · Tue closed
+              </div>
+            </div>
           </div>
 
           {cfg.channels.length === 0 ? (

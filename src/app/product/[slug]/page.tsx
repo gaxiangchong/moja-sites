@@ -1,15 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getCatalogProducts,
+  getCatalogSource,
   getProductsBySlug,
   type ProductDetail,
 } from "@/lib/products";
+import { JsonLd } from "@/components/JsonLd";
 import { OrderInAppButton } from "@/components/OrderInAppButton";
+import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { breadcrumbJsonLd, productJsonLd } from "@/lib/jsonLd";
+import {
+  displayPriceLabel,
+  priceLabelFrom,
+  pricesVisible,
+} from "@/lib/priceDisplay";
+import { SERVICE_AREAS, SITE_NAME, absoluteUrl } from "@/lib/siteConfig";
 
 export async function generateStaticParams() {
   try {
@@ -21,6 +32,77 @@ export async function generateStaticParams() {
 }
 
 export const revalidate = 300;
+
+/**
+ * Per-product title/description/canonical. Previously every product page
+ * inherited the site-wide title, so they competed with each other for the same
+ * query and none of them described the cake being sold.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const [productsBySlug, catalogSource] = await Promise.all([
+    getProductsBySlug(),
+    getCatalogSource(),
+  ]);
+  const product = productsBySlug.get(slug);
+
+  if (!product) {
+    return {
+      title: "Cake not found",
+      robots: { index: false, follow: true },
+    };
+  }
+
+  const path = `/product/${product.slug}`;
+  const priceLabel = displayPriceLabel(
+    priceLabelFrom(product.price, product.variants),
+    pricesVisible(catalogSource),
+  );
+  const blurb = product.shortDescription?.trim() || product.summary;
+
+  // Lead with the cake name, then price and locality: that is the shape of a
+  // search snippet a buyer in Johor actually clicks.
+  const description = [
+    blurb,
+    priceLabel ? `${priceLabel}.` : null,
+    "Baked to order with pickup or delivery in Johor Bahru & Iskandar Puteri.",
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .slice(0, 300);
+
+  return {
+    title: `${product.name} — ${product.category}`,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "website",
+      title: `${product.name} | ${SITE_NAME}`,
+      description,
+      url: path,
+      images: product.images.slice(0, 2).map((img) => ({
+        url: absoluteUrl(img.src),
+        alt: img.alt || product.name,
+      })),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} | ${SITE_NAME}`,
+      description,
+      images: product.images.slice(0, 1).map((img) => absoluteUrl(img.src)),
+    },
+    other: {
+      // Plain-text facts for answer engines that read meta pairs.
+      "product:brand": SITE_NAME,
+      ...(priceLabel ? { "product:price:amount": priceLabel } : {}),
+      "product:availability": product.soldOut ? "out of stock" : "in stock",
+    },
+  };
+}
 
 const CRAFT_POINTS = [
   {
@@ -100,9 +182,10 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [productsBySlug, allProducts] = await Promise.all([
+  const [productsBySlug, allProducts, catalogSource] = await Promise.all([
     getProductsBySlug(),
     getCatalogProducts(),
+    getCatalogSource(),
   ]);
   const product = productsBySlug.get(slug);
   if (!product) return notFound();
@@ -113,8 +196,21 @@ export default async function ProductPage({
     product.summary.trim() !== tagline.trim()
       ? product.summary
       : null;
-  const variantLabels =
-    product.variants?.filter((v) => v.available).map((v) => v.label) ?? [];
+  const availableVariants = product.variants?.filter((v) => v.available) ?? [];
+  const showPrices = pricesVisible(catalogSource);
+  const priceLabel = displayPriceLabel(
+    priceLabelFrom(product.price, product.variants),
+    showPrices,
+  );
+  const productPath = `/product/${product.slug}`;
+  const structuredData = [
+    productJsonLd(product, { includeOffers: showPrices }),
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Collection", path: "/shop" },
+      { name: product.name, path: productPath },
+    ]),
+  ];
   const detailPanels = [
     { title: "Size options", items: product.size ?? [] },
     { title: "Allergens", items: product.allergens ?? [] },
@@ -124,6 +220,9 @@ export default async function ProductPage({
 
   return (
     <div className="min-h-full">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <SiteHeader ctaLabel="Order in app" />
 
       <main>
@@ -167,10 +266,42 @@ export default async function ProductPage({
                     {tagline}
                   </p>
 
+                  {priceLabel ? (
+                    <div className="mt-6 flex flex-wrap items-baseline gap-2">
+                      <span className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+                        {priceLabel}
+                      </span>
+                      {product.variants?.some((v) => v.available) ? (
+                        <span className="text-sm text-slate-500">
+                          · sizes below
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : null}
+
                   {product.soldOut ? (
-                    <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900">
-                      <span className="h-2 w-2 rounded-full bg-amber-500" />
-                      Currently unavailable — browse other creations
+                    <div className="mt-6">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900">
+                        <span className="h-2 w-2 rounded-full bg-amber-500" />
+                        Currently unavailable
+                      </div>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                        Ask us when {product.name} is back, or let us suggest a
+                        cake that is ready this week.
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2.5">
+                        <OrderOnWhatsAppButton
+                          label="Ask about availability"
+                          productName={product.name}
+                          productPath={productPath}
+                        />
+                        <Link
+                          href="/shop"
+                          className="inline-flex items-center justify-center rounded-full border border-slate-900/12 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+                        >
+                          See what&apos;s available
+                        </Link>
+                      </div>
                     </div>
                   ) : (
                     <div className="mt-6 flex flex-wrap gap-2">
@@ -187,23 +318,28 @@ export default async function ProductPage({
                     </div>
                   )}
 
-                  {variantLabels.length > 0 ? (
+                  {availableVariants.length > 0 ? (
                     <div className="mt-8">
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                         Available sizes
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {variantLabels.map((label) => (
+                        {availableVariants.map((variant) => (
                           <span
-                            key={label}
-                            className="rounded-2xl border border-slate-900/10 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-800"
+                            key={variant.label}
+                            className="inline-flex items-baseline gap-2 rounded-2xl border border-slate-900/10 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-800"
                           >
-                            {label}
+                            {variant.label}
+                            {showPrices && variant.price ? (
+                              <span className="text-slate-500">
+                                {variant.price}
+                              </span>
+                            ) : null}
                           </span>
                         ))}
                       </div>
                       <p className="mt-2 text-xs text-slate-500">
-                        Sizes and availability are confirmed in the Moja app.
+                        Final availability is confirmed when you check out.
                       </p>
                     </div>
                   ) : null}
@@ -211,18 +347,30 @@ export default async function ProductPage({
                   {!product.soldOut ? (
                     <div className="mt-8 rounded-[1.75rem] border border-slate-900/10 bg-gradient-to-br from-white via-white to-[#eef6ff] p-6 shadow-[0_20px_60px_rgba(98,166,255,0.08)]">
                       <h2 className="text-lg font-semibold text-slate-900">
-                        Order through the Moja app
+                        Order {product.name}
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                        Choose your size, pickup slot, and member rewards when
-                        you checkout in the app.
+                        Check out in the Moja app for sizes, pickup slots and
+                        member rewards — or message us on WhatsApp and we will
+                        take the order for you.
                       </p>
-                      <div className="mt-5">
+                      <div className="mt-5 grid gap-2.5">
                         <OrderInAppButton
                           className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-6 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_12px_32px_rgba(98,166,255,0.22)] transition hover:brightness-110"
-                          label="Open Moja app to order"
+                          label="Order in the Moja app"
+                        />
+                        <OrderOnWhatsAppButton
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#1f8f5f]/25 bg-[#eafaf1] px-6 py-3.5 text-sm font-semibold text-[#0f6b45] transition hover:bg-[#dcf5e8]"
+                          label="Order on WhatsApp"
+                          productName={product.name}
+                          productPath={productPath}
                         />
                       </div>
+                      <p className="mt-4 text-xs leading-relaxed text-slate-500">
+                        Pickup in {SERVICE_AREAS[0]} · delivery across{" "}
+                        {SERVICE_AREAS.slice(1, 4).join(", ")} · order before
+                        1PM (Mon–Sat) for same or next-day slots.
+                      </p>
                     </div>
                   ) : null}
 
@@ -386,6 +534,12 @@ export default async function ProductPage({
               <OrderInAppButton
                 className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-8 py-3.5 text-sm font-semibold text-[#050a14] shadow-[0_16px_48px_rgba(98,166,255,0.35)] transition hover:brightness-110"
                 label="Order in app"
+              />
+              <OrderOnWhatsAppButton
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-white/15"
+                label="Order on WhatsApp"
+                productName={product.name}
+                productPath={productPath}
               />
               <Link
                 href="/shop"

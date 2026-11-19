@@ -15,6 +15,13 @@ CATALOG_CACHE_SECONDS=300
 
 The storefront caches catalog API responses for **5 minutes** (`CATALOG_CACHE_SECONDS`). After deploy, the first page load may still call the API; later loads should be fast.
 
+> **Prices.** The member-app admin is the single source. Prices now render on
+> the storefront, so a stale fallback would publish a price you no longer
+> charge. The site therefore **hides prices in production whenever the catalog
+> came from `products.catalog.json` instead of the API** — check
+> `npm run catalog:check` and your `MEMBER_API_BASE_URL` if prices go missing.
+> See `docs/seo-and-aeo.md` for the full chain.
+
 If every page load stays slow (10s+), Hostinger may not reach `api.mojamaison.com`. Test from the host’s shell:
 
 ```bash
