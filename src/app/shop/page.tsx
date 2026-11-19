@@ -1,20 +1,42 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { OrderInAppButton } from "@/components/OrderInAppButton";
+import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getShopSections, type ShopListingProduct } from "@/lib/products";
 import { MEMBER_APP_URL, ORDERING_ENABLED } from "@/lib/appLinks";
+import { breadcrumbJsonLd, itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
+import { displayPriceLabel } from "@/lib/priceDisplay";
+import { SERVICE_AREAS } from "@/lib/siteConfig";
+
+const SHOP_TITLE = "Cake Menu — Order Cakes in Johor Bahru & Iskandar Puteri";
+const SHOP_DESCRIPTION =
+  "Browse the full Moja Maison cake menu: burnt Basque cheesecakes, premium gateaux, loaves and cookie jars. Baked to order with pickup in Iskandar Puteri and delivery across Johor Bahru.";
+
+export const metadata: Metadata = {
+  title: SHOP_TITLE,
+  description: SHOP_DESCRIPTION,
+  alternates: { canonical: "/shop" },
+  openGraph: {
+    title: SHOP_TITLE,
+    description: SHOP_DESCRIPTION,
+    url: "/shop",
+  },
+};
 
 function ProductCard({ product }: { product: ShopListingProduct }) {
   const href = `/product/${product.slug}`;
+  const priceLabel = displayPriceLabel(product.priceLabel ?? product.price);
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-slate-900/10 bg-white/70 transition hover:bg-white">
       <Link href={href} className="relative block h-48">
         <Image
           src={product.imageSrc}
-          alt={product.name}
+          alt={`${product.name} — handcrafted cake by Moja Maison`}
           fill
           className="object-cover transition duration-500 group-hover:scale-[1.02]"
           sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
@@ -40,6 +62,11 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
             {product.name}
           </h3>
         </Link>
+        {priceLabel ? (
+          <div className="mt-1.5 text-sm font-semibold text-slate-900">
+            {priceLabel}
+          </div>
+        ) : null}
         {product.description ? (
           <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-600">
             {product.description}
@@ -58,7 +85,14 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
               className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
               label="Order in app"
             />
-          ) : null}
+          ) : (
+            <OrderOnWhatsAppButton
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-[#1f8f5f]/25 bg-[#eafaf1] px-4 py-2 text-sm font-semibold text-[#0f6b45] transition hover:bg-[#dcf5e8]"
+              label="Ask us"
+              productName={product.name}
+              productPath={href}
+            />
+          )}
         </div>
       </div>
     </article>
@@ -70,19 +104,38 @@ export const revalidate = 300;
 export default async function ShopPage() {
   const sections = await getShopSections();
 
+  const allProducts = sections.flatMap((section) => section.products);
+  const structuredData = [
+    webPageJsonLd({
+      type: "CollectionPage",
+      name: SHOP_TITLE,
+      description: SHOP_DESCRIPTION,
+      path: "/shop",
+    }),
+    itemListJsonLd(allProducts, { name: "Moja Maison cake menu", path: "/shop" }),
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Collection", path: "/shop" },
+    ]),
+  ];
+
   return (
     <div className="min-h-full">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-              Our collection
+              Our cake collection
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Browse what we bake at Moja Maison. When you&apos;re ready to
-              order, choose your size and pickup slot in the{" "}
+              {allProducts.length} cakes baked to order in {SERVICE_AREAS[0]},
+              with pickup or delivery across {SERVICE_AREAS.slice(1, 4).join(", ")}.
+              Choose your size and slot in the{" "}
               {ORDERING_ENABLED ? (
                 <a
                   href={MEMBER_APP_URL}
@@ -95,8 +148,11 @@ export default async function ShopPage() {
               ) : (
                 <span className="font-semibold text-slate-800">Moja app</span>
               )}
-              .
+              , or message us on WhatsApp and we&apos;ll place it for you.
             </p>
+            <div className="mt-4">
+              <OrderOnWhatsAppButton label="Order on WhatsApp" />
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             {sections.map((s) => (

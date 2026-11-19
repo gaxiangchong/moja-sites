@@ -1,10 +1,31 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { OrderInAppButton } from "@/components/OrderInAppButton";
+import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getHomeFeaturedProducts, getShopSections } from "@/lib/products";
 import type { ShopListingProduct } from "@/lib/productTypes";
+import { getCompanyConfig } from "@/lib/companyConfig";
+import { itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
+import { displayPriceLabel, priceLabelFrom } from "@/lib/priceDisplay";
+import { SERVICE_AREAS, SITE_DESCRIPTION } from "@/lib/siteConfig";
+
+const HOME_TITLE =
+  "Cake Delivery in Johor Bahru & Iskandar Puteri | Handcrafted to Order";
+
+export const metadata: Metadata = {
+  title: HOME_TITLE,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: HOME_TITLE,
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+};
 
 const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
 
@@ -61,8 +82,33 @@ export default async function Home() {
     unfeaturedPremium.length > 0 ? unfeaturedPremium : premiumProducts
   ).slice(0, PREMIUM_HIGHLIGHT_COUNT);
 
+  const company = getCompanyConfig();
+  const featuredPriceLabels = new Map(
+    featuredProducts.map((p) => [p.slug, priceLabelFrom(p.price, p.variants)]),
+  );
+  const structuredData = [
+    webPageJsonLd({
+      name: HOME_TITLE,
+      description: SITE_DESCRIPTION,
+      path: "/",
+    }),
+    itemListJsonLd(
+      featuredProducts.map((p) => ({
+        slug: p.slug,
+        name: p.name,
+        description: p.shortDescription ?? p.summary,
+        price: p.price,
+        imageSrc: p.images[0]?.src ?? "",
+      })),
+      { name: "Featured cakes", path: "/" },
+    ),
+  ];
+
   return (
     <div className="flex flex-col flex-1">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <div className="border-b border-slate-900/10 bg-slate-900 text-center text-[11px] font-medium tracking-wide text-white sm:text-xs">
         <div className="mx-auto max-w-6xl px-4 py-2.5">
           <span className="text-[#9edcff]">Freshly baked</span> in small batches
@@ -105,11 +151,12 @@ export default async function Home() {
               </div>
 
               <h1 className="font-display mt-6 text-balance text-4xl font-medium leading-[1.08] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
-                Cakes worth craving for everyday moments
+                Cakes worth craving, baked fresh in Iskandar Puteri
               </h1>
               <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/95 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)] sm:text-lg">
-                Less-sweet, texture-forward recipes guests remember. Explore
-                our collection here — order sizes, slots, and rewards in the app.
+                Less-sweet, texture-forward cakes guests remember — baked to
+                order with pickup in {SERVICE_AREAS[0]} and delivery across{" "}
+                {SERVICE_AREAS.slice(1, 4).join(", ")}.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -122,6 +169,10 @@ export default async function Home() {
                 <OrderInAppButton
                   className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
                   label="Order in app"
+                />
+                <OrderOnWhatsAppButton
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+                  label="WhatsApp us"
                 />
               </div>
 
@@ -190,9 +241,9 @@ export default async function Home() {
                 Built for celebrations — and ordinary Thursdays.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
-                When people eat with their eyes first, a strong hero photo wins
-                attention; the next click should feel effortless. Start with
-                crowd favorites, then explore the full menu.
+                Birthdays, Raya, office farewells, or a quiet Thursday that
+                deserves cake — every order is baked after you place it, then
+                collected in {SERVICE_AREAS[0]} or delivered to your door.
               </p>
               <Link
                 href="/shop"
@@ -218,8 +269,8 @@ export default async function Home() {
                     desc: "Ingredients selected with care.",
                   },
                   {
-                    title: "Coverage",
-                    desc: "Delivery within selected city zones.",
+                    title: "Delivery coverage",
+                    desc: `${SERVICE_AREAS.slice(0, 4).join(", ")} and nearby.`,
                   },
                 ].map((f) => (
                   <div
@@ -244,9 +295,9 @@ export default async function Home() {
                 Featured creations
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                A taste of what we bake — tap a cake for the full story. To
-                order, open the Moja app for sizes, pickup slots, and member
-                rewards.
+                This week&apos;s most-ordered cakes. Tap one for sizes,
+                allergens and storage, then order in the Moja app or on
+                WhatsApp.
               </p>
             </div>
             <Link
@@ -298,6 +349,11 @@ export default async function Home() {
                       {p.name}
                     </h3>
                   </Link>
+                  {displayPriceLabel(featuredPriceLabels.get(p.slug)) ? (
+                    <div className="mt-1.5 text-sm font-semibold text-slate-900">
+                      {displayPriceLabel(featuredPriceLabels.get(p.slug))}
+                    </div>
+                  ) : null}
                   <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
                     {p.shortDescription ?? p.summary}
                   </p>
@@ -364,8 +420,8 @@ export default async function Home() {
                   Real reviews from real celebrations
                 </h2>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
-                  Social proof reduces hesitation — here&apos;s what customers
-                  say about freshness, delivery, and flavor balance.
+                  What customers tell us about freshness, delivery and how the
+                  cakes taste.
                 </p>
               </div>
               <OrderInAppButton label="Order in app" />
@@ -423,9 +479,14 @@ export default async function Home() {
                   New drops, behind-the-scenes, and limited editions — follow
                   before they sell out.
                 </div>
-                <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800">
+                <a
+                  href="https://www.instagram.com/mojamaison"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                >
                   @mojamaison
-                </div>
+                </a>
               </div>
             </div>
 
@@ -434,11 +495,18 @@ export default async function Home() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <div className="text-sm font-semibold text-slate-900">
-                      Operation hours
+                      Opening hours
                     </div>
                     <div className="mt-2 space-y-1 text-sm text-slate-600">
-                      <div>Web - Mon: 11:00 AM - 8:00 PM</div>
-                      <div>Tue: OFF</div>
+                      <div>Mon: 11:00 AM – 8:00 PM</div>
+                      <div>Wed–Sun: 10:00 AM – 6:00 PM</div>
+                      <div>Tue: Closed</div>
+                    </div>
+                    <div className="mt-3 text-sm text-slate-600">
+                      <span className="font-semibold text-slate-900">
+                        Find us:
+                      </span>{" "}
+                      {company.registeredAddress}
                     </div>
                   </div>
                   <div>
@@ -449,27 +517,30 @@ export default async function Home() {
                       <div>
                         Email:{" "}
                         <a
-                          className="font-medium text-slate-800 hover:text-slate-900"
-                          href="#"
+                          className="font-medium text-slate-800 underline-offset-2 hover:text-slate-900 hover:underline"
+                          href={`mailto:${company.contactEmail}`}
                         >
-                          admin@mojamaison.com
+                          {company.contactEmail}
                         </a>
                       </div>
                       <div>
                         Phone:{" "}
                         <a
-                          className="font-medium text-slate-800 hover:text-slate-900"
-                          href="#"
+                          className="font-medium text-slate-800 underline-offset-2 hover:text-slate-900 hover:underline"
+                          href={`tel:${company.contactPhone.replace(/[^\d+]/g, "")}`}
                         >
-                          +60 11-3933 1134
+                          {company.contactPhone}
                         </a>
+                      </div>
+                      <div className="mt-3">
+                        <OrderOnWhatsAppButton label="WhatsApp us to order" />
                       </div>
                       <div className="mt-3">
                         <Link
                           href="/contact"
                           className="text-sm font-semibold text-[#1a5f9e] hover:text-slate-900"
                         >
-                          WhatsApp, email &amp; social →
+                          All contact channels →
                         </Link>
                       </div>
                     </div>
@@ -477,7 +548,17 @@ export default async function Home() {
                 </div>
 
                 <div id="faq" className="mt-6 border-t border-slate-900/10 pt-6">
-                  <div className="text-sm font-semibold text-slate-900">FAQ</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-semibold text-slate-900">
+                      FAQ
+                    </div>
+                    <Link
+                      href="/faq"
+                      className="text-sm font-semibold text-[#1a5f9e] hover:text-slate-900"
+                    >
+                      See all answers →
+                    </Link>
+                  </div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
                     {[
                       {

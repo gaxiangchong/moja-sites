@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { getCompanyConfig, isPresent } from "@/lib/companyConfig";
 
 export const metadata: Metadata = {
-  title: "Refund Policy — Moja Maison",
+  title: "Refund Policy",
   description:
     "When and how Moja Maison issues refunds or replacements for orders.",
+  alternates: { canonical: "/refund-policy" },
 };
 
 export default function RefundPolicyPage() {

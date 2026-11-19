@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { getCompanyConfig, isPresent } from "@/lib/companyConfig";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Moja Maison",
+  title: "Privacy Policy",
   description:
     "How Moja Maison collects, uses, and protects your personal data, in line with the Personal Data Protection Act 2010 (Malaysia).",
+  alternates: { canonical: "/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

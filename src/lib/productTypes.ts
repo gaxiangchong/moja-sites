@@ -36,6 +36,12 @@ export type ShopListingProduct = {
   description: string;
   badge?: string;
   price: string;
+  /**
+   * Pre-rendered "From RM22.00" style label covering every available variant,
+   * computed by the catalog mappers so listing cards don't have to carry the
+   * full variant list. Undefined when no usable price exists.
+   */
+  priceLabel?: string;
   imageSrc: string;
   soldOut?: boolean;
   hasVariants?: boolean;

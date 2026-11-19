@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
+import { priceLabelFrom } from "./priceDisplay";
 import {
   getLocalCatalogProducts,
   getLocalHomeFeaturedProducts,
@@ -63,12 +64,14 @@ function toProductDetail(p: MemberCatalogProduct): ProductDetail {
 
 function toShopListing(p: MemberCatalogProduct): ShopListingProduct {
   const images = productImages(p);
+  const variants = toStorefrontVariants(p);
   return {
     slug: p.id,
     name: p.name,
     description: (p.shortDescription || p.description).trim(),
     badge: p.badge,
     price: productPriceLabel(p),
+    priceLabel: priceLabelFrom(productPriceLabel(p), variants),
     imageSrc: images[0]?.src ?? "/images/demo/shop/display-case.jpg",
     soldOut: productIsSoldOut(p),
     hasVariants: productHasVariants(p),
