@@ -7,16 +7,12 @@ import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import {
+  getCatalogSource,
   getHomeFeaturedProducts,
   getProductsBySlug,
   getShopSections,
 } from "@/lib/products";
 import type { ProductDetail } from "@/lib/productTypes";
-  getCatalogSource,
-  getHomeFeaturedProducts,
-  getShopSections,
-} from "@/lib/products";
-import type { ShopListingProduct } from "@/lib/productTypes";
 import { getCompanyConfig } from "@/lib/companyConfig";
 import { itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
 import {
@@ -62,11 +58,13 @@ const COOKIE_HIGHLIGHT_COUNT = 3;
 export const revalidate = 300;
 
 export default async function Home() {
-  const [homeFeatured, shopSections, productsBySlug] = await Promise.all([
-    getHomeFeaturedProducts(),
-    getShopSections(),
-    getProductsBySlug(),
-  ]);
+  const [homeFeatured, shopSections, productsBySlug, catalogSource] =
+    await Promise.all([
+      getHomeFeaturedProducts(),
+      getShopSections(),
+      getProductsBySlug(),
+      getCatalogSource(),
+    ]);
   const showPrices = pricesVisible(catalogSource);
 
   // The catalog only marks a handful of products as featured, which is not

@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
+import { priceLabelFrom } from "./priceDisplay";
 import { applyCatalogSections, getCatalogSectionsConfig } from "./catalogSections";
 import {
   getLocalCatalogProducts,
