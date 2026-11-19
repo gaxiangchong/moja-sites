@@ -1,5 +1,35 @@
 # Deploying mojamaison.com (moja-sites)
 
+## Build bundler — why `--webpack`
+
+`npm run build` runs `next build --webpack`. Next.js 16 defaults to Turbopack,
+which spawns a separate Node process to run the PostCSS/Tailwind step. On
+constrained build hosts that subprocess can fail to start, giving:
+
+```
+Error [TurbopackInternalError]: Failed to write app endpoint /page
+Caused by:
+- [project]/src/app/globals.css [app-client] (css)
+- creating new process
+- node process exited before we could connect to it with exit status: 0
+```
+
+That is an environment failure, not a code error — the CSS itself is fine and
+builds locally either way. `--webpack` is the documented Next 16 opt-out and
+keeps the PostCSS work in-process, so there is no subprocess to fail.
+
+If you want Turbopack's faster builds back, run `npm run build:turbopack` and
+check these on the host first:
+
+1. **Node version** — Next 16 requires **>= 20.9.0**. Run `node -v` on the
+   build host; an older Node is a common cause of this exact error.
+2. **Build memory** — raise it with `NODE_OPTIONS=--max-old-space-size=2048`.
+3. **`NODE_OPTIONS`** — an unsupported flag there makes the spawned worker exit
+   immediately, which matches "exited before we could connect".
+
+Webpack builds are slower but produce identical output.
+
+
 ## Catalog (Option B — member-app is source of truth)
 
 1. Edit products in **moja-member-app** `data/shop-catalog.products.json` and `data/shop-catalog.layout.json`.
