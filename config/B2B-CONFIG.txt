@@ -1,0 +1,207 @@
+================================================================================
+B2B LANDING PAGE (/business) — HOW TO EDIT THE WORDING
+================================================================================
+
+The page lives at:  https://yoursite/business
+All of its wording is read from:  config/b2b.json
+
+Edit that file with any text editor (Notepad, VS Code, etc.). Save the file.
+
+  • Local dev: save, then refresh the browser (restart `npm run dev` if the
+    page does not pick up changes).
+  • Production: commit your changes and redeploy / run `npm run build` again.
+
+JSON RULES (important):
+  • Use straight double quotes " like this — not curly "smart" quotes.
+  • Every line except the last item in { } or [ ] needs a comma at the end.
+  • To put a line break inside a message, write \n (backslash + n).
+
+--------------------------------------------------------------------------------
+WHERE THE CONTACT DETAILS COME FROM
+--------------------------------------------------------------------------------
+The WhatsApp number and email address are NOT in b2b.json.
+They are reused from:  config/contact.json   (see CONTACT-CONFIG.txt)
+
+  whatsapp.url      -> every "WhatsApp" button on the B2B page
+  email.address     -> every "Email us" button on the B2B page
+
+If you set "enabled": false on either channel in contact.json, that button
+simply disappears from the B2B page. If both are off, the page still renders
+but with no enquiry buttons — so keep at least one on.
+
+--------------------------------------------------------------------------------
+WHAT EACH SECTION OF b2b.json CONTROLS
+--------------------------------------------------------------------------------
+  eyebrow, headline, subheadline, heroHighlights
+      The top of the page (the first thing a business visitor reads).
+  heroImage, heroImageAlt
+      The hero photo. Use a path under public/ (e.g. /images/your-photo.png).
+
+  factsTitle, factsNote, facts
+      The "At a glance" box: minimum order, lead time, coverage, etc.
+      Each fact has an "icon" as well as a label and value. Pick one of:
+          box        stacked boxes   (good for: minimum order, volume)
+          clock      clock           (lead time, schedules)
+          truck      delivery van    (coverage, shipping)
+          gift       gift box        (packaging, branding)
+          sparkles   sparkles        (samples, tasting)
+          document   document        (invoicing, paperwork)
+      Any other word (or "") just shows a small dot, so a typo is harmless.
+      >>> THESE ARE THE MOST IMPORTANT ONES TO REVIEW. See the warning below.
+
+  segmentsTitle, segmentsIntro, segments
+      "Who we supply" — the types of business you sell to.
+      Each segment has a title, body, "examples" chips, and a photo:
+
+          "image"     path to a picture under public/, shown down the LEFT
+                      side of the card, e.g. "/images/demo/about/foo.jpg".
+                      Set it to "" to show that card with no photo.
+          "imageAlt"  one sentence describing the photo, for screen readers
+                      and for when the image fails to load.
+          "imagePosition"  optional. The photo is cropped into a tall, narrow
+                      strip, so if the important part is not in the middle,
+                      nudge it: "center 62%" moves the crop down, "center 25%"
+                      moves it up. Leave it out for normal, centred photos.
+
+      To use your own photos, drop the files into public/images/ and point
+      "image" at them. Upright (portrait) photos crop best in this strip.
+
+      The shop's own photographs live in:  public/images/moja/
+          display-case-counter.webp   the retail display case
+          cake-lineup.webp            a row of whole cakes (also the hero)
+          catering-trays.webp         catering trays of loaves and tartlets
+          espresso-bar.webp           the coffee bar
+          gift-bag-cookie-jars.webp   branded gift bag with cookie jars
+          gift-box-coffee-cup.webp    branded gift box and takeaway cup
+
+  potentialTitle, potentialIntro, potential
+      "Why these products work commercially" — the business case / upside.
+
+  productsTitle, productsIntro, productsCtaLabel
+      Wording around the product list. The products THEMSELVES are NOT edited
+      here — they come from the live catalog (see PRODUCTS-CONFIG.txt), so the
+      B2B page always matches the shop. They are listed as a plain menu of
+      names (no photos) because the shop already shows the pictures; each name
+      links through to its shop page.
+
+  (Product sections)
+      The headings products are grouped under — "Cheesecake", "Cream Cake"
+      and so on — are NOT set here. They live in:
+          config/catalog-sections.json   (see CATALOG-SECTIONS-CONFIG.txt)
+      so that this page and the shop page always agree. Editing them there
+      updates both pages at once.
+
+  factsTitle, factsNote, facts
+      The "At a glance" box: minimum order, lead time, coverage, etc.
+      Each fact has an "icon" as well as a label and value. Pick one of:
+          box        stacked boxes   (good for: minimum order, volume)
+          clock      clock           (lead time, schedules)
+          truck      delivery van    (coverage, shipping)
+          gift       gift box        (packaging, branding)
+          sparkles   sparkles        (samples, tasting)
+          document   document        (invoicing, paperwork)
+      Any other word (or "") just shows a small dot, so a typo is harmless.
+      >>> THESE ARE THE MOST IMPORTANT ONES TO REVIEW. See the warning below.
+
+  segmentsTitle, segmentsIntro, segments
+      "Who we supply" — the types of business you sell to.
+      Each segment has a title, body, "examples" chips, and a photo:
+
+          "image"     path to a picture under public/, shown down the LEFT
+                      side of the card, e.g. "/images/demo/about/foo.jpg".
+                      Set it to "" to show that card with no photo.
+          "imageAlt"  one sentence describing the photo, for screen readers
+                      and for when the image fails to load.
+          "imagePosition"  optional. The photo is cropped into a tall, narrow
+                      strip, so if the important part is not in the middle,
+                      nudge it: "center 62%" moves the crop down, "center 25%"
+                      moves it up. Leave it out for normal, centred photos.
+
+      To use your own photos, drop the files into public/images/ and point
+      "image" at them. Upright (portrait) photos crop best in this strip.
+
+      The shop's own photographs live in:  public/images/moja/
+          display-case-counter.webp   the retail display case
+          cake-lineup.webp            a row of whole cakes (also the hero)
+          catering-trays.webp         catering trays of loaves and tartlets
+          espresso-bar.webp           the coffee bar
+          gift-bag-cookie-jars.webp   branded gift bag with cookie jars
+          gift-box-coffee-cup.webp    branded gift box and takeaway cup
+
+  potentialTitle, potentialIntro, potential
+      "Why these products work commercially" — the business case / upside.
+
+  productsTitle, productsIntro, productsCtaLabel
+      Wording around the product list. The products THEMSELVES are NOT edited
+      here — they come from the live catalog (see PRODUCTS-CONFIG.txt), so the
+      B2B page always matches the shop. They are listed as a plain menu of
+      names (no photos) because the shop already shows the pictures; each name
+      links through to its shop page.
+
+  productGroups
+      Splits ONE catalog section into several sections on this page only.
+      The shop is left exactly as it is.
+
+      "replacesSectionId"  the catalog section being split. Today that is
+                           "premium-cake", which this page shows as two
+                           sections: "Cheesecake" and "Cream Cake".
+      "groups"             each needs a title, a description, and "items".
+
+      Each entry in "items" can be written two ways:
+        • the product's id, e.g. "truffle-basque-cheesecake"  (safest)
+        • the product's name, e.g. "Truffle Noir"
+      Products appear in the order you list them.
+
+      If an item matches nothing in the catalog:
+        • a NAME (has spaces) is still listed, as plain text with no link —
+          useful for a cake the shop sells that the catalog has not got yet.
+          The "Enquire" button beside it still works.
+        • an ID (no spaces) is skipped, on the assumption it is a typo.
+
+      Anything in the split section that you do not list stays on the page
+      under its original heading, so a new product can never go missing.
+
+  processTitle, processIntro, process
+      The numbered "How it works" steps.
+
+  faqTitle, faqs
+      The business FAQ (wholesale pricing, minimums, branding, invoicing...).
+
+  ctaTitle, ctaBody, ctaChecklist
+      The dark box at the bottom. The checklist tells a buyer what to include
+      in their message, which makes incoming enquiries much easier to quote.
+
+--------------------------------------------------------------------------------
+THE PREFILLED MESSAGES ("enquiry")
+--------------------------------------------------------------------------------
+When a visitor taps a button, WhatsApp / their email app opens with a message
+already typed in. Those templates are:
+
+  whatsappMessage         main "Enquire on WhatsApp" button
+  emailSubject/emailBody  main "Email us" button
+  productMessageTemplate  the small "Enquire" button on each product card.
+                          Must contain {product} — it is replaced with the
+                          product name, e.g. "Tiramisu Noir".
+  priceListMessage        the "Request the wholesale price list" button
+  responseNote            small line such as office hours. Leave "" to hide.
+
+--------------------------------------------------------------------------------
+!! PLEASE REVIEW BEFORE YOU ADVERTISE THIS PAGE !!
+--------------------------------------------------------------------------------
+The shipped text deliberately does NOT promise specific numbers, because only
+you know your real terms. Everything currently says some version of
+"confirmed on enquiry". Replace these with your real policy when you know it:
+
+  facts -> "Minimum order"   e.g. "From 20 jars or 5 whole cakes per delivery"
+  facts -> "Lead time"       e.g. "3 working days; 7 for orders over 50 units"
+  facts -> "Coverage"        your real delivery zones
+  facts -> "Packaging"       whether custom branding is genuinely available
+  faqs                       the same numbers, repeated in the answers
+
+Also check these claims are still true for your business:
+  • "Halal-friendly ingredients"  (stated in heroHighlights and potential)
+  • "Cookie jars ship nationwide" (stated in heroHighlights, potential, facts)
+  • Custom branding / white-label being available "on request"
+  • Tasting samples being available
+
+================================================================================

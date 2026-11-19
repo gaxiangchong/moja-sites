@@ -305,7 +305,7 @@ export default async function ProductPage({
                     </div>
                   ) : (
                     <div className="mt-6 flex flex-wrap gap-2">
-                      {["Halal-friendly ingredients", "Made fresh to order"].map(
+                      {["Muslim-friendly ingredients", "Made fresh to order"].map(
                         (label) => (
                           <span
                             key={label}

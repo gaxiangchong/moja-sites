@@ -1,0 +1,71 @@
+================================================================================
+SHOP SECTIONS — HOW THE WEBSITE GROUPS YOUR PRODUCTS
+================================================================================
+
+This site reads:  config/catalog-sections.json
+
+It controls the SECTION HEADINGS products are listed under, on both:
+    /shop       (the shop page)
+    /business   (the wholesale page)
+Change it once and both pages follow. They can never drift apart.
+
+Today it takes the member app's single "Premium Cake" section and shows it
+as two sections on the website: "Cheesecake" and "Cream Cake".
+
+--------------------------------------------------------------------------------
+WHAT THIS FILE DOES *NOT* DO
+--------------------------------------------------------------------------------
+It does not create, rename, price or photograph products. All of that lives
+in the member app — see PRODUCTS-CONFIG.txt. This file only decides which
+heading an existing product is shown under on the website.
+
+If a product is missing from the website entirely, this is the wrong file.
+Check the member app: Admin -> Shop Layout.
+
+--------------------------------------------------------------------------------
+HOW TO EDIT IT
+--------------------------------------------------------------------------------
+  "replacesSectionId"   the member-app section being split up. Today that is
+                        "premium-cake". The sections you define below appear
+                        in its place; every other section is left alone.
+
+  "groups"              one block per heading you want. Each needs:
+                          "id"           short name, lowercase-with-dashes
+                          "title"        the heading shown on the page
+                          "description"  one line under the heading
+                          "items"        the products, in display order
+
+  Each entry in "items" can be written two ways:
+      • the product's id,   e.g. "truffle-basque-cheesecake"   (safest)
+      • the product's name, e.g. "Truffle Noir"
+
+  Find product ids in the member app, or in config/products.catalog.json.
+
+--------------------------------------------------------------------------------
+IF AN ITEM DOES NOT MATCH A REAL PRODUCT
+--------------------------------------------------------------------------------
+  • Written as a NAME (it has spaces):
+        /shop      skips it — there is no photo or price to show a card with
+        /business  lists it as plain text, with no link. The "Enquire" button
+                   beside it still works.
+    This is deliberate: it lets the wholesale menu mention a cake the kitchen
+    sells before the catalog has caught up. Add the product in the member app
+    and it starts linking everywhere automatically, with no edit here.
+
+  • Written as an ID (no spaces):
+        skipped everywhere, on the assumption it is a typo.
+
+--------------------------------------------------------------------------------
+NOTHING EVER GOES MISSING
+--------------------------------------------------------------------------------
+A product in the split section that you forget to list still appears, under
+the original heading. Adding a cake to the catalog can never make it vanish
+from the website because of this file.
+
+--------------------------------------------------------------------------------
+TO SWITCH THE SPLIT OFF
+--------------------------------------------------------------------------------
+Set "groups" to an empty list:   "groups": []
+The website then shows the member app's sections exactly as they come.
+
+================================================================================

@@ -1,0 +1,129 @@
+{
+  "$schemaNote": "Edit this file to change the wording on the /business (B2B) landing page. See config/B2B-CONFIG.txt for help. Restart dev server after changes.",
+
+  "eyebrow": "Wholesale · Corporate · Events",
+  "headline": "Desserts your customers remember, made to your schedule.",
+  "subheadline": "Moja Maison supplies cafés, hotels, offices and retail partners with small-batch cakes, loaves and cookie jars — baked to order, packed to arrive presentable, and quoted per volume.",
+  "heroImage": "/images/moja/cake-lineup.webp",
+  "heroImageAlt": "A row of Moja Maison whole cakes — strawberry shortcake, matcha, chocolate, burnt Basque cheesecakes and caramel espresso gateau — laid out on a table",
+  "heroHighlights": [
+    "Small-batch baking, consistent to spec",
+    "Halal-friendly ingredients",
+    "Cookie jars ship nationwide"
+  ],
+
+  "segmentsTitle": "Who we supply",
+  "segmentsIntro": "If dessert sits anywhere in your offer — on a counter, a banquet menu, or a gift list — we can build a supply arrangement around it.",
+  "segments": [
+    {
+      "title": "Cafés & dessert counters",
+      "body": "A rotating range of premium slices and whole cakes to anchor your display, with repeat delivery on the days you choose.",
+      "examples": ["Weekly standing orders", "Seasonal rotation", "Slice-ready formats"],
+      "image": "/images/moja/espresso-bar.webp",
+      "imageAlt": "Espresso machine and grinder on the Moja Maison coffee bar, with cups and a tamper ready for service"
+    },
+    {
+      "title": "Hotels, events & catering",
+      "body": "Volume dessert for banquets, conferences and functions — planned ahead so your kitchen is not improvising on the day.",
+      "examples": ["Banquet quantities", "Pre-agreed delivery windows", "Plated or whole"],
+      "image": "/images/moja/catering-trays.webp",
+      "imageAlt": "Catering trays packed with mini banana loaves and dozens of berry tartlets"
+    },
+    {
+      "title": "Corporate gifting",
+      "body": "Client appreciation, festive hampers and staff rewards in gift-ready packaging that travels well and lands looking intentional.",
+      "examples": ["Festive campaigns", "Client thank-yous", "Bulk address lists"],
+      "image": "/images/moja/gift-bag-cookie-jars.webp",
+      "imageAlt": "Three ribboned Moja Maison cookie jars in front of a branded navy gift bag"
+    },
+    {
+      "title": "Retail & reseller partners",
+      "body": "Shelf-stable cookie jars and loaves for stockists who want a dessert line without running a bakery.",
+      "examples": ["Cookie jar range", "Nationwide shipping", "Restock on demand"],
+      "image": "/images/moja/display-case-counter.webp",
+      "imageAlt": "Moja Maison retail display case with labelled cakes and cheesecakes on two shelves"
+    }
+  ],
+
+  "potentialTitle": "Why these products work commercially",
+  "potentialIntro": "Good dessert is a margin line and a reason to return. Here is what makes our range practical to carry.",
+  "potential": [
+    {
+      "title": "Built to be photographed",
+      "body": "Burnt Basque tops, clean layers and glossy finishes read well on a counter and on social — dessert that markets itself."
+    },
+    {
+      "title": "Formats that survive the journey",
+      "body": "Cookie jars are sealed to arrive crisp and ship nationwide. Cakes are packed for our delivery zones so they reach you intact."
+    },
+    {
+      "title": "Consistent batch to batch",
+      "body": "Every order is baked to the same spec, so the cake a customer loved in January is the cake they get in June."
+    },
+    {
+      "title": "Halal-friendly by default",
+      "body": "Ingredients are selected with care, which keeps your dessert line open to the widest possible guest list."
+    },
+    {
+      "title": "Your brand, our kitchen",
+      "body": "Custom packaging, sleeves and gift messaging can be arranged for corporate runs — ask us what is possible at your volume."
+    },
+    {
+      "title": "One contact, not a queue",
+      "body": "Business orders are handled directly over WhatsApp or email. No app, no checkout, no waiting in a consumer queue."
+    }
+  ],
+
+  "productsTitle": "The range",
+  "productsIntro": "Our current catalogue, grouped the way we supply it. Tap any product for the full description, or ask us for the wholesale price list.",
+  "productsCtaLabel": "Request the wholesale price list",
+
+  "factsTitle": "At a glance",
+  "factsNote": "Exact terms depend on the product and volume — we confirm everything in writing before you commit.",
+  "facts": [
+    { "icon": "box", "label": "Minimum order", "value": "Set per product — tell us your volume and we will confirm" },
+    { "icon": "clock", "label": "Lead time", "value": "Baked to order; bulk runs need advance notice" },
+    { "icon": "truck", "label": "Coverage", "value": "Cake delivery within our service zones; cookie jars ship nationwide" },
+    { "icon": "gift", "label": "Packaging", "value": "Standard retail packaging, with custom branding on request" },
+    { "icon": "sparkles", "label": "Samples", "value": "Tasting sets can be arranged before a first order" },
+    { "icon": "document", "label": "Invoicing", "value": "Company invoices and procurement paperwork supported" }
+  ],
+
+  "processTitle": "How it works",
+  "processIntro": "Four steps from first message to a standing order.",
+  "process": [
+    { "title": "Tell us what you need", "body": "Message us with your outlet or company, the products you are interested in, rough quantity and how often." },
+    { "title": "Tasting & quote", "body": "We confirm what is feasible, arrange samples where it helps, and send pricing for your volume." },
+    { "title": "Lock the schedule", "body": "Agree delivery days, lead times and packaging. Standing orders get a fixed slot." },
+    { "title": "Deliver & reorder", "body": "We bake to the agreed schedule. Reorders and changes go through the same contact." }
+  ],
+
+  "faqTitle": "Questions businesses ask",
+  "faqs": [
+    { "q": "Do you offer wholesale pricing?", "a": "Yes — pricing is quoted by product and volume rather than published, because a weekly standing order and a one-off event are very different jobs. Ask for the current price list." },
+    { "q": "What is the minimum order?", "a": "It depends on the product. Cookie jars and loaves start lower than premium cakes. Send us your expected quantity and we will tell you straight away whether it works." },
+    { "q": "Can you put our branding on the packaging?", "a": "Custom sleeves, stickers and gift messaging can be arranged for corporate and gifting runs. Lead time and minimums depend on the format — ask us early." },
+    { "q": "Do you deliver to our outlet?", "a": "Cakes are delivered within our service zones on agreed days. Cookie jars ship nationwide, so stockists outside the zones can still carry the range." },
+    { "q": "Can we try before we commit?", "a": "Yes. We would rather you taste the product first — tasting sets can be arranged as part of the quote." },
+    { "q": "Can you invoice our company?", "a": "Yes. We issue company invoices and can work with your procurement or finance process." }
+  ],
+
+  "ctaTitle": "Tell us what you need",
+  "ctaBody": "Send one message with your outlet or company name, the products you are interested in, your rough quantity and how often you would reorder. That is usually enough for us to come back with pricing.",
+  "ctaChecklist": [
+    "Company or outlet name",
+    "Products you are interested in",
+    "Quantity and how often",
+    "Delivery location",
+    "Date you need it by"
+  ],
+
+  "enquiry": {
+    "whatsappMessage": "Hi Moja Maison, I would like to enquire about wholesale / corporate orders.\n\nCompany / outlet:\nProducts of interest:\nQuantity & frequency:\nDelivery location:\nNeeded by:",
+    "emailSubject": "Wholesale / corporate enquiry",
+    "emailBody": "Hi Moja Maison,\n\nWe would like to enquire about wholesale / corporate orders.\n\nCompany / outlet:\nProducts of interest:\nQuantity & frequency:\nDelivery location:\nNeeded by:\n\nThank you.",
+    "productMessageTemplate": "Hi Moja Maison, I would like wholesale pricing for: {product}.",
+    "priceListMessage": "Hi Moja Maison, please send me your wholesale price list.",
+    "responseNote": "We reply during business hours, 10am–6pm."
+  }
+}

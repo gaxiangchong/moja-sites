@@ -108,7 +108,7 @@ const sections: FaqSection[] = [
     items: [
       {
         q: "Is your cake halal-certified?",
-        a: "We use halal-friendly ingredients and follow careful handling practices. If you need confirmation for a specific item, please contact us and we’ll advise based on the current menu.",
+        a: "We use Muslim-friendly ingredients and follow careful handling practices. If you need confirmation for a specific item, please contact us and we’ll advise based on the current menu.",
       },
       {
         q: "Is your cake suitable for vegetarian, egg-free, gluten free, diabetes or keto diet?",

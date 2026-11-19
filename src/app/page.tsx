@@ -9,9 +9,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 import {
   getCatalogSource,
   getHomeFeaturedProducts,
+  getProductsBySlug,
   getShopSections,
 } from "@/lib/products";
-import type { ShopListingProduct } from "@/lib/productTypes";
+import type { ProductDetail } from "@/lib/productTypes";
 import { getCompanyConfig } from "@/lib/companyConfig";
 import { itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
 import {
@@ -35,62 +36,59 @@ export const metadata: Metadata = {
   },
 };
 
-const HERO_IMAGE = "/images/hero-chef-burnt-cheesecake.png";
-
-const PREMIUM_SECTION_ID = "premium-cake";
-const PREMIUM_HIGHLIGHT_COUNT = 4;
+const HERO_IMAGE = "/images/hero-moja-baker-basque.webp";
 
 /**
- * Short flavour lines for the "Premium cakes" tiles, keyed by product slug.
- * Anything missing falls back to a trimmed version of the catalog description,
- * so a newly added cake still renders sensibly.
+ * Sections the featured row tops up from, in the order they are drawn on.
+ * "premium-cake" is listed last because it doubles as the fallback for when
+ * config/catalog-sections.json is not splitting it into the cake tiers.
  */
-const PREMIUM_FLAVOUR_NOTES: Record<string, string> = {
-  "caramel-espresso-gateau": "Espresso sponge, salted caramel.",
-  "jasmine-blanc-cheesecake": "Jasmine tea, floral, burnt Basque.",
-  "lemon-yuzu-cake": "Osmanthus chantilly, sweet longan.",
-  "matcha-marmalade": "Ceremonial matcha, yuzu marmalade.",
-  "strawberry-shortcake": "Chiffon sponge, cream, strawberries.",
-  "mixed-fruit-basque-cheesecake": "Caramelised top, custardy centre.",
-  "pistachio-noir-cheesecake": "Pistachio, dark chocolate, burnt Basque.",
-  "tiramisu-noir-cheesecake": "Espresso, mascarpone, cocoa.",
-  "citron-basque-cheesecake": "Lemon zest, tangy and creamy.",
-  "truffle-basque-cheesecake": "Dark chocolate truffle ganache.",
-};
+const PREMIUM_SECTION_IDS = [
+  "signature-basque",
+  "premium-basque",
+  "cream-cake",
+  "premium-cake",
+];
+/** Featured creations runs two rows of three on desktop. */
+const FEATURED_COUNT = 6;
 
-function flavourNote(product: ShopListingProduct): string {
-  const curated = PREMIUM_FLAVOUR_NOTES[product.slug];
-  if (curated) return curated;
-
-  // Fallback: first sentence of the catalog description, trimmed to one line.
-  const firstSentence = product.description.split(/(?<=\.)\s/)[0]?.trim() ?? "";
-  if (firstSentence.length <= 64) return firstSentence;
-  return `${firstSentence.slice(0, 61).replace(/[\s,—-]+$/, "")}…`;
-}
+const COOKIE_SECTION_ID = "box-edition";
+const COOKIE_HIGHLIGHT_COUNT = 3;
 
 export const revalidate = 300;
 
 export default async function Home() {
-  const [featuredProducts, shopSections, catalogSource] = await Promise.all([
-    getHomeFeaturedProducts(),
-    getShopSections(),
-    getCatalogSource(),
-  ]);
+  const [homeFeatured, shopSections, productsBySlug, catalogSource] =
+    await Promise.all([
+      getHomeFeaturedProducts(),
+      getShopSections(),
+      getProductsBySlug(),
+      getCatalogSource(),
+    ]);
   const showPrices = pricesVisible(catalogSource);
 
-  // Drive the "Premium cakes" tiles from the live catalog so they can never
-  // advertise a cake the store no longer sells. Skip anything already shown in
-  // the featured row above to avoid repeating the same cakes on one page.
-  const featuredSlugs = new Set(featuredProducts.map((p) => p.slug));
-  const premiumProducts =
-    shopSections.find((section) => section.id === PREMIUM_SECTION_ID)
-      ?.products ?? [];
-  const unfeaturedPremium = premiumProducts.filter(
-    (p) => !featuredSlugs.has(p.slug),
+  // The catalog only marks a handful of products as featured, which is not
+  // enough to fill two rows. Top the row up with premium cakes that are not
+  // already featured, drawn from the shop section so nothing unlisted appears.
+  const featuredSlugs = new Set(homeFeatured.map((p) => p.slug));
+  const premiumFill = shopSections
+    .filter((section) => PREMIUM_SECTION_IDS.includes(section.id))
+    .flatMap((section) => section.products)
+    .filter((p) => !featuredSlugs.has(p.slug))
+    .map((p) => productsBySlug.get(p.slug))
+    .filter((p): p is ProductDetail => Boolean(p));
+
+  const featuredProducts = [...homeFeatured, ...premiumFill].slice(
+    0,
+    FEATURED_COUNT,
   );
-  const premiumHighlights = (
-    unfeaturedPremium.length > 0 ? unfeaturedPremium : premiumProducts
-  ).slice(0, PREMIUM_HIGHLIGHT_COUNT);
+
+  // Cookie jars keep and travel far better than whole cakes, so they get their
+  // own shipping-led section rather than sharing the cake framing.
+  const cookieHighlights = (
+    shopSections.find((section) => section.id === COOKIE_SECTION_ID)
+      ?.products ?? []
+  ).slice(0, COOKIE_HIGHLIGHT_COUNT);
 
   const company = getCompanyConfig();
   const featuredPriceLabels = new Map(
@@ -136,37 +134,64 @@ export default async function Home() {
         {/* Full-bleed hero: image-first for immediate visual hook */}
         <section className="relative isolate w-full overflow-hidden bg-[#050a14]">
           <div className="absolute inset-0">
-            <div className="hero-image-drift absolute inset-[-8%] min-h-[120%] min-w-[120%]">
+            {/*
+              Only a little over-scale: enough for the slow drift to have room,
+              but not so much that it crops the baker and the apron wordmark off
+              the right edge. The photo is composed deliberately, with the
+              subject right and clear space left, so hard cropping costs us the
+              whole point of it.
+            */}
+            <div className="hero-image-drift absolute inset-[-3%] min-h-[106%] min-w-[106%]">
               <Image
                 src={HERO_IMAGE}
-                alt="Pastry chef finishing a burnt Basque cheesecake, highlighting the caramelized top and careful craftsmanship"
+                alt="A Moja Maison baker dusting sugar over a burnt Basque cheesecake on a marble counter in a sunlit kitchen"
                 fill
-                className="object-cover object-center"
+                /*
+                  On phones the wide photo is cropped to a tall frame, and
+                  centring it would show mostly the empty wall. Favour the
+                  right side so the baker and the cake stay in shot; from sm up
+                  the frame is wide enough to centre and keep the clear space.
+                */
+                className="object-cover object-[72%_center] sm:object-center"
                 sizes="100vw"
                 priority
                 fetchPriority="high"
               />
             </div>
-            {/* No directional overlay — full photo stays even; copy uses the glass panel + shadows */}
+            {/*
+              Directional scrim instead of a frosted panel. The subject of the
+              photo sits on the right, so the copy goes left and the gradient
+              darkens only that side, leaving the baker and the cake uncovered.
+              Phones get a vertical gradient instead: the crop is too narrow
+              for any part of the frame to stay clear.
+            */}
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-[#050a14]/85 via-[#050a14]/55 to-[#050a14]/85 sm:bg-gradient-to-r sm:from-[#050a14]/90 sm:via-[#050a14]/45 sm:to-transparent"
+              aria-hidden
+            />
           </div>
 
           <div className="relative mx-auto flex w-full min-h-[min(48vh,440px)] max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-5 sm:min-h-[min(44vh,400px)] sm:pb-11 sm:pt-6 lg:min-h-[min(42vh,380px)] lg:pb-12 lg:pt-8">
-            <div className="ml-auto w-full max-w-xl text-left lg:max-w-2xl rounded-3xl border border-white/[0.14] bg-slate-950/25 px-5 py-7 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-7 sm:py-8 lg:bg-slate-950/20 lg:backdrop-blur-lg">
+            <div className="mr-auto w-full max-w-xl text-left lg:max-w-2xl py-7 sm:py-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-[#c8e8ff] backdrop-blur-md">
                 <span
                   className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#57f0ff] shadow-[0_0_12px_rgba(87,240,255,0.9)]"
                   aria-hidden
                 />
-                Baked to order · Halal-friendly ingredients
+                Baked to order · Muslim-friendly ingredients
               </div>
 
-              <h1 className="font-display mt-6 text-balance text-4xl font-medium leading-[1.08] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
-                Cakes worth craving, baked fresh in Iskandar Puteri
+              <h1 className="font-display mt-6 text-balance text-[1.75rem] font-medium leading-[1.12] tracking-tight text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.45),0_1px_2px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
+                {/* Keeps each clause whole so the line can only break at the
+                    comma, never mid-phrase. The phone size is set small
+                    enough that the longer clause still fits on one line. */}
+                <span className="inline-block">A Little Cake,</span>{" "}
+                <span className="inline-block">A Lot of Happiness.</span>
               </h1>
               <p className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-slate-100/95 [text-shadow:0_1px_16px_rgba(0,0,0,0.4)] sm:text-lg">
-                Less-sweet, texture-forward cakes guests remember — baked to
-                order with pickup in {SERVICE_AREAS[0]} and delivery across{" "}
-                {SERVICE_AREAS.slice(1, 4).join(", ")}.
+                Beautifully crafted cakes for everyday treats and special
+                moments. Explore our collection here — order sizes, slots, and
+                rewards in the app.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -275,7 +300,7 @@ export default async function Home() {
                     desc: "Order before 1PM (Mon–Sat).",
                   },
                   {
-                    title: "Halal-friendly",
+                    title: "Muslim-friendly",
                     desc: "Ingredients selected with care.",
                   },
                   {
@@ -392,41 +417,113 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="about" className="mx-auto max-w-6xl px-4 py-10">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
-            <div className="lg:col-span-5">
-              <h2 className="font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
-                Premium cakes
-              </h2>
-              <p className="mt-3 text-base leading-relaxed text-slate-600">
-                A union of flavors and textures — built for gifting, sharing,
-                and those “just because” days.
-              </p>
-            </div>
-            <div className="lg:col-span-7">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {premiumHighlights.map((p) => (
+        {cookieHighlights.length > 0 && (
+          <section id="cookies" className="mx-auto max-w-6xl px-4 py-10">
+            <div className="overflow-hidden rounded-3xl border border-slate-900/10 bg-gradient-to-br from-[#f7fbff] via-white to-[#f0f7ff]">
+              <div className="p-6 sm:p-10">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                  <div className="max-w-xl">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-900/10 bg-white px-3 py-1.5 text-xs font-medium text-slate-700">
+                      <span
+                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#62a6ff]"
+                        aria-hidden
+                      />
+                      Delivered nationwide
+                    </div>
+                    <h2 className="font-display mt-4 text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+                      Cookie jars we can send anywhere
+                    </h2>
+                    <p className="mt-3 text-base leading-relaxed text-slate-600">
+                      Our cakes travel within our delivery zones, but cookie
+                      jars keep beautifully — so we ship them nationwide.
+                      Sealed fresh, packed to arrive intact, and ready to gift.
+                    </p>
+                  </div>
                   <Link
-                    key={p.slug}
-                    href={`/product/${p.slug}`}
-                    className="block rounded-3xl border border-slate-900/10 bg-white/85 p-5 transition hover:-translate-y-0.5 hover:border-slate-900/20 hover:bg-white hover:shadow-sm"
+                    href="/shop#box-edition"
+                    className="inline-flex shrink-0 items-center justify-center rounded-full border border-slate-900/15 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-900/25 hover:bg-slate-50"
                   >
-                    <div className="text-sm font-semibold text-slate-900">
-                      {p.name}
-                    </div>
-                    <div className="mt-1 text-sm text-slate-600">
-                      {flavourNote(p)}
-                    </div>
-                    <div className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-500">
-                      <span className="h-1.5 w-1.5 rounded-full bg-slate-900/20" />
-                      Crafted in small batches
-                    </div>
+                    See all cookie jars
                   </Link>
-                ))}
+                </div>
+
+                <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {cookieHighlights.map((c) => (
+                    <article
+                      key={c.slug}
+                      className="group flex flex-col overflow-hidden rounded-3xl border border-slate-900/10 bg-white/90 shadow-sm shadow-slate-900/[0.04] transition hover:-translate-y-0.5 hover:border-slate-900/15 hover:shadow-md"
+                    >
+                      <Link
+                        href={`/product/${c.slug}`}
+                        className="relative block aspect-[4/3] overflow-hidden bg-slate-100"
+                      >
+                        <Image
+                          src={c.imageSrc}
+                          alt={c.name}
+                          fill
+                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                          sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                        />
+                      </Link>
+                      <div className="flex flex-1 flex-col p-5">
+                        <Link
+                          href={`/product/${c.slug}`}
+                          className="font-display text-lg font-medium tracking-tight text-slate-900"
+                        >
+                          {c.name}
+                        </Link>
+                        <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
+                          {c.description}
+                        </p>
+                        <div className="mt-5 flex gap-2">
+                          <Link
+                            href={`/product/${c.slug}`}
+                            className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-900/12 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                          >
+                            View details
+                          </Link>
+                          <OrderInAppButton
+                            className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-r from-[#62a6ff] to-[#57f0ff] px-4 py-2.5 text-sm font-semibold text-[#050a14] transition hover:brightness-110"
+                            label="Order in app"
+                          />
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  {[
+                    {
+                      title: "Ships nationwide",
+                      desc: "Cookie jars reach addresses across Malaysia.",
+                    },
+                    {
+                      title: "Sealed for freshness",
+                      desc: "Packed airtight so they arrive crisp.",
+                    },
+                    {
+                      title: "Gift-ready jars",
+                      desc: "Presented to hand over exactly as they arrive.",
+                    },
+                  ].map((f) => (
+                    <div
+                      key={f.title}
+                      className="rounded-2xl border border-slate-900/10 bg-white/80 p-4"
+                    >
+                      <div className="text-sm font-semibold text-slate-900">
+                        {f.title}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        {f.desc}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="mx-auto max-w-6xl px-4 py-12">
           <div className="rounded-3xl border border-slate-900/10 bg-gradient-to-br from-white via-white to-[#f0f7ff] p-6 sm:p-10">

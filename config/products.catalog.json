@@ -11,6 +11,7 @@
       "title": "Premium Cake",
       "description": "Signature whole cakes crafted from the finest ingredients. Multi-layer indulgence with contrasting textures and complementary flavours.",
       "productSlugs": [
+        "caramel-espresso-gateau",
         "jasmine-blanc-cheesecake",
         "matcha-marmalade",
         "strawberry-shortcake",
@@ -143,6 +144,39 @@
       ]
     },
     {
+      "slug": "blueberry-velvet-gateau",
+      "name": "Blueberry Velvet Gateau",
+      "price": "RM22.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "alt": "Blueberry Velvet Gateau",
+          "src": "/uploads/products/blueberry-velvet-gateau-1791903969613.png"
+        }
+      ],
+      "summary": "A delightful pairing of chocolate, smooth cream, and fruity blueberry—rich, creamy, and full of flavour.",
+      "shortDescription": "A delightful pairing of chocolate, smooth cream, and fruity blueberry",
+      "badge": "New",
+      "soldOut": false,
+      "variants": [
+        {
+          "label": "6\"",
+          "price": "RM149.00",
+          "available": true
+        },
+        {
+          "label": "8\"",
+          "price": "RM208.00",
+          "available": true
+        },
+        {
+          "label": "Slice",
+          "price": "RM22.00",
+          "available": true
+        }
+      ]
+    },
+    {
       "slug": "mixed-fruit-basque-cheesecake",
       "name": "Original Basque",
       "price": "RM139.00",
@@ -206,38 +240,6 @@
         {
           "label": "Slice",
           "price": "RM22.00",
-          "available": true
-        }
-      ]
-    },
-    {
-      "slug": "pistachio-noir-cheesecake",
-      "name": "Pistachio Noir",
-      "price": "RM228.00",
-      "category": "Premium Cake",
-      "images": [
-        {
-          "alt": "Pistachio Noir",
-          "src": "/uploads/products/pistachio-noir-cheesecake-1791698590901.png"
-        }
-      ],
-      "summary": "Finely ground pistachios folded through our burnt Basque cheesecake, finished with a deeply caramelised top and a whisper of dark chocolate. Nutty, rich, and quietly luxurious.",
-      "shortDescription": "Finely ground pistachios folded through our burnt Basque cheesecake, finished with a deeply caramelised top and a whisper of dark chocolate. Nutty, rich, and quietly luxurious.",
-      "soldOut": false,
-      "variants": [
-        {
-          "label": "6 inch",
-          "price": "RM228.00",
-          "available": true
-        },
-        {
-          "label": "8 inch",
-          "price": "RM268.00",
-          "available": true
-        },
-        {
-          "label": "Slice",
-          "price": "RM27.00",
           "available": true
         }
       ]
@@ -334,6 +336,70 @@
         {
           "label": "Slice",
           "price": "RM24.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "slug": "pistachio-noir-cheesecake",
+      "name": "Pistachio Noir",
+      "price": "RM228.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "alt": "Pistachio Noir",
+          "src": "/uploads/products/pistachio-noir-cheesecake-1791698590901.png"
+        }
+      ],
+      "summary": "Finely ground pistachios folded through our burnt Basque cheesecake, finished with a deeply caramelised top and a whisper of dark chocolate. Nutty, rich, and quietly luxurious.",
+      "shortDescription": "Finely ground pistachios folded through our burnt Basque cheesecake, finished with a deeply caramelised top and a whisper of dark chocolate. Nutty, rich, and quietly luxurious.",
+      "soldOut": false,
+      "variants": [
+        {
+          "label": "6 inch",
+          "price": "RM228.00",
+          "available": true
+        },
+        {
+          "label": "8 inch",
+          "price": "RM268.00",
+          "available": true
+        },
+        {
+          "label": "Slice",
+          "price": "RM27.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "slug": "rocher-noir-basque",
+      "name": "Rocher Noir Basque",
+      "price": "RM28.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "alt": "Rocher Noir Basque",
+          "src": "/uploads/products/rocher-noir-basque-1791905141549.png"
+        }
+      ],
+      "summary": "Rich chocolate and nutty hazelnut meet our signature melting Basque cheesecake, with a caramelised top and a smooth, creamy centre.",
+      "shortDescription": "Rich chocolate and nutty hazelnut meet our signature melting Basque cheesecake, with a caramelised top and a smooth, creamy centre.",
+      "soldOut": false,
+      "variants": [
+        {
+          "label": "6\"",
+          "price": "RM228.00",
+          "available": true
+        },
+        {
+          "label": "8\"",
+          "price": "RM268.00",
+          "available": true
+        },
+        {
+          "label": "Slice",
+          "price": "RM28.00",
           "available": true
         }
       ]
@@ -436,6 +502,74 @@
       "summary": "Deep cocoa cookies with rich dark chocolate chunks, baked until just chewy. For anyone who likes their chocolate doubled.",
       "shortDescription": "Deep cocoa cookies with rich dark chocolate chunks, baked until just chewy. For anyone who likes their chocolate doubled.",
       "soldOut": false
+    },
+    {
+      "slug": "caramel-espresso-gateau",
+      "name": "Caramel Espresso Gateau",
+      "price": "RM159.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "alt": "Caramel Espresso Gateau",
+          "src": "/uploads/products/caramel-espresso-gateau-1791906274543.png"
+        },
+        {
+          "alt": "Caramel Espresso Gateau — alternative angle",
+          "src": "/images/products/caramel_macadamia_cake.png"
+        }
+      ],
+      "summary": "Espresso-infused sponge layered with rich salted caramel and a generous scatter of toasted macadamia nuts. Bold, indulgent, and beautifully balanced.",
+      "shortDescription": "Espresso-infused sponge layered with rich salted caramel and a generous scatter of toasted macadamia nuts. Bold, indulgent, and beautifully balanced.",
+      "soldOut": true,
+      "variants": [
+        {
+          "label": "6 inch",
+          "price": "RM159.00",
+          "available": true
+        },
+        {
+          "label": "8 inch",
+          "price": "RM228.00",
+          "available": true
+        },
+        {
+          "label": "Slice",
+          "price": "RM24.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "slug": "cherry-espresso-gateau",
+      "name": "Cherry Chocolate Gateau",
+      "price": "RM24.00",
+      "category": "Premium Cake",
+      "images": [
+        {
+          "alt": "Cherry Chocolate Gateau",
+          "src": "/uploads/products/cherry-espresso-gateau-1791906449947.png"
+        }
+      ],
+      "summary": "Rich chocolate, smooth cream, and sweet-tart cherries come together for a deliciously fruity, indulgent treat.",
+      "shortDescription": "Rich chocolate, smooth cream, and sweet-tart cherries",
+      "soldOut": true,
+      "variants": [
+        {
+          "label": "6\"",
+          "price": "RM159.00",
+          "available": true
+        },
+        {
+          "label": "8\"",
+          "price": "RM228.00",
+          "available": true
+        },
+        {
+          "label": "Slice",
+          "price": "RM24.00",
+          "available": true
+        }
+      ]
     }
   ]
 }
