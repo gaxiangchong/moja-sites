@@ -1,6 +1,7 @@
 import { cache } from "react";
 import catalogFile from "../../config/products.catalog.json";
 import { resolveProductImageSrc } from "./assetUrl";
+import { priceLabelFrom } from "./priceDisplay";
 import type { ProductCategory, ProductDetail, ShopListingProduct, ShopSection } from "./productTypes";
 
 type CatalogJson = {
@@ -66,6 +67,7 @@ function toShopListing(p: ProductDetail): ShopListingProduct {
     description: (p.shortDescription ?? p.summary).trim(),
     badge: p.badge,
     price: p.price,
+    priceLabel: priceLabelFrom(p.price, p.variants),
     imageSrc: p.images[0]!.src,
     soldOut: p.soldOut,
     hasVariants: p.hasVariants,

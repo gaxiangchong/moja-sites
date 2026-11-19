@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { getCompanyConfig, isPresent } from "@/lib/companyConfig";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions — Moja Maison",
+  title: "Terms & Conditions",
   description:
     "The terms that govern your use of mojamaison.com and any orders placed with Moja Maison.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

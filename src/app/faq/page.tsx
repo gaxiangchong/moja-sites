@@ -1,6 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
+import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/jsonLd";
+
+const FAQ_TITLE = "Cake Ordering FAQ — Delivery, Halal, Storage & Changes";
+const FAQ_DESCRIPTION =
+  "Answers to the questions customers ask before ordering: same-day delivery in Johor Bahru, coverage areas, halal-friendly ingredients, allergens, cake storage, and how to change or cancel an order.";
+
+export const metadata: Metadata = {
+  title: FAQ_TITLE,
+  description: FAQ_DESCRIPTION,
+  alternates: { canonical: "/faq" },
+  openGraph: {
+    title: FAQ_TITLE,
+    description: FAQ_DESCRIPTION,
+    url: "/faq",
+  },
+};
 
 type FaqItem = {
   q: string;
@@ -124,17 +143,36 @@ function FaqCard({ q, a }: FaqItem) {
 }
 
 export default function FaqPage() {
+  // Every visible Q&A is mirrored into FAQPage markup, so search engines and
+  // AI assistants answer from our own wording instead of guessing.
+  const allItems = sections.flatMap((section) => section.items);
+  const structuredData = [
+    faqPageJsonLd(allItems, {
+      name: FAQ_TITLE,
+      description: FAQ_DESCRIPTION,
+      path: "/faq",
+    }),
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "FAQ", path: "/faq" },
+    ]),
+  ];
+
   return (
     <div className="min-h-full">
+      {structuredData.map((data, i) => (
+        <JsonLd key={i} data={data} />
+      ))}
       <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-10">
         <div className="rounded-3xl border border-slate-900/10 bg-white/70 p-6 sm:p-8">
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            FAQ
+            Ordering, delivery &amp; cake care questions
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Quick answers about ordering, delivery, and caring for your cakes.
+            Quick answers about ordering, delivery across Johor Bahru, halal
+            handling, allergens and keeping your cake at its best.
           </p>
         </div>
 
@@ -163,12 +201,13 @@ export default function FaqPage() {
             Message us and we’ll help you pick the right cake for the occasion.
           </div>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#"
+            <OrderOnWhatsAppButton label="WhatsApp our team" />
+            <Link
+              href="/contact"
               className="inline-flex items-center justify-center rounded-full bg-slate-900/5 px-5 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-900/10"
             >
-              Contact support
-            </a>
+              All contact channels
+            </Link>
             <Link
               href="/shop"
               className="inline-flex items-center justify-center rounded-full border border-slate-900/10 bg-white/70 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
