@@ -6,10 +6,14 @@ import { OrderInAppButton } from "@/components/OrderInAppButton";
 import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { getShopSections, type ShopListingProduct } from "@/lib/products";
+import {
+  getCatalogSource,
+  getShopSections,
+  type ShopListingProduct,
+} from "@/lib/products";
 import { MEMBER_APP_URL, ORDERING_ENABLED } from "@/lib/appLinks";
 import { breadcrumbJsonLd, itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
-import { displayPriceLabel } from "@/lib/priceDisplay";
+import { displayPriceLabel, pricesVisible } from "@/lib/priceDisplay";
 import { SERVICE_AREAS } from "@/lib/siteConfig";
 
 const SHOP_TITLE = "Cake Menu — Order Cakes in Johor Bahru & Iskandar Puteri";
@@ -27,9 +31,18 @@ export const metadata: Metadata = {
   },
 };
 
-function ProductCard({ product }: { product: ShopListingProduct }) {
+function ProductCard({
+  product,
+  showPrices,
+}: {
+  product: ShopListingProduct;
+  showPrices: boolean;
+}) {
   const href = `/product/${product.slug}`;
-  const priceLabel = displayPriceLabel(product.priceLabel ?? product.price);
+  const priceLabel = displayPriceLabel(
+    product.priceLabel ?? product.price,
+    showPrices,
+  );
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-slate-900/10 bg-white/70 transition hover:bg-white">
@@ -102,7 +115,11 @@ function ProductCard({ product }: { product: ShopListingProduct }) {
 export const revalidate = 300;
 
 export default async function ShopPage() {
-  const sections = await getShopSections();
+  const [sections, catalogSource] = await Promise.all([
+    getShopSections(),
+    getCatalogSource(),
+  ]);
+  const showPrices = pricesVisible(catalogSource);
 
   const allProducts = sections.flatMap((section) => section.products);
   const structuredData = [
@@ -183,7 +200,11 @@ export default async function ShopPage() {
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {section.products.map((p) => (
-                  <ProductCard key={p.slug} product={p} />
+                  <ProductCard
+                    key={p.slug}
+                    product={p}
+                    showPrices={showPrices}
+                  />
                 ))}
               </div>
             </section>

@@ -1,9 +1,5 @@
 import { getCompanyConfig } from "./companyConfig";
-import {
-  PRICE_CURRENCY,
-  SHOW_PRICES,
-  availablePriceValues,
-} from "./priceDisplay";
+import { PRICE_CURRENCY, availablePriceValues } from "./priceDisplay";
 import type { ProductDetail, ShopListingProduct } from "./productTypes";
 import {
   BUSINESS_ADDRESS,
@@ -122,7 +118,10 @@ export function breadcrumbJsonLd(crumbs: Crumb[]) {
  * prices are actually visible on the page — advertising a price in structured
  * data that a shopper cannot see is a rich-results policy violation.
  */
-export function productJsonLd(product: ProductDetail) {
+export function productJsonLd(
+  product: ProductDetail,
+  { includeOffers }: { includeOffers: boolean },
+) {
   const url = absoluteUrl(`/product/${product.slug}`);
   const prices = availablePriceValues(product);
   const availability = product.soldOut
@@ -130,7 +129,7 @@ export function productJsonLd(product: ProductDetail) {
     : "https://schema.org/InStock";
 
   const offers = (() => {
-    if (!SHOW_PRICES || prices.length === 0) return undefined;
+    if (!includeOffers || prices.length === 0) return undefined;
 
     const lowest = prices[0]!;
     const highest = prices[prices.length - 1]!;

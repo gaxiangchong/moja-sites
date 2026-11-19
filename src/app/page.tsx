@@ -6,11 +6,19 @@ import { OrderInAppButton } from "@/components/OrderInAppButton";
 import { OrderOnWhatsAppButton } from "@/components/OrderOnWhatsAppButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { getHomeFeaturedProducts, getShopSections } from "@/lib/products";
+import {
+  getCatalogSource,
+  getHomeFeaturedProducts,
+  getShopSections,
+} from "@/lib/products";
 import type { ShopListingProduct } from "@/lib/productTypes";
 import { getCompanyConfig } from "@/lib/companyConfig";
 import { itemListJsonLd, webPageJsonLd } from "@/lib/jsonLd";
-import { displayPriceLabel, priceLabelFrom } from "@/lib/priceDisplay";
+import {
+  displayPriceLabel,
+  priceLabelFrom,
+  pricesVisible,
+} from "@/lib/priceDisplay";
 import { SERVICE_AREAS, SITE_DESCRIPTION } from "@/lib/siteConfig";
 
 const HOME_TITLE =
@@ -63,10 +71,12 @@ function flavourNote(product: ShopListingProduct): string {
 export const revalidate = 300;
 
 export default async function Home() {
-  const [featuredProducts, shopSections] = await Promise.all([
+  const [featuredProducts, shopSections, catalogSource] = await Promise.all([
     getHomeFeaturedProducts(),
     getShopSections(),
+    getCatalogSource(),
   ]);
+  const showPrices = pricesVisible(catalogSource);
 
   // Drive the "Premium cakes" tiles from the live catalog so they can never
   // advertise a cake the store no longer sells. Skip anything already shown in
@@ -349,9 +359,15 @@ export default async function Home() {
                       {p.name}
                     </h3>
                   </Link>
-                  {displayPriceLabel(featuredPriceLabels.get(p.slug)) ? (
+                  {displayPriceLabel(
+                    featuredPriceLabels.get(p.slug),
+                    showPrices,
+                  ) ? (
                     <div className="mt-1.5 text-sm font-semibold text-slate-900">
-                      {displayPriceLabel(featuredPriceLabels.get(p.slug))}
+                      {displayPriceLabel(
+                        featuredPriceLabels.get(p.slug),
+                        showPrices,
+                      )}
                     </div>
                   ) : null}
                   <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">

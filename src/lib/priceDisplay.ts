@@ -13,6 +13,30 @@ import type { ProductDetail, ProductVariant } from "./productTypes";
 export const SHOW_PRICES =
   process.env.NEXT_PUBLIC_SHOW_PRICES?.trim().toLowerCase() !== "false";
 
+/**
+ * Allow prices to render even when the catalog came from the fallback
+ * snapshot instead of the admin API. Off in production by design: a snapshot
+ * price can be one the admin has already changed, and a wrong price is a
+ * promise to the customer and a mismatch against the Offer structured data.
+ * Development defaults to on so `CATALOG_SOURCE=local` is still workable.
+ */
+const ALLOW_SNAPSHOT_PRICES =
+  process.env.NEXT_PUBLIC_ALLOW_SNAPSHOT_PRICES?.trim().toLowerCase() ===
+  "true" || process.env.NODE_ENV === "development";
+
+/**
+ * Whether prices may be shown for a catalog that came from `source`.
+ * Pages pass the result down instead of reading SHOW_PRICES directly, so a
+ * silent fallback to the snapshot degrades the page (no price) rather than
+ * publishing a stale one.
+ */
+export function pricesVisible(
+  source: "member-api" | "snapshot",
+): boolean {
+  if (!SHOW_PRICES) return false;
+  return source === "member-api" || ALLOW_SNAPSHOT_PRICES;
+}
+
 export const PRICE_CURRENCY = "MYR";
 
 /** "RM149.00" / "RM 1,208" -> 149 / 1208. Returns null for unusable input. */
@@ -77,10 +101,15 @@ export function priceLabelFrom(
   return highest > lowest ? `From ${formatRm(lowest)}` : formatRm(lowest);
 }
 
-/** The label a component should actually render (honours SHOW_PRICES). */
+/**
+ * The label a component should actually render. `enabled` comes from
+ * `pricesVisible(source)` so the caller controls both the env flag and the
+ * freshness check in one place.
+ */
 export function displayPriceLabel(
   label: string | null | undefined,
+  enabled: boolean,
 ): string | null {
-  if (!SHOW_PRICES) return null;
+  if (!enabled) return null;
   return label?.trim() || null;
 }

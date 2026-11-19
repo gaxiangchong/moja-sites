@@ -34,13 +34,58 @@ Validate anything after a deploy with the
 | `NEXT_PUBLIC_SITE_URL` | `https://mojamaison.com` | **Set this on the host.** Drives every canonical tag, the sitemap and all absolute URLs in structured data. A wrong value points Google at the wrong domain. |
 | `NEXT_PUBLIC_SHOW_PRICES` | prices shown | Set `false` to hide prices again site-wide. Note this also removes price/availability from search results — Google only shows prices that are visible on the page. |
 | `NEXT_PUBLIC_ORDERING_ENABLED` | ordering on | `false` disables the in-app CTA. WhatsApp ordering keeps working either way. |
+| `NEXT_PUBLIC_ALLOW_SNAPSHOT_PRICES` | off in production | See "Price freshness" below. Set `true` only if you accept showing snapshot prices. |
 
-**About prices:** no new sync is needed. Prices already travel from the member
-app to the storefront — `basePriceCents` and `variants[].priceCents` come over
-the catalog API (`/shop/catalog/bundle`) and are snapshotted into
-`config/products.catalog.json` by `npm run catalog:pull`. They were simply never
-rendered. Update a price in the member app and the storefront follows within
-`CATALOG_CACHE_SECONDS` (default 5 minutes).
+### Price freshness — admin is the single source
+
+Prices are configured in the member app's admin and reach the storefront like
+this:
+
+```
+admin.web (member app)
+   -> api.mojamaison.com/shop/catalog/bundle     <- the website reads this
+   -> app.mojamaison.com                          <- what customers see in the app
+```
+
+The website never reads `app.mojamaison.com` and needs no login; both read the
+same backend. Edit a price in admin once and the storefront follows within
+`CATALOG_CACHE_SECONDS` (default 300s), plus up to the page's own 300s ISR
+window — so **about 10 minutes worst case**.
+
+Fields that propagate automatically: name, short description, description,
+images, base price, every variant label/price/availability, badge, sold-out,
+active/inactive, category, plus the home-featured list and shop sections from
+the layout endpoint.
+
+**The fallback is the thing to watch.** The site silently falls back to
+`config/products.catalog.json` when `CATALOG_SOURCE=local`, when
+`MEMBER_API_BASE_URL` is unset or points at localhost, or when the API is
+slow/unreachable (5s timeout). That snapshot is only as fresh as the last
+`npm run catalog:pull`.
+
+To stop that publishing a price you no longer charge, the storefront now tracks
+where the catalog came from. When it came from the snapshot, **production hides
+prices and drops the `Offer` from the Product schema** — the cakes still render,
+they just carry no price. Nothing stale is ever quoted. Override with
+`NEXT_PUBLIC_ALLOW_SNAPSHOT_PRICES=true` if you prefer stale prices to none.
+
+Note that `next build` prerenders pages with whatever source it can reach at
+build time. If the API is down during a deploy, the first requests serve
+price-free snapshot pages until ISR revalidates. Deploy the member app first.
+
+### Checking it
+
+```bash
+npm run catalog:check     # diffs the live admin catalog against the snapshot
+```
+
+It reports price drift, name changes, availability changes, cakes added in
+admin but missing from the snapshot, and cakes still in the snapshot that admin
+has deactivated. It exits non-zero on drift, so you can gate a deploy on it.
+Fix drift with `npm run catalog:pull`, then redeploy.
+
+Worth adding to your deploy routine: `npm run catalog:pull && npm run
+catalog:check` before building, so the fallback is never far behind.
 
 ---
 
@@ -56,7 +101,10 @@ rendered. Update a price in the member app and the storefront follows within
    if not, fix them in `src/lib/siteConfig.ts` (`OPENING_HOURS`) *and* the three
    display spots so they stay consistent. Wrong hours in schema is worse than no
    hours.
-3. **Geo coordinates.** Adding `latitude`/`longitude` to the `Bakery` node (in
+3. **`priceRange` in `src/lib/jsonLd.ts`** — currently the hardcoded band
+   `RM22–RM250`, which search engines may surface. It does not follow admin, so
+   check it still matches your range when prices change.
+4. **Geo coordinates.** Adding `latitude`/`longitude` to the `Bakery` node (in
    `src/lib/jsonLd.ts`) improves map and "near me" matching. Grab them from your
    Google Business Profile pin.
 

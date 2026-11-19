@@ -27,10 +27,21 @@ export type {
 
 import type { ProductCategory, ProductDetail, ShopListingProduct, ShopSection } from "./productTypes";
 
+/**
+ * Where the catalog in hand actually came from.
+ *
+ * "member-api" = live from the admin (api.mojamaison.com), so prices are
+ * current. "snapshot" = config/products.catalog.json, which is only as fresh
+ * as the last `npm run catalog:pull` and can therefore show a price the admin
+ * has since changed.
+ */
+export type CatalogSource = "member-api" | "snapshot";
+
 type CatalogBundle = {
   products: ProductDetail[];
   shopSections: ShopSection[];
   homeFeatured: ProductDetail[];
+  source: CatalogSource;
 };
 
 function assertCategory(c: string | undefined): ProductCategory {
@@ -98,7 +109,7 @@ function memberBundleFromApi(
     .map((id) => byId.get(id))
     .filter((p): p is MemberCatalogProduct => Boolean(p))
     .map(toProductDetail);
-  return { products, shopSections, homeFeatured };
+  return { products, shopSections, homeFeatured, source: "member-api" };
 }
 
 function localCatalogBundle(): CatalogBundle {
@@ -106,6 +117,7 @@ function localCatalogBundle(): CatalogBundle {
     products: getLocalCatalogProducts(),
     shopSections: getLocalShopSections(),
     homeFeatured: getLocalHomeFeaturedProducts(),
+    source: "snapshot",
   };
 }
 
@@ -192,4 +204,13 @@ export const getShopSections = cache(async (): Promise<ShopSection[]> => {
 export const getHomeFeaturedProducts = cache(async (): Promise<ProductDetail[]> => {
   const { homeFeatured } = await getCatalogBundle();
   return homeFeatured;
+});
+
+/**
+ * Lets pages decide whether the prices they are about to render are live from
+ * the admin or came from the fallback snapshot.
+ */
+export const getCatalogSource = cache(async (): Promise<CatalogSource> => {
+  const { source } = await getCatalogBundle();
+  return source;
 });

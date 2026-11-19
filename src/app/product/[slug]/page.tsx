@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getCatalogProducts,
+  getCatalogSource,
   getProductsBySlug,
   type ProductDetail,
 } from "@/lib/products";
@@ -15,9 +16,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { breadcrumbJsonLd, productJsonLd } from "@/lib/jsonLd";
 import {
-  SHOW_PRICES,
   displayPriceLabel,
   priceLabelFrom,
+  pricesVisible,
 } from "@/lib/priceDisplay";
 import { SERVICE_AREAS, SITE_NAME, absoluteUrl } from "@/lib/siteConfig";
 
@@ -43,7 +44,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const productsBySlug = await getProductsBySlug();
+  const [productsBySlug, catalogSource] = await Promise.all([
+    getProductsBySlug(),
+    getCatalogSource(),
+  ]);
   const product = productsBySlug.get(slug);
 
   if (!product) {
@@ -56,6 +60,7 @@ export async function generateMetadata({
   const path = `/product/${product.slug}`;
   const priceLabel = displayPriceLabel(
     priceLabelFrom(product.price, product.variants),
+    pricesVisible(catalogSource),
   );
   const blurb = product.shortDescription?.trim() || product.summary;
 
@@ -177,9 +182,10 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [productsBySlug, allProducts] = await Promise.all([
+  const [productsBySlug, allProducts, catalogSource] = await Promise.all([
     getProductsBySlug(),
     getCatalogProducts(),
+    getCatalogSource(),
   ]);
   const product = productsBySlug.get(slug);
   if (!product) return notFound();
@@ -191,12 +197,14 @@ export default async function ProductPage({
       ? product.summary
       : null;
   const availableVariants = product.variants?.filter((v) => v.available) ?? [];
+  const showPrices = pricesVisible(catalogSource);
   const priceLabel = displayPriceLabel(
     priceLabelFrom(product.price, product.variants),
+    showPrices,
   );
   const productPath = `/product/${product.slug}`;
   const structuredData = [
-    productJsonLd(product),
+    productJsonLd(product, { includeOffers: showPrices }),
     breadcrumbJsonLd([
       { name: "Home", path: "/" },
       { name: "Collection", path: "/shop" },
@@ -322,7 +330,7 @@ export default async function ProductPage({
                             className="inline-flex items-baseline gap-2 rounded-2xl border border-slate-900/10 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-800"
                           >
                             {variant.label}
-                            {SHOW_PRICES && variant.price ? (
+                            {showPrices && variant.price ? (
                               <span className="text-slate-500">
                                 {variant.price}
                               </span>
