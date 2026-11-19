@@ -94,6 +94,37 @@ Redeploying member-app does not fix mojamaison.com unless `MEMBER_API_BASE_URL` 
 
 ---
 
+## Ordering links to the member app (the "Order in app" buttons)
+
+Every "Order in app" button, and the header CTA, is controlled by one env var:
+
+```env
+NEXT_PUBLIC_ORDERING_ENABLED=false   # buttons become inert and show the
+                                     # "not open yet" alert instead
+```
+
+The default is **enabled**. Only the literal string `false` blocks ordering,
+so the var is normally absent. To unlock ordering:
+
+1. In the hosting dashboard, **delete** `NEXT_PUBLIC_ORDERING_ENABLED`, or set
+   it to `true`.
+2. Trigger a **new deploy**. This is not optional — `NEXT_PUBLIC_*` values are
+   baked into the JavaScript at build time, so restarting the server keeps the
+   old value.
+3. Verify from any machine:
+
+```bash
+# unlocked: prints a number above zero. blocked: prints 0
+curl -s https://mojamaison.com/shop | grep -c 'app\.mojamaison\.com'
+```
+
+Nothing in this repo sets the var, so if ordering is blocked in production but
+works locally, the value is in the hosting dashboard.
+
+Blocking ordering also redirects `/cart` and `/checkout` to `/shop`.
+
+---
+
 ## After changing env vars
 
 1. Save env in hosting dashboard (Render / Hostinger / Vercel).
